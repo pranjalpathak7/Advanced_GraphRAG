@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import threading
 from src.api.engine import rag_engine 
 from src.telemetry import log_feedback, get_telemetry
 
@@ -27,10 +28,9 @@ async def startup_event():
     """
     Initialize the DB connection and Indexing on startup.
     """
-    print("Server Starting... Indexing Graph Nodes...")
+    print("🚀 Server Starting... Indexing Graph Nodes in the background...")
     try:
-        rag_engine.index_entities()
-        print("✅ Indexing Complete.")
+        threading.Thread(target=rag_engine.index_entities, daemon=True).start()
     except Exception as e:
         print(f"⚠️ Indexing Warning: {e}")
 
