@@ -19,20 +19,28 @@ class GraphRAG:
     def __init__(self):
         self.driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
         
-        # Vector Store 
-        self.embedding_fn = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        # THE FIX: Do not download the heavy AI model on startup!
+        self._embedding_fn = None 
+        
         self.chroma_client = chromadb.Client()
         self.collection = self.chroma_client.get_or_create_collection(
             name="entities", 
             metadata={"hnsw:space": "cosine"}
         )
         
-        # 2. Setup Gemini 
+        # Setup Gemini 
         self.llm = ChatGoogleGenerativeAI(
             model="gemini-2.5-flash",
             google_api_key=GOOGLE_API_KEY,
             temperature=0
         )
+
+    @property
+    def embedding_fn(self):
+        if self._embedding_fn is None:
+            print("⏳ Downloading HuggingFace Embedding Model...")
+            self._embedding_fn = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        return self._embedding_fn
 
     def index_entities(self):
         """Syncs Neo4j Entities to ChromaDB."""
