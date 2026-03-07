@@ -1,5 +1,11 @@
 # Layer10 Memory Core - Execution Guide
 
+## Live Demo
+**[Click Here to Try the Live Application!](https://advancedgraphrag.streamlit.app/)**
+*(No installation required. You can explore the interactive knowledge graph topology and test the temporally-aware GraphRAG agent directly in your browser.)*
+
+---
+
 This repository contains a production-ready knowledge graph pipeline designed to ingest unstructured GitHub Issues, perform schema-enforced LLM extraction, deduplicate claims safely, and serve a temporally-aware GraphRAG agent.
 
 ## Prerequisites
@@ -122,4 +128,4 @@ To test the system's ability to handle strict data deletion (GDPR/SOC2) without 
 python main.py --redact <TICKET_ID>
 ```
 
-This will permanently scrub the text and PII from the database while leaving the conceptual edges intact. You can view the redacted node in the Streamlit UI.
+This will permanently scrub the text and PII from the database while leaving the conceptual edges intact. You can view the redacted node in the Streamlit UI.  
