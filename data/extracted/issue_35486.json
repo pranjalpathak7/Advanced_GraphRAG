@@ -1,0 +1,12 @@
+{
+  "id": 35486,
+  "title": "fix(openai): ensure stream=False in payload when disable_streaming is active",
+  "status": "closed",
+  "created_at": "2026-02-28T16:28:01Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35486",
+  "body_text": "## Summary\n\nFixes #35436\n\nWhen `disable_streaming='tool_calling'` (or `True`) routes execution through `_generate`/`_agenerate` instead of `_stream`/`_astream`, the request payload still contained `stream=True` because `_default_params` unconditionally includes `\"stream\": self.streaming`.\n\nThis caused the OpenAI client to return an `AsyncStream` object instead of a `ChatCompletion`, leading to a crash in `_create_chat_result` when calling `response.model_dump()`.\n\n## Root Cause\n\n`_default_params` (line 1113) hardcodes `\"stream\": self.streaming`. When `self.streaming=True` and `disable_streaming` routes through `_generate`/`_agenerate` (the non-streaming code path), the payload still has `stream: True`, causing the API to return a stream iterator.\n\n## Fix\n\nExplicitly set `payload['stream'] = False` at the top of both `_generate` and `_agenerate`. These methods are the non-streaming code path by definition — they should never send `stream: True` to the API.\n\n## Tests\n\nAdded `test_disable_streaming_payload_stream_false` and its async variant. Both verify that when `streaming=True` + `disable_streaming='tool_calling'` + tools are bound, the actual API payload has `stream=False`.",
+  "extracted_data": null,
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": 35457
+}

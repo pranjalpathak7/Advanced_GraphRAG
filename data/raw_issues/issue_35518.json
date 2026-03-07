@@ -1,0 +1,112 @@
+{
+  "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35518",
+  "repository_url": "https://api.github.com/repos/langchain-ai/langchain",
+  "labels_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35518/labels{/name}",
+  "comments_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35518/comments",
+  "events_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35518/events",
+  "html_url": "https://github.com/langchain-ai/langchain/issues/35518",
+  "id": 4011359467,
+  "node_id": "I_kwDOIPDwls7vGHzr",
+  "number": 35518,
+  "title": "Add Capsule to safely run untrusted code using WebAssembly sandboxes",
+  "user": {
+    "login": "mavdol",
+    "id": 15196295,
+    "node_id": "MDQ6VXNlcjE1MTk2Mjk1",
+    "avatar_url": "https://avatars.githubusercontent.com/u/15196295?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/mavdol",
+    "html_url": "https://github.com/mavdol",
+    "followers_url": "https://api.github.com/users/mavdol/followers",
+    "following_url": "https://api.github.com/users/mavdol/following{/other_user}",
+    "gists_url": "https://api.github.com/users/mavdol/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/mavdol/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/mavdol/subscriptions",
+    "organizations_url": "https://api.github.com/users/mavdol/orgs",
+    "repos_url": "https://api.github.com/users/mavdol/repos",
+    "events_url": "https://api.github.com/users/mavdol/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/mavdol/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 9019019264,
+      "node_id": "LA_kwDOIPDwls8AAAACGZNQAA",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/langchain",
+      "name": "langchain",
+      "color": "f9d0c4",
+      "default": false,
+      "description": "`langchain` package issues & PRs"
+    },
+    {
+      "id": 9260554836,
+      "node_id": "LA_kwDOIPDwls8AAAACJ_jaVA",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/feature%20request",
+      "name": "feature request",
+      "color": "058a42",
+      "default": false,
+      "description": "Request for an enhancement / additional functionality"
+    },
+    {
+      "id": 10037429975,
+      "node_id": "LA_kwDOIPDwls8AAAACVkcG1w",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/external",
+      "name": "external",
+      "color": "d32751",
+      "default": false,
+      "description": ""
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [],
+  "milestone": null,
+  "comments": 0,
+  "created_at": "2026-03-02T13:43:09Z",
+  "updated_at": "2026-03-02T13:43:18Z",
+  "closed_at": null,
+  "assignee": null,
+  "author_association": "NONE",
+  "type": {
+    "id": 18879553,
+    "node_id": "IT_kwDOB43M6c4BIBRB",
+    "name": "Feature",
+    "description": "A request, idea, or new functionality",
+    "color": "blue",
+    "created_at": "2024-02-16T01:43:34Z",
+    "updated_at": "2024-10-08T21:10:19Z",
+    "is_enabled": true
+  },
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "### Checked other resources\n\n- [x] This is a feature request, not a bug report or usage question.\n- [x] I added a clear and descriptive title that summarizes the feature request.\n- [x] I used the GitHub search to find a similar feature request and didn't find it.\n- [x] I checked the LangChain documentation and API reference to see if this feature already exists.\n- [x] This is not related to the langchain-community package.\n\n### Package (Required)\n\n- [x] langchain\n- [ ] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Feature Description\n\nI would like LangChain to support Capsule as a lightweight, self-hosted sandbox for executing untrusted Python/JavaScript code. Capsule is a runtime that runs python/javascript code in WebAssembly sandboxes.\n\n### Use Case\n\nWhen AI agents generate code, executing it directly could be risky for the host system. Except for Docker containers or cloud-based tools, there are few lightweight alternatives. While `langchain-sandbox` (Pyodide/Wasm) seems to be a great solution, it executes Python code only and is now archived.\n\n### Proposed Solution\n\nIntegrate `langchain-capsule` to documentation, a LangChain version of Capsule. Here's how the implementation works:\n```python\nimport asyncio\nfrom langchain_capsule import CapsulePythonTool, CapsuleJSTool\n\n# Python Example\npython_tool = CapsulePythonTool()\nresult = python_tool.run(\"1 + 1\")\nprint(result) # \"2\"\n\n# JavaScript / TypeScript Example\njs_tool = CapsuleJSTool()\nresult = asyncio.run(js_tool.arun(\"1 + 2\"))\nprint(result) # \"3\"\n```\n\nOnly the first run takes a second (cold start), then every next run starts in ~10ms. This is because Capsule compiles and caches a native version of the Wasm module locally after the first execution.\n\n### Alternatives Considered\n\n_No response_\n\n### Additional Context\n\n- PyPI package: langchain-capsule\n- Integration repo: [github.com/mavdol/langchain-capsule](https://github.com/mavdol/langchain-capsule)\n- Capsule main repo: [github.com/mavdol/capsule](https://github.com/mavdol/capsule)\n\nHappy to submit a PR in the LangChain docs if there's interest. Also open to other integration possibilities around Capsule!",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35518/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35518/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}

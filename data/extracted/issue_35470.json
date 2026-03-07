@@ -1,0 +1,405 @@
+{
+  "id": 35470,
+  "title": "fix(langchain): streaming path to apply middleware and guardrails",
+  "status": "open",
+  "created_at": "2026-02-28T04:15:11Z",
+  "author_name": "Ratnaditya-J",
+  "url": "https://github.com/langchain-ai/langchain/pull/35470",
+  "body_text": "This fixes the streaming bypass of middleware guardrails reported in #35011.\n\nThe problem: when using agent.stream() or agent.astream() with stream_mode=\"messages\", raw LLM tokens are emitted to the user through StreamMessagesHandler.on_llm_new_token before any after_model middleware has a chance to inspect them. This means output-guard middleware like PIIMiddleware (with apply_to_output=True) runs too late -- PII and other sensitive content has already leaked through the stream.\n\nThe fix has two parts:\n\n1. AgentMiddleware gets a new guards_output attribute (default False). Middleware that checks or transforms model output sets this to True. PIIMiddleware sets it when apply_to_output=True.\n\n2. Middleware with guards_output=True implements wrap_model_call / awrap_model_call to sanitize the model response inside the model node itself, before on_chain_end emits it. create_agent detects guards_output middleware and applies TAG_NOSTREAM to the model node's RunnableCallable. This prevents StreamMessagesHandler from emitting raw per-token chunks via on_llm_new_token, while the sanitized complete messages still reach the user through on_chain_end.\n\nThe existing after_model hook is kept for backward compatibility. It's idempotent since it sees the already-sanitized content from wrap_model_call.\n\nFiles changed:\n- agents/middleware/types.py: Added guards_output attribute to AgentMiddleware base class\n- agents/middleware/pii.py: Added wrap_model_call, awrap_model_call, and _process_model_response to PIIMiddleware; set guards_output = apply_to_output\n- agents/factory.py: Detect guards_output middleware and apply TAG_NOSTREAM to model node\n- tests: Added 8 tests for the streaming guard behavior (guards_output flag, wrap_model_call sanitization, TAG_NOSTREAM tagging, invoke compatibility)\n\nAll existing tests continue to pass (59 PII tests, 566 middleware tests, 707 agent tests).",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "The framework or library where the streaming bypass vulnerability was found."
+      },
+      {
+        "name": "Streaming Bypass",
+        "type": "Problem",
+        "description": "A vulnerability where streamed data bypasses security or processing middleware."
+      },
+      {
+        "name": "Middleware Guardrails",
+        "type": "Technology",
+        "description": "Security or processing layers designed to inspect and potentially modify data streams."
+      },
+      {
+        "name": "Issue 35011",
+        "type": "Problem",
+        "description": "The specific GitHub issue number where the streaming bypass problem was reported."
+      },
+      {
+        "name": "agent.stream()",
+        "type": "Feature",
+        "description": "A method used for streaming output from an agent."
+      },
+      {
+        "name": "agent.astream()",
+        "type": "Feature",
+        "description": "An asynchronous method used for streaming output from an agent."
+      },
+      {
+        "name": "stream_mode=\"messages\"",
+        "type": "Feature",
+        "description": "A configuration setting for streaming, specifically for messages."
+      },
+      {
+        "name": "Raw LLM Tokens",
+        "type": "Technology",
+        "description": "Unprocessed, individual tokens emitted directly from a Large Language Model."
+      },
+      {
+        "name": "StreamMessagesHandler",
+        "type": "Technology",
+        "description": "A component responsible for handling and emitting streamed messages."
+      },
+      {
+        "name": "on_llm_new_token",
+        "type": "Feature",
+        "description": "A callback method within StreamMessagesHandler that emits raw LLM tokens."
+      },
+      {
+        "name": "after_model Middleware",
+        "type": "Technology",
+        "description": "Middleware designed to run after the model has processed its input."
+      },
+      {
+        "name": "Output-Guard Middleware",
+        "type": "Technology",
+        "description": "A type of middleware specifically designed to inspect and protect model output."
+      },
+      {
+        "name": "PIIMiddleware",
+        "type": "Technology",
+        "description": "A specific implementation of output-guard middleware focused on Personally Identifiable Information."
+      },
+      {
+        "name": "PII",
+        "type": "Problem",
+        "description": "Personally Identifiable Information, which is sensitive content."
+      },
+      {
+        "name": "Sensitive Content",
+        "type": "Problem",
+        "description": "Information that should not be leaked or exposed."
+      },
+      {
+        "name": "AgentMiddleware",
+        "type": "Technology",
+        "description": "The base class for agent middleware components."
+      },
+      {
+        "name": "guards_output Attribute",
+        "type": "Feature",
+        "description": "A new attribute added to AgentMiddleware to indicate if middleware checks or transforms model output."
+      },
+      {
+        "name": "wrap_model_call",
+        "type": "Feature",
+        "description": "A method implemented by middleware to sanitize model responses."
+      },
+      {
+        "name": "awrap_model_call",
+        "type": "Feature",
+        "description": "An asynchronous version of the wrap_model_call method."
+      },
+      {
+        "name": "Model Response",
+        "type": "Technology",
+        "description": "The output generated by the language model."
+      },
+      {
+        "name": "Model Node",
+        "type": "Technology",
+        "description": "A specific node within the agent's processing graph that represents the model call."
+      },
+      {
+        "name": "on_chain_end",
+        "type": "Feature",
+        "description": "A callback method that emits complete messages at the end of a processing chain."
+      },
+      {
+        "name": "create_agent",
+        "type": "Feature",
+        "description": "A function or method responsible for creating an agent instance."
+      },
+      {
+        "name": "TAG_NOSTREAM",
+        "type": "Technology",
+        "description": "A tag applied to prevent raw per-token streaming."
+      },
+      {
+        "name": "RunnableCallable",
+        "type": "Technology",
+        "description": "A callable component that can be executed within a LangChain runnable."
+      },
+      {
+        "name": "_process_model_response",
+        "type": "Feature",
+        "description": "An internal method used by PIIMiddleware for processing model responses."
+      },
+      {
+        "name": "agents/middleware/types.py",
+        "type": "Technology",
+        "description": "A file containing definitions for middleware types."
+      },
+      {
+        "name": "agents/middleware/pii.py",
+        "type": "Technology",
+        "description": "A file containing the implementation of PIIMiddleware."
+      },
+      {
+        "name": "agents/factory.py",
+        "type": "Technology",
+        "description": "A file containing the agent creation logic."
+      },
+      {
+        "name": "Tests",
+        "type": "Technology",
+        "description": "The test suite for the project."
+      },
+      {
+        "name": "Streaming Guard Behavior",
+        "type": "Feature",
+        "description": "The new behavior implemented to guard streaming output."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Streaming Bypass",
+        "target": "LangChain",
+        "label": "AFFECTS",
+        "evidence": "This fixes the streaming bypass of middleware guardrails reported in #35011.",
+        "evidence_start": 0,
+        "evidence_end": 76
+      },
+      {
+        "source": "Issue 35011",
+        "target": "Streaming Bypass",
+        "label": "RELATED_TO",
+        "evidence": "reported in #35011.",
+        "evidence_start": 57,
+        "evidence_end": 76
+      },
+      {
+        "source": "agent.stream()",
+        "target": "Streaming Bypass",
+        "label": "CAUSES",
+        "evidence": "when using agent.stream() or agent.astream() with stream_mode=\"messages\", raw LLM tokens are emitted to the user through StreamMessagesHandler.on_llm_new_token before any after_model middleware has a chance to inspect them.",
+        "evidence_start": 91,
+        "evidence_end": 314
+      },
+      {
+        "source": "agent.astream()",
+        "target": "Streaming Bypass",
+        "label": "CAUSES",
+        "evidence": "when using agent.stream() or agent.astream() with stream_mode=\"messages\", raw LLM tokens are emitted to the user through StreamMessagesHandler.on_llm_new_token before any after_model middleware has a chance to inspect them.",
+        "evidence_start": 91,
+        "evidence_end": 314
+      },
+      {
+        "source": "agent.stream()",
+        "target": "stream_mode=\"messages\"",
+        "label": "USES",
+        "evidence": "when using agent.stream() or agent.astream() with stream_mode=\"messages\"",
+        "evidence_start": 91,
+        "evidence_end": 163
+      },
+      {
+        "source": "agent.astream()",
+        "target": "stream_mode=\"messages\"",
+        "label": "USES",
+        "evidence": "when using agent.stream() or agent.astream() with stream_mode=\"messages\"",
+        "evidence_start": 91,
+        "evidence_end": 163
+      },
+      {
+        "source": "Streaming Bypass",
+        "target": "PII",
+        "label": "CAUSES",
+        "evidence": "PII and other sensitive content has already leaked through the stream.",
+        "evidence_start": 414,
+        "evidence_end": 484
+      },
+      {
+        "source": "Streaming Bypass",
+        "target": "Sensitive Content",
+        "label": "CAUSES",
+        "evidence": "PII and other sensitive content has already leaked through the stream.",
+        "evidence_start": 414,
+        "evidence_end": 484
+      },
+      {
+        "source": "StreamMessagesHandler",
+        "target": "on_llm_new_token",
+        "label": "USES",
+        "evidence": "raw LLM tokens are emitted to the user through StreamMessagesHandler.on_llm_new_token",
+        "evidence_start": 165,
+        "evidence_end": 250
+      },
+      {
+        "source": "on_llm_new_token",
+        "target": "Raw LLM Tokens",
+        "label": "CAUSES",
+        "evidence": "raw LLM tokens are emitted to the user through StreamMessagesHandler.on_llm_new_token",
+        "evidence_start": 165,
+        "evidence_end": 250
+      },
+      {
+        "source": "PIIMiddleware",
+        "target": "Output-Guard Middleware",
+        "label": "RELATED_TO",
+        "evidence": "output-guard middleware like PIIMiddleware",
+        "evidence_start": 326,
+        "evidence_end": 368
+      },
+      {
+        "source": "AgentMiddleware",
+        "target": "guards_output Attribute",
+        "label": "RELATED_TO",
+        "evidence": "AgentMiddleware gets a new guards_output attribute",
+        "evidence_start": 513,
+        "evidence_end": 563
+      },
+      {
+        "source": "PIIMiddleware",
+        "target": "guards_output Attribute",
+        "label": "USES",
+        "evidence": "PIIMiddleware sets it when apply_to_output=True.",
+        "evidence_start": 650,
+        "evidence_end": 698
+      },
+      {
+        "source": "PIIMiddleware",
+        "target": "wrap_model_call",
+        "label": "USES",
+        "evidence": "Added wrap_model_call, awrap_model_call, and _process_model_response to PIIMiddleware",
+        "evidence_start": 1441,
+        "evidence_end": 1526
+      },
+      {
+        "source": "PIIMiddleware",
+        "target": "awrap_model_call",
+        "label": "USES",
+        "evidence": "Added wrap_model_call, awrap_model_call, and _process_model_response to PIIMiddleware",
+        "evidence_start": 1441,
+        "evidence_end": 1526
+      },
+      {
+        "source": "wrap_model_call",
+        "target": "Model Response",
+        "label": "RELATED_TO",
+        "evidence": "sanitize the model response",
+        "evidence_start": 787,
+        "evidence_end": 814
+      },
+      {
+        "source": "awrap_model_call",
+        "target": "Model Response",
+        "label": "RELATED_TO",
+        "evidence": "sanitize the model response",
+        "evidence_start": 787,
+        "evidence_end": 814
+      },
+      {
+        "source": "create_agent",
+        "target": "guards_output Attribute",
+        "label": "RELATED_TO",
+        "evidence": "create_agent detects guards_output middleware and applies TAG_NOSTREAM to the model node's RunnableCallable.",
+        "evidence_start": 875,
+        "evidence_end": 983
+      },
+      {
+        "source": "create_agent",
+        "target": "TAG_NOSTREAM",
+        "label": "USES",
+        "evidence": "create_agent detects guards_output middleware and applies TAG_NOSTREAM to the model node's RunnableCallable.",
+        "evidence_start": 875,
+        "evidence_end": 983
+      },
+      {
+        "source": "TAG_NOSTREAM",
+        "target": "StreamMessagesHandler",
+        "label": "AFFECTS",
+        "evidence": "This prevents StreamMessagesHandler from emitting raw per-token chunks via on_llm_new_token",
+        "evidence_start": 984,
+        "evidence_end": 1075
+      },
+      {
+        "source": "on_chain_end",
+        "target": "Model Response",
+        "label": "USES",
+        "evidence": "the sanitized complete messages still reach the user through on_chain_end.",
+        "evidence_start": 1083,
+        "evidence_end": 1157
+      },
+      {
+        "source": "agents/middleware/types.py",
+        "target": "guards_output Attribute",
+        "label": "RELATED_TO",
+        "evidence": "agents/middleware/types.py: Added guards_output attribute to AgentMiddleware base class",
+        "evidence_start": 1325,
+        "evidence_end": 1412
+      },
+      {
+        "source": "agents/middleware/pii.py",
+        "target": "PIIMiddleware",
+        "label": "RELATED_TO",
+        "evidence": "agents/middleware/pii.py: Added wrap_model_call, awrap_model_call, and _process_model_response to PIIMiddleware",
+        "evidence_start": 1415,
+        "evidence_end": 1526
+      },
+      {
+        "source": "agents/middleware/pii.py",
+        "target": "wrap_model_call",
+        "label": "RELATED_TO",
+        "evidence": "agents/middleware/pii.py: Added wrap_model_call, awrap_model_call, and _process_model_response to PIIMiddleware",
+        "evidence_start": 1415,
+        "evidence_end": 1526
+      },
+      {
+        "source": "agents/middleware/pii.py",
+        "target": "awrap_model_call",
+        "label": "RELATED_TO",
+        "evidence": "agents/middleware/pii.py: Added wrap_model_call, awrap_model_call, and _process_model_response to PIIMiddleware",
+        "evidence_start": 1415,
+        "evidence_end": 1526
+      },
+      {
+        "source": "agents/middleware/pii.py",
+        "target": "_process_model_response",
+        "label": "RELATED_TO",
+        "evidence": "agents/middleware/pii.py: Added wrap_model_call, awrap_model_call, and _process_model_response to PIIMiddleware",
+        "evidence_start": 1415,
+        "evidence_end": 1526
+      },
+      {
+        "source": "agents/factory.py",
+        "target": "guards_output Attribute",
+        "label": "RELATED_TO",
+        "evidence": "agents/factory.py: Detect guards_output middleware and apply TAG_NOSTREAM to model node",
+        "evidence_start": 1566,
+        "evidence_end": 1653
+      },
+      {
+        "source": "agents/factory.py",
+        "target": "TAG_NOSTREAM",
+        "label": "RELATED_TO",
+        "evidence": "agents/factory.py: Detect guards_output middleware and apply TAG_NOSTREAM to model node",
+        "evidence_start": 1566,
+        "evidence_end": 1653
+      },
+      {
+        "source": "Tests",
+        "target": "Streaming Guard Behavior",
+        "label": "USES",
+        "evidence": "tests: Added 8 tests for the streaming guard behavior",
+        "evidence_start": 1656,
+        "evidence_end": 1709
+      }
+    ],
+    "summary": "This fix addresses a streaming bypass vulnerability in LangChain agents where raw LLM tokens, potentially containing PII, were emitted before output-guard middleware could process them, by introducing a `guards_output` attribute to `AgentMiddleware` and applying `TAG_NOSTREAM` to prevent premature token emission."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

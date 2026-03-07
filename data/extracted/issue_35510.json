@@ -1,0 +1,155 @@
+{
+  "id": 35510,
+  "title": "anthropic: fix streaming usage_metadata missing input_tokens",
+  "status": "open",
+  "created_at": "2026-03-02T07:29:21Z",
+  "author_name": "deku0818",
+  "url": "https://github.com/langchain-ai/langchain/pull/35510",
+  "body_text": "## Summary\n\nFixes #35509\n\n- **Bug**: When using `astream_events` or `astream` with `ChatAnthropic`, `usage_metadata.input_tokens` is always `0` after chunk aggregation.\n- **Root cause**: Anthropic's streaming API splits usage across two events — `message_start` contains `input_tokens`, `message_delta` contains `output_tokens`. The current code skips `usage_metadata` at `message_start` and only reads from `message_delta`, which lacks `input_tokens`.\n- **Fix**: Extract `usage_metadata` from `event.message.usage` during `message_start`. Since the two events contain disjoint fields, chunk aggregation merges them correctly without double-counting.\n\n## Reproduction\n\n```python\nimport asyncio\nfrom langchain_anthropic import ChatAnthropic\nfrom langchain_core.messages import HumanMessage\n\nllm = ChatAnthropic(model=\"claude-sonnet-4-5-20250929\")\n\nasync def main():\n    messages = [HumanMessage(content=\"Hello\")]\n    async for event in llm.astream_events(messages, version=\"v2\"):\n        if event[\"event\"] == \"on_chat_model_end\":\n            output = event[\"data\"][\"output\"]\n            print(f\"usage_metadata: {output.usage_metadata}\")\n            # Before fix: {'input_tokens': 0, 'output_tokens': 29, ...}\n            # After fix:  {'input_tokens': 10, 'output_tokens': 29, ...}\n\nasyncio.run(main())\n```\n\n## Test plan\n\n- [x] Verified `input_tokens` is correctly reported after fix\n- [x] Verified `output_tokens` still correct (no double-counting)\n- [x] Verified cache-related fields (`cache_read`, `cache_creation`, `ephemeral_5m`, `ephemeral_1h`) pass through correctly\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Anthropic",
+        "type": "Technology",
+        "description": "An AI company or its API, providing streaming services."
+      },
+      {
+        "name": "ChatAnthropic",
+        "type": "Technology",
+        "description": "A class or integration for interacting with Anthropic chat models."
+      },
+      {
+        "name": "astream_events",
+        "type": "Feature",
+        "description": "An asynchronous method for streaming events from ChatAnthropic."
+      },
+      {
+        "name": "astream",
+        "type": "Feature",
+        "description": "An asynchronous method for streaming responses from ChatAnthropic."
+      },
+      {
+        "name": "Usage Metadata Input Tokens",
+        "type": "Problem",
+        "description": "The 'input_tokens' field within 'usage_metadata' incorrectly reporting '0'."
+      },
+      {
+        "name": "Anthropic Streaming API",
+        "type": "Technology",
+        "description": "The API provided by Anthropic for streaming responses."
+      },
+      {
+        "name": "Message Start Event",
+        "type": "Technology",
+        "description": "An event type in Anthropic's streaming API that contains 'input_tokens'."
+      },
+      {
+        "name": "Message Delta Event",
+        "type": "Technology",
+        "description": "An event type in Anthropic's streaming API that contains 'output_tokens'."
+      },
+      {
+        "name": "Input Tokens",
+        "type": "Feature",
+        "description": "A metric representing the number of tokens consumed as input."
+      },
+      {
+        "name": "Output Tokens",
+        "type": "Feature",
+        "description": "A metric representing the number of tokens generated as output."
+      },
+      {
+        "name": "Chunk Aggregation",
+        "type": "Technology",
+        "description": "The process of combining streaming data chunks."
+      },
+      {
+        "name": "Cache-Related Fields",
+        "type": "Feature",
+        "description": "Fields related to caching, including 'cache_read', 'cache_creation', 'ephemeral_5m', and 'ephemeral_1h'."
+      },
+      {
+        "name": "Claude Code",
+        "type": "Technology",
+        "description": "A tool used to generate the issue description."
+      }
+    ],
+    "relations": [
+      {
+        "source": "ChatAnthropic",
+        "target": "Usage Metadata Input Tokens",
+        "label": "AFFECTS",
+        "evidence": "When using `astream_events` or `astream` with `ChatAnthropic`, `usage_metadata.input_tokens` is always `0` after chunk aggregation.",
+        "evidence_start": 37,
+        "evidence_end": 168
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "astream_events",
+        "label": "USES",
+        "evidence": "When using `astream_events` or `astream` with `ChatAnthropic`",
+        "evidence_start": 37,
+        "evidence_end": 98
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "astream",
+        "label": "USES",
+        "evidence": "When using `astream_events` or `astream` with `ChatAnthropic`",
+        "evidence_start": 37,
+        "evidence_end": 98
+      },
+      {
+        "source": "Anthropic Streaming API",
+        "target": "Message Start Event",
+        "label": "RELATED_TO",
+        "evidence": "Anthropic's streaming API splits usage across two events — `message_start` contains `input_tokens`",
+        "evidence_start": 187,
+        "evidence_end": 285
+      },
+      {
+        "source": "Anthropic Streaming API",
+        "target": "Message Delta Event",
+        "label": "RELATED_TO",
+        "evidence": "Anthropic's streaming API splits usage across two events — `message_start` contains `input_tokens`, `message_delta` contains `output_tokens`.",
+        "evidence_start": 187,
+        "evidence_end": 328
+      },
+      {
+        "source": "Message Start Event",
+        "target": "Input Tokens",
+        "label": "RELATED_TO",
+        "evidence": "`message_start` contains `input_tokens`",
+        "evidence_start": 246,
+        "evidence_end": 285
+      },
+      {
+        "source": "Message Delta Event",
+        "target": "Output Tokens",
+        "label": "RELATED_TO",
+        "evidence": "`message_delta` contains `output_tokens`",
+        "evidence_start": 287,
+        "evidence_end": 327
+      },
+      {
+        "source": "Chunk Aggregation",
+        "target": "Usage Metadata Input Tokens",
+        "label": "CAUSES",
+        "evidence": "`usage_metadata.input_tokens` is always `0` after chunk aggregation.",
+        "evidence_start": 100,
+        "evidence_end": 168
+      },
+      {
+        "source": "Claude Code",
+        "target": "Issue Description",
+        "label": "RELATED_TO",
+        "evidence": "Generated with [Claude Code]",
+        "evidence_start": 1576,
+        "evidence_end": 1604
+      }
+    ],
+    "summary": "The `ChatAnthropic` integration incorrectly reports `usage_metadata.input_tokens` as `0` after chunk aggregation in streaming events because it only reads usage from `message_delta` and skips `message_start` which contains `input_tokens`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

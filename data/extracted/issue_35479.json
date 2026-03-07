@@ -1,0 +1,187 @@
+{
+  "id": 35479,
+  "title": "fix(core): cancel pending tasks in abatch_as_completed on exception or early exit",
+  "status": "closed",
+  "created_at": "2026-02-28T09:40:58Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35479",
+  "body_text": "## Problem\n\n`abatch_as_completed` does not cancel pending tasks when the consumer stops iterating (via exception or `break`). This means remaining `ainvoke` calls continue running in the background and can still complete API calls, incurring extra cost even though their results will never be consumed.\n\nThe sync `batch_as_completed` already handles this correctly with a `try/finally` block that cancels remaining futures.\n\n### Reproduction (from #35419)\n\n```python\nasync def llm_call(prompt: str) -> str:\n    if prompt == \"bad\":\n        raise RuntimeError(\"429 rate limit\")\n    await asyncio.sleep(0.25)\n    print(f\"CHARGED: {prompt}\")  # still runs after exception\n    return f\"ok:{prompt}\"\n\nr = RunnableLambda(llm_call)\nasync for _, out in r.abatch_as_completed([\"bad\", \"a\", \"b\"]):\n    print(out)\n# Expected: only the RuntimeError, no CHARGED output\n# Actual: RuntimeError + CHARGED: a + CHARGED: b\n```\n\n## Root Cause\n\n`abatch_as_completed` passed coroutines directly to `asyncio.as_completed()`, which wraps them in tasks internally. Since the caller never held references to those tasks, there was no way to cancel them when iteration stopped.\n\n## Fix\n\n1. Create explicit `asyncio.Task` objects via `asyncio.ensure_future()` so we hold references\n2. Wrap the yield loop in `try/finally` that cancels any unfinished tasks (mirroring the sync version)\n3. `await asyncio.gather(*tasks, return_exceptions=True)` to suppress `CancelledError`\n\n## Tests\n\nAdded two regression tests:\n- `test_abatch_as_completed_cancels_on_exception`: verifies no tasks complete after one raises\n- `test_abatch_as_completed_cancels_on_break`: verifies no tasks complete after consumer breaks\n\nAll 6 concurrency tests pass.\n\nFixes #35419",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "abatch_as_completed",
+        "type": "Technology",
+        "description": "An asynchronous function that processes tasks as they complete."
+      },
+      {
+        "name": "Pending Tasks Cancellation",
+        "type": "Feature",
+        "description": "The mechanism to stop tasks that are no longer needed."
+      },
+      {
+        "name": "Extra API Cost",
+        "type": "Problem",
+        "description": "Unnecessary expenses incurred due to uncancelled API calls."
+      },
+      {
+        "name": "ainvoke",
+        "type": "Technology",
+        "description": "An asynchronous invocation call."
+      },
+      {
+        "name": "asyncio.as_completed()",
+        "type": "Technology",
+        "description": "An asyncio function to run coroutines concurrently and yield results as they complete."
+      },
+      {
+        "name": "batch_as_completed",
+        "type": "Technology",
+        "description": "A synchronous function that processes tasks as they complete."
+      },
+      {
+        "name": "try/finally block",
+        "type": "Technology",
+        "description": "A programming construct used for error handling and resource cleanup."
+      },
+      {
+        "name": "Issue 35419",
+        "type": "Problem",
+        "description": "A previously reported GitHub issue demonstrating the `abatch_as_completed` cancellation problem."
+      },
+      {
+        "name": "asyncio.Task",
+        "type": "Technology",
+        "description": "An object representing a concurrently running coroutine in asyncio."
+      },
+      {
+        "name": "asyncio.ensure_future()",
+        "type": "Technology",
+        "description": "An asyncio function used to wrap a coroutine or future in a Task."
+      },
+      {
+        "name": "asyncio.gather()",
+        "type": "Technology",
+        "description": "An asyncio function used to run multiple awaitable objects concurrently."
+      },
+      {
+        "name": "CancelledError",
+        "type": "Problem",
+        "description": "An exception raised when a task is cancelled."
+      },
+      {
+        "name": "Regression Tests",
+        "type": "Feature",
+        "description": "Tests added to verify the fix for `abatch_as_completed` cancellation."
+      }
+    ],
+    "relations": [
+      {
+        "source": "abatch_as_completed",
+        "target": "Pending Tasks Cancellation",
+        "label": "RELATED_TO",
+        "evidence": "`abatch_as_completed` does not cancel pending tasks when the consumer stops iterating (via exception or `break`).",
+        "evidence_start": 12,
+        "evidence_end": 125
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "Extra API Cost",
+        "label": "AFFECTS",
+        "evidence": "remaining `ainvoke` calls continue running in the background and can still complete API calls, incurring extra cost",
+        "evidence_start": 137,
+        "evidence_end": 252
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "ainvoke",
+        "label": "USES",
+        "evidence": "remaining `ainvoke` calls continue running in the background",
+        "evidence_start": 137,
+        "evidence_end": 197
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "asyncio.as_completed()",
+        "label": "USES",
+        "evidence": "`abatch_as_completed` passed coroutines directly to `asyncio.as_completed()`",
+        "evidence_start": 923,
+        "evidence_end": 999
+      },
+      {
+        "source": "batch_as_completed",
+        "target": "try/finally block",
+        "label": "USES",
+        "evidence": "The sync `batch_as_completed` already handles this correctly with a `try/finally` block",
+        "evidence_start": 304,
+        "evidence_end": 391
+      },
+      {
+        "source": "batch_as_completed",
+        "target": "Pending Tasks Cancellation",
+        "label": "RELATED_TO",
+        "evidence": "The sync `batch_as_completed` already handles this correctly with a `try/finally` block that cancels remaining futures.",
+        "evidence_start": 304,
+        "evidence_end": 423
+      },
+      {
+        "source": "Issue 35419",
+        "target": "abatch_as_completed",
+        "label": "RELATED_TO",
+        "evidence": "Reproduction (from #35419)",
+        "evidence_start": 429,
+        "evidence_end": 455
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "asyncio.Task",
+        "label": "USES",
+        "evidence": "Create explicit `asyncio.Task` objects via `asyncio.ensure_future()` so we hold references",
+        "evidence_start": 1162,
+        "evidence_end": 1252
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "asyncio.ensure_future()",
+        "label": "USES",
+        "evidence": "Create explicit `asyncio.Task` objects via `asyncio.ensure_future()` so we hold references",
+        "evidence_start": 1162,
+        "evidence_end": 1252
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "try/finally block",
+        "label": "USES",
+        "evidence": "Wrap the yield loop in `try/finally` that cancels any unfinished tasks",
+        "evidence_start": 1256,
+        "evidence_end": 1326
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "asyncio.gather()",
+        "label": "USES",
+        "evidence": "`await asyncio.gather(*tasks, return_exceptions=True)` to suppress `CancelledError`",
+        "evidence_start": 1359,
+        "evidence_end": 1442
+      },
+      {
+        "source": "Pending Tasks Cancellation",
+        "target": "CancelledError",
+        "label": "RELATED_TO",
+        "evidence": "`await asyncio.gather(*tasks, return_exceptions=True)` to suppress `CancelledError`",
+        "evidence_start": 1359,
+        "evidence_end": 1442
+      },
+      {
+        "source": "Regression Tests",
+        "target": "abatch_as_completed",
+        "label": "RELATED_TO",
+        "evidence": "Added two regression tests: - `test_abatch_as_completed_cancels_on_exception`: verifies no tasks complete after one raises - `test_abatch_as_completed_cancels_on_break`: verifies no tasks complete after consumer breaks",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "The `abatch_as_completed` function fails to cancel pending tasks upon early exit or exception, leading to unnecessary API costs, which is fixed by explicitly managing `asyncio.Task` objects within a `try/finally` block."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

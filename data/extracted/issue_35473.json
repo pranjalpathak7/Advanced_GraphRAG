@@ -1,0 +1,161 @@
+{
+  "id": 35473,
+  "title": "perf(core): use deque for pipeline batch output reassembly in RunnableSequence",
+  "status": "closed",
+  "created_at": "2026-02-28T04:31:09Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35473",
+  "body_text": "## Problem\n\n`RunnableSequence.batch()` and `abatch()` use `list.pop(0)` to reassemble outputs by merging a `failed_inputs_map` with remaining successful inputs consumed front-to-back.\n\n`list.pop(0)` is **O(n)** per call because CPython must shift every remaining element. For large batch sizes this accumulates to **O(n²)** total work.\n\n## Solution\n\nConvert the copied inputs list to a `collections.deque` and replace `.pop(0)` with `.popleft()`, which is **O(1)** amortised. The `collections` module is already imported in this file.\n\n## Testing\n\nAll 6 batch-related tests pass:\n- `test_retry_batch_preserves_order`\n- `test_async_retry_batch_preserves_order`\n- `test_seq_batch_return_exceptions`\n- `test_seq_abatch_return_exceptions`\n- `test_runnable_branch_batch`\n- `test_runnable_branch_abatch`\n\n(2 consecutive clean runs)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "RunnableSequence",
+        "type": "Technology",
+        "description": "A core component or class in the system that handles sequences of operations."
+      },
+      {
+        "name": "batch()",
+        "type": "Feature",
+        "description": "A method of RunnableSequence for processing inputs in batches."
+      },
+      {
+        "name": "abatch()",
+        "type": "Feature",
+        "description": "An asynchronous method of RunnableSequence for processing inputs in batches."
+      },
+      {
+        "name": "list.pop(0)",
+        "type": "Technology",
+        "description": "A Python list method used for removing the first element."
+      },
+      {
+        "name": "O(n) Complexity",
+        "type": "Problem",
+        "description": "A linear time complexity per call, indicating performance scales linearly with input size."
+      },
+      {
+        "name": "O(n²) Complexity",
+        "type": "Problem",
+        "description": "A quadratic time complexity, indicating poor performance for large batch sizes."
+      },
+      {
+        "name": "collections.deque",
+        "type": "Technology",
+        "description": "A Python data structure from the collections module, optimized for appends and pops from both ends."
+      },
+      {
+        "name": ".popleft()",
+        "type": "Feature",
+        "description": "A method of collections.deque for removing the first element."
+      },
+      {
+        "name": "O(1) Complexity",
+        "type": "Feature",
+        "description": "A constant time complexity, indicating efficient performance regardless of input size."
+      },
+      {
+        "name": "giulio-leone",
+        "type": "Organization",
+        "description": "The author of the issue and proposed solution."
+      },
+      {
+        "name": "Copilot",
+        "type": "Organization",
+        "description": "An AI assistant that co-authored the solution."
+      }
+    ],
+    "relations": [
+      {
+        "source": "RunnableSequence",
+        "target": "batch()",
+        "label": "USES",
+        "evidence": "RunnableSequence.batch()",
+        "evidence_start": 13,
+        "evidence_end": 37
+      },
+      {
+        "source": "RunnableSequence",
+        "target": "abatch()",
+        "label": "USES",
+        "evidence": "abatch()",
+        "evidence_start": 44,
+        "evidence_end": 52
+      },
+      {
+        "source": "batch()",
+        "target": "list.pop(0)",
+        "label": "USES",
+        "evidence": "RunnableSequence.batch() and abatch() use list.pop(0)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "abatch()",
+        "target": "list.pop(0)",
+        "label": "USES",
+        "evidence": "RunnableSequence.batch() and abatch() use list.pop(0)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "list.pop(0)",
+        "target": "O(n) Complexity",
+        "label": "CAUSES",
+        "evidence": "list.pop(0) is O(n) per call",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "O(n) Complexity",
+        "target": "O(n²) Complexity",
+        "label": "CAUSES",
+        "evidence": "For large batch sizes this accumulates to O(n²) total work.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "O(n²) Complexity",
+        "target": "RunnableSequence",
+        "label": "AFFECTS",
+        "evidence": "For large batch sizes this accumulates to O(n²) total work.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "collections.deque",
+        "target": "RunnableSequence",
+        "label": "RELATED_TO",
+        "evidence": "use deque for pipeline batch output reassembly in RunnableSequence",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "collections.deque",
+        "target": ".popleft()",
+        "label": "USES",
+        "evidence": "Convert the copied inputs list to a collections.deque and replace .pop(0) with .popleft()",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": ".popleft()",
+        "target": "O(1) Complexity",
+        "label": "RELATED_TO",
+        "evidence": "which is O(1) amortised",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "giulio-leone",
+        "target": "Copilot",
+        "label": "RELATED_TO",
+        "evidence": "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+        "evidence_start": 827,
+        "evidence_end": 895
+      }
+    ],
+    "summary": "The `RunnableSequence.batch()` and `abatch()` methods suffer from `O(n²)` performance due to `list.pop(0)`, which is resolved by switching to `collections.deque` and its `O(1)` `popleft()` method."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

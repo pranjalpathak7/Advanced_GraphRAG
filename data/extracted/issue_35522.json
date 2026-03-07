@@ -1,0 +1,161 @@
+{
+  "id": 35522,
+  "title": "fix(huggingface): bump transformers and sentence-transformers lower bounds",
+  "status": "closed",
+  "created_at": "2026-03-02T15:33:24Z",
+  "author_name": "mdrxy",
+  "url": "https://github.com/langchain-ai/langchain/pull/35522",
+  "body_text": "Bump `transformers` and `sentence-transformers` lower bounds in `langchain-huggingface` to resolve a dependency conflict with `huggingface-hub` 1.x. The existing constraints allowed `huggingface-hub>=0.33.4,<2.0.0` (so hub 1.x is valid), but `transformers` 4.x requires `huggingface-hub<1.0` — causing the pre-release CI job to fail when `uv pip install --force-reinstall` resolved hub to 1.5.0 while leaving `transformers` at 4.56.2.\r\n\r\nBreaking change for users on transformers 4.x or sentence-transformers<5.2.0 who install langchain-huggingface[full].",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "transformers",
+        "type": "Technology",
+        "description": "A Python library for natural language processing."
+      },
+      {
+        "name": "sentence-transformers",
+        "type": "Technology",
+        "description": "A Python framework for state-of-the-art sentence, text and image embeddings."
+      },
+      {
+        "name": "langchain-huggingface",
+        "type": "Technology",
+        "description": "A component of LangChain that integrates with Hugging Face models."
+      },
+      {
+        "name": "huggingface-hub",
+        "type": "Technology",
+        "description": "A library for interacting with the Hugging Face Hub."
+      },
+      {
+        "name": "Dependency Conflict",
+        "type": "Problem",
+        "description": "An issue arising from incompatible version requirements between packages."
+      },
+      {
+        "name": "Pre-release CI Job",
+        "type": "Technology",
+        "description": "A continuous integration process for pre-release versions of software."
+      },
+      {
+        "name": "Lower Bounds Bump",
+        "type": "Feature",
+        "description": "The proposed change to increase the minimum required versions for `transformers` and `sentence-transformers`."
+      },
+      {
+        "name": "transformers 4.x",
+        "type": "Technology",
+        "description": "A specific major version series of the `transformers` library."
+      },
+      {
+        "name": "huggingface-hub 1.x",
+        "type": "Technology",
+        "description": "A specific major version series of the `huggingface-hub` library."
+      },
+      {
+        "name": "sentence-transformers <5.2.0",
+        "type": "Technology",
+        "description": "A specific version range of the `sentence-transformers` library, below 5.2.0."
+      },
+      {
+        "name": "langchain-huggingface[full]",
+        "type": "Technology",
+        "description": "A specific installation variant of `langchain-huggingface` that includes all its dependencies."
+      }
+    ],
+    "relations": [
+      {
+        "source": "langchain-huggingface",
+        "target": "transformers",
+        "label": "USES",
+        "evidence": "Bump `transformers` and `sentence-transformers` lower bounds in `langchain-huggingface`",
+        "evidence_start": 0,
+        "evidence_end": 87
+      },
+      {
+        "source": "langchain-huggingface",
+        "target": "sentence-transformers",
+        "label": "USES",
+        "evidence": "Bump `transformers` and `sentence-transformers` lower bounds in `langchain-huggingface`",
+        "evidence_start": 0,
+        "evidence_end": 87
+      },
+      {
+        "source": "Dependency Conflict",
+        "target": "langchain-huggingface",
+        "label": "AFFECTS",
+        "evidence": "resolve a dependency conflict with `huggingface-hub` 1.x",
+        "evidence_start": 91,
+        "evidence_end": 147
+      },
+      {
+        "source": "huggingface-hub 1.x",
+        "target": "Dependency Conflict",
+        "label": "CAUSES",
+        "evidence": "dependency conflict with `huggingface-hub` 1.x",
+        "evidence_start": 101,
+        "evidence_end": 147
+      },
+      {
+        "source": "transformers 4.x",
+        "target": "Dependency Conflict",
+        "label": "CAUSES",
+        "evidence": "`transformers` 4.x requires `huggingface-hub<1.0`",
+        "evidence_start": 242,
+        "evidence_end": 291
+      },
+      {
+        "source": "Dependency Conflict",
+        "target": "Pre-release CI Job",
+        "label": "CAUSES",
+        "evidence": "causing the pre-release CI job to fail",
+        "evidence_start": 294,
+        "evidence_end": 332
+      },
+      {
+        "source": "Lower Bounds Bump",
+        "target": "transformers",
+        "label": "RELATED_TO",
+        "evidence": "Bump `transformers` and `sentence-transformers` lower bounds",
+        "evidence_start": 0,
+        "evidence_end": 60
+      },
+      {
+        "source": "Lower Bounds Bump",
+        "target": "sentence-transformers",
+        "label": "RELATED_TO",
+        "evidence": "Bump `transformers` and `sentence-transformers` lower bounds",
+        "evidence_start": 0,
+        "evidence_end": 60
+      },
+      {
+        "source": "Lower Bounds Bump",
+        "target": "transformers 4.x",
+        "label": "AFFECTS",
+        "evidence": "Breaking change for users on transformers 4.x",
+        "evidence_start": 438,
+        "evidence_end": 483
+      },
+      {
+        "source": "Lower Bounds Bump",
+        "target": "sentence-transformers <5.2.0",
+        "label": "AFFECTS",
+        "evidence": "Breaking change for users on transformers 4.x or sentence-transformers<5.2.0",
+        "evidence_start": 438,
+        "evidence_end": 514
+      },
+      {
+        "source": "Lower Bounds Bump",
+        "target": "langchain-huggingface[full]",
+        "label": "AFFECTS",
+        "evidence": "who install langchain-huggingface[full]",
+        "evidence_start": 515,
+        "evidence_end": 554
+      }
+    ],
+    "summary": "The `langchain-huggingface` package needs to bump its `transformers` and `sentence-transformers` lower bounds to resolve a dependency conflict with `huggingface-hub 1.x`, which currently causes pre-release CI job failures and will be a breaking change for users on older versions of `transformers` or `sentence-transformers`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,12 @@
+{
+  "id": 35478,
+  "title": "fix(core): prevent RunnableRetry.batch from returning corrupted outputs on partial failure",
+  "status": "closed",
+  "created_at": "2026-02-28T09:07:03Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35478",
+  "body_text": "## Summary\n\nFixes #35475\n\nWhen using `RunnableLambda(...).with_retry(...).batch(..., return_exceptions=True)`, if some items succeed on retry while others permanently fail, the failed items' positions in the output list can contain a successful result from a different item instead of the expected exception.\n\n## Root Cause\n\nIn both `_batch()` and `_abatch()`, after the retry loop completes:\n\n1. `result` holds the raw outputs from the **last** retry attempt (both successes and exceptions)\n2. Successful outputs from that attempt are added to `results_map`, but are **not removed** from `result`\n3. The output-assembly loop uses `result.pop(0)` for items not in `results_map`\n4. This pops a successful result (from a different item) instead of the exception for the permanently-failed item\n\n**Example** with `stop_after_attempt=2` and inputs `['ok', 'retry_then_ok', 'always_fail']`:\n- After attempt 2: `result = ['retry-result', ValueError()]`, `results_map = {0: 'ok-result', 1: 'retry-result'}`\n- For index 2 (not in `results_map`): `result.pop(0)` returns `'retry-result'` instead of `ValueError()`\n\n## Fix\n\nFilter `result` to keep only exceptions before the output-assembly loop:\n```python\nresult = [r for r in result if isinstance(r, Exception)]\n```\n\nThis ensures each permanently-failed item gets its actual exception. Applied to both sync `_batch` and async `_abatch`.\n\n## Tests\n\nAdded:\n- `test_retry_batch_no_corrupted_outputs_on_partial_failure` (sync)\n- `test_async_retry_batch_no_corrupted_outputs_on_partial_failure` (async)\n\nBoth verify that the third item (always fails) is an exception while the first two items have their correct results. All 6 retry tests pass.",
+  "extracted_data": null,
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": 35476
+}

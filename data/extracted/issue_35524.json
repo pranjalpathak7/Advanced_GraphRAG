@@ -1,0 +1,187 @@
+{
+  "id": 35524,
+  "title": "fix(huggingface): resolve huggingface-hub 1.x compat",
+  "status": "closed",
+  "created_at": "2026-03-02T17:22:44Z",
+  "author_name": "mdrxy",
+  "url": "https://github.com/langchain-ai/langchain/pull/35524",
+  "body_text": "- Switch `TestHuggingFaceEndpoint` from `Llama-4-Maverick` + `fireworks-ai` to `Llama-3.3-70B-Instruct` + `sambanova` — Maverick is no longer routed to Fireworks in hub 1.x\n- Switch `test_stream_usage` provider from `nebius` to `scaleway` for `gemma-3-27b-it` — same provider routing change\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "HuggingFace",
+        "type": "Technology",
+        "description": "A platform for machine learning."
+      },
+      {
+        "name": "HuggingFace Hub 1.x",
+        "type": "Technology",
+        "description": "A specific version of the HuggingFace Hub."
+      },
+      {
+        "name": "Compatibility Issue",
+        "type": "Problem",
+        "description": "An issue related to compatibility with HuggingFace Hub 1.x."
+      },
+      {
+        "name": "TestHuggingFaceEndpoint",
+        "type": "Feature",
+        "description": "A test component for HuggingFace endpoints."
+      },
+      {
+        "name": "Llama-4-Maverick",
+        "type": "Technology",
+        "description": "A language model."
+      },
+      {
+        "name": "Fireworks.ai",
+        "type": "Technology",
+        "description": "An AI model provider."
+      },
+      {
+        "name": "Llama-3.3-70B-Instruct",
+        "type": "Technology",
+        "description": "A language model."
+      },
+      {
+        "name": "SambaNova",
+        "type": "Technology",
+        "description": "An AI model provider."
+      },
+      {
+        "name": "Test Stream Usage",
+        "type": "Feature",
+        "description": "A test component for stream usage."
+      },
+      {
+        "name": "Nebius",
+        "type": "Technology",
+        "description": "An AI model provider."
+      },
+      {
+        "name": "Scaleway",
+        "type": "Technology",
+        "description": "An AI model provider."
+      },
+      {
+        "name": "Gemma-3-27B-IT",
+        "type": "Technology",
+        "description": "A language model."
+      },
+      {
+        "name": "Provider Routing Change",
+        "type": "Problem",
+        "description": "A change in how providers are routed within HuggingFace Hub 1.x."
+      }
+    ],
+    "relations": [
+      {
+        "source": "HuggingFace Hub 1.x",
+        "target": "Compatibility Issue",
+        "label": "CAUSES",
+        "evidence": "resolve huggingface-hub 1.x compat",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "HuggingFace Hub 1.x",
+        "target": "Provider Routing Change",
+        "label": "CAUSES",
+        "evidence": "Maverick is no longer routed to Fireworks in hub 1.x",
+        "evidence_start": 120,
+        "evidence_end": 172
+      },
+      {
+        "source": "TestHuggingFaceEndpoint",
+        "target": "Llama-4-Maverick",
+        "label": "USES",
+        "evidence": "Switch TestHuggingFaceEndpoint from Llama-4-Maverick",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "TestHuggingFaceEndpoint",
+        "target": "Fireworks.ai",
+        "label": "USES",
+        "evidence": "Switch TestHuggingFaceEndpoint from Llama-4-Maverick + fireworks-ai",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "TestHuggingFaceEndpoint",
+        "target": "Llama-3.3-70B-Instruct",
+        "label": "USES",
+        "evidence": "to Llama-3.3-70B-Instruct",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "TestHuggingFaceEndpoint",
+        "target": "SambaNova",
+        "label": "USES",
+        "evidence": "to Llama-3.3-70B-Instruct + sambanova",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Provider Routing Change",
+        "target": "Llama-4-Maverick",
+        "label": "AFFECTS",
+        "evidence": "Maverick is no longer routed to Fireworks in hub 1.x",
+        "evidence_start": 120,
+        "evidence_end": 172
+      },
+      {
+        "source": "Provider Routing Change",
+        "target": "Fireworks.ai",
+        "label": "AFFECTS",
+        "evidence": "Maverick is no longer routed to Fireworks in hub 1.x",
+        "evidence_start": 120,
+        "evidence_end": 172
+      },
+      {
+        "source": "Test Stream Usage",
+        "target": "Nebius",
+        "label": "USES",
+        "evidence": "Switch test_stream_usage provider from nebius",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Test Stream Usage",
+        "target": "Scaleway",
+        "label": "USES",
+        "evidence": "to scaleway",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Test Stream Usage",
+        "target": "Gemma-3-27B-IT",
+        "label": "USES",
+        "evidence": "for gemma-3-27b-it",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Provider Routing Change",
+        "target": "Nebius",
+        "label": "AFFECTS",
+        "evidence": "same provider routing change",
+        "evidence_start": 262,
+        "evidence_end": 290
+      },
+      {
+        "source": "Provider Routing Change",
+        "target": "Gemma-3-27B-IT",
+        "label": "AFFECTS",
+        "evidence": "same provider routing change",
+        "evidence_start": 262,
+        "evidence_end": 290
+      }
+    ],
+    "summary": "This issue resolves compatibility problems with HuggingFace Hub 1.x by updating model and provider routing for `TestHuggingFaceEndpoint` and `test_stream_usage` due to changes in how models like Llama-4-Maverick and Gemma-3-27B-IT are routed."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

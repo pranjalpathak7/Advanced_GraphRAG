@@ -1,0 +1,121 @@
+{
+  "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35539",
+  "repository_url": "https://api.github.com/repos/langchain-ai/langchain",
+  "labels_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35539/labels{/name}",
+  "comments_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35539/comments",
+  "events_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35539/events",
+  "html_url": "https://github.com/langchain-ai/langchain/issues/35539",
+  "id": 4018328350,
+  "node_id": "I_kwDOIPDwls7vgtMe",
+  "number": 35539,
+  "title": "LangChain v1.1-1.12 create_agent with response_format hardcodes tool_choice=\"any\" for structured output tool, breaking Anthropic thinking + structured output.",
+  "user": {
+    "login": "stoyan-atanasov-beye",
+    "id": 218773497,
+    "node_id": "U_kgDODQo3-Q",
+    "avatar_url": "https://avatars.githubusercontent.com/u/218773497?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/stoyan-atanasov-beye",
+    "html_url": "https://github.com/stoyan-atanasov-beye",
+    "followers_url": "https://api.github.com/users/stoyan-atanasov-beye/followers",
+    "following_url": "https://api.github.com/users/stoyan-atanasov-beye/following{/other_user}",
+    "gists_url": "https://api.github.com/users/stoyan-atanasov-beye/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/stoyan-atanasov-beye/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/stoyan-atanasov-beye/subscriptions",
+    "organizations_url": "https://api.github.com/users/stoyan-atanasov-beye/orgs",
+    "repos_url": "https://api.github.com/users/stoyan-atanasov-beye/repos",
+    "events_url": "https://api.github.com/users/stoyan-atanasov-beye/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/stoyan-atanasov-beye/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 5680700839,
+      "node_id": "LA_kwDOIPDwls8AAAABUpidpw",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/bug",
+      "name": "bug",
+      "color": "b60205",
+      "default": true,
+      "description": "Related to a bug, vulnerability, unexpected error with an existing feature"
+    },
+    {
+      "id": 9019019264,
+      "node_id": "LA_kwDOIPDwls8AAAACGZNQAA",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/langchain",
+      "name": "langchain",
+      "color": "f9d0c4",
+      "default": false,
+      "description": "`langchain` package issues & PRs"
+    },
+    {
+      "id": 9605597620,
+      "node_id": "LA_kwDOIPDwls8AAAACPInJtA",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/anthropic",
+      "name": "anthropic",
+      "color": "cc3518",
+      "default": false,
+      "description": "`langchain-anthropic` package issues & PRs"
+    },
+    {
+      "id": 10037429975,
+      "node_id": "LA_kwDOIPDwls8AAAACVkcG1w",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/external",
+      "name": "external",
+      "color": "d32751",
+      "default": false,
+      "description": ""
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [],
+  "milestone": null,
+  "comments": 0,
+  "created_at": "2026-03-03T19:25:51Z",
+  "updated_at": "2026-03-03T19:26:23Z",
+  "closed_at": null,
+  "assignee": null,
+  "author_association": "NONE",
+  "type": {
+    "id": 18879550,
+    "node_id": "IT_kwDOB43M6c4BIBQ-",
+    "name": "Bug",
+    "description": "An unexpected problem or behavior",
+    "color": "red",
+    "created_at": "2024-02-16T01:43:33Z",
+    "updated_at": "2024-07-26T15:00:33Z",
+    "is_enabled": true
+  },
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [x] langchain\n- [ ] langchain-openai\n- [x] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n_No response_\n\n### Reproduction Steps / Example Code (Python)\n\n```python\nfrom langchain_anthropic import ChatAnthropic\nfrom pydantic_v1 import BaseModel, Field\nfrom langchain.agents import create_agent\n\nclass Result(BaseModel):\n    answer: str = Field(description=\"Final answer\")\n\nllm = ChatAnthropic(\n    model=\"claude-3-5-sonnet-20241022\",\n    thinking={\"type\": \"enabled\", \"budget_tokens\": 5000}\n)\n\nagent = create_agent(llm, tools=[], response_format=Result, system_prompt=\"Answer directly.\")\nagent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"What is 2+2?\"}]})\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\nError code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Thinking may not be enabled when tool_choice forces tool use.'}, 'request_id': 'req_011CYggXHSpHGThY9So9qSzy'}\n```\n\n### Description\n\n`create_agent(model, ..., response_format=Schema)` converts structured output to a tool call with `tool_choice=\"any\"`. \n\nAnthropic rejects this with `\"Thinking may not be enabled when tool_choice forces tool use\"` when model has `thinking={\"type\": \"enabled\"}`.\n\n**Expected:** Use provider native structured output (`with_structured_output(method=\"anthropic_json_mode\")`) or `tool_choice=\"auto\"`.\n\n**Actual:** Forces tool-based structured output with `tool_choice=\"any\"`.\n\n### Reproduction\n```python\nfrom langchain_anthropic import ChatAnthropic\nfrom pydantic_v1 import BaseModel, Field\nfrom langchain.agents import create_agent\n\nclass Result(BaseModel):\n    answer: str = Field(description=\"Final answer\")\n\nllm = ChatAnthropic(\n    model=\"claude-3-5-sonnet-20241022\",\n    thinking={\"type\": \"enabled\", \"budget_tokens\": 5000}\n)\n\nagent = create_agent(llm, tools=[], response_format=Result, system_prompt=\"Answer directly.\")\nagent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"What is 2+2?\"}]})\n```\n**Error:** `400: 'Thinking may not be enabled when tool_choice forces tool use.'`\n\n### Environment\n- `langchain==1.1.x`\n- `langchain-anthropic==0.x.x`\n\n### Workaround\nManual LangGraph or `llm.with_structured_output(Result, method=\"anthropic_json_mode\")`.\n\n### Source\n`create_agent` \u2192 structured output \u2192 tool binding \u2192 `tool_choice=\"any\"`.\n\n**Fix:** Add `provider_strategy=\"anthropic_json_mode\"` or detect `thinking` param \u2192 skip tool-based structured output.\n\n### System Info\n\nystem Information\n------------------\n> OS:  Linux\n> OS Version:  #91-Ubuntu SMP PREEMPT_DYNAMIC Tue Nov 18 14:14:30 UTC 2025\n> Python Version:  3.13.11 (main, Dec  9 2025, 02:03:30) [GCC 12.2.0]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.17\n> langchain: 1.2.10\n> langchain_community: 0.4\n> langsmith: 0.4.37\n> langchain_anthropic: 1.3.4\n> langchain_classic: 1.0.0\n> langchain_google_genai: 4.2.0\n> langchain_google_vertexai: 3.2.1\n> langchain_openai: 1.0.1\n> langchain_postgres: 0.0.16\n> langchain_text_splitters: 1.0.0\n> langgraph_sdk: 0.3.9\n\nOptional packages not installed\n-------------------------------\n> deepagents\n> deepagents-cli\n\nOther Dependencies\n------------------\n> aiohttp: 3.13.0\n> anthropic: 0.84.0\n> asyncpg: 0.31.0\n> bottleneck: 1.6.0\n> dataclasses-json: 0.6.7\n> filetype: 1.2.0\n> google-cloud-aiplatform: 1.134.0\n> google-cloud-storage: 3.8.0\n> google-genai: 1.60.0\n> httpx: 0.28.1\n> httpx-sse: 0.4.3\n> jsonpatch: 1.33\n> langgraph: 1.0.10\n> numexpr: 2.14.1\n> numpy: 2.3.4\n> openai: 2.14.0\n> openai-agents: 0.4.1\n> orjson: 3.11.5\n> packaging: 25.0\n> pgvector: 0.3.6\n> psycopg: 3.2.11\n> psycopg-pool: 3.3.0\n> pyarrow: 22.0.0\n> pydantic: 2.12.3\n> pydantic-settings: 2.12.0\n> pytest: 8.4.2\n> PyYAML: 6.0.3\n> pyyaml: 6.0.3\n> requests: 2.32.5\n> requests-toolbelt: 1.0.0\n> rich: 14.2.0\n> SQLAlchemy: 2.0.44\n> sqlalchemy: 2.0.44\n> tenacity: 9.1.2\n> tiktoken: 0.12.0\n> typing-extensions: 4.15.0\n> uuid-utils: 0.14.0\n> validators: 0.35.0\n> zstandard: 0.25.0",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35539/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35539/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}

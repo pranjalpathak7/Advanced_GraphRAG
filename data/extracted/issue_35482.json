@@ -1,0 +1,145 @@
+{
+  "id": 35482,
+  "title": "fix(openai): fix if/elif chain and unhandled tool name in _consolidate_calls",
+  "status": "open",
+  "created_at": "2026-02-28T12:27:10Z",
+  "author_name": "umut-polat",
+  "url": "https://github.com/langchain-ai/langchain/pull/35482",
+  "body_text": "## problem\n\n`_consolidate_calls` in `_compat.py` has two issues:\n\n1. the `file_search` branch uses a bare `if` instead of `elif`, breaking the mutually exclusive chain that starts with `web_search`. functionally this doesn't cause wrong results today since a tool name can only match one branch, but it means the `file_search` condition is evaluated even after `web_search` already matched — and more importantly, the downstream `elif`/`else` chain is attached to `file_search` rather than the full dispatch.\n\n2. when a `server_tool_call` has a name that doesn't match any known tool (`web_search`, `file_search`, `code_interpreter`, `remote_mcp`, `mcp_list_tools`), the `else` branch does `pass` but the code still falls through to `yield collapsed` — where `collapsed` was never assigned, causing an `UnboundLocalError`. this can happen if openai adds new server tool types in the future.\n\n## fix\n\n- change `file_search`'s `if` to `elif` so the entire dispatch is a single `if/elif/else` chain\n- in the `else` branch, emit both the call and result items unchanged instead of silently dropping them\n\n## tests\n\nadded two tests:\n- `test_consolidate_calls_unknown_tool_name`: verifies that unrecognized tool names pass through both items without error\n- `test_consolidate_calls_web_search`: verifies that web_search pairs are still collapsed correctly",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "_consolidate_calls",
+        "type": "Feature",
+        "description": "A function in `_compat.py` that processes server tool calls."
+      },
+      {
+        "name": "_compat.py",
+        "type": "Technology",
+        "description": "A Python module containing compatibility logic."
+      },
+      {
+        "name": "If/Elif Chain Issue",
+        "type": "Problem",
+        "description": "An incorrect conditional structure (bare `if` instead of `elif`) in `_consolidate_calls`."
+      },
+      {
+        "name": "Unhandled Tool Name",
+        "type": "Problem",
+        "description": "A scenario where `_consolidate_calls` does not properly handle `server_tool_call` names that don't match known tools."
+      },
+      {
+        "name": "UnboundLocalError",
+        "type": "Problem",
+        "description": "A runtime error caused by attempting to access an unassigned variable `collapsed`."
+      },
+      {
+        "name": "File Search",
+        "type": "Feature",
+        "description": "A type of tool call handled by `_consolidate_calls`."
+      },
+      {
+        "name": "Web Search",
+        "type": "Feature",
+        "description": "A type of tool call handled by `_consolidate_calls`."
+      },
+      {
+        "name": "Server Tool Call",
+        "type": "Technology",
+        "description": "A data structure representing a call to a server-side tool."
+      },
+      {
+        "name": "OpenAI",
+        "type": "Organization",
+        "description": "The organization that might add new server tool types."
+      },
+      {
+        "name": "Test Consolidate Calls Unknown Tool Name",
+        "type": "Feature",
+        "description": "A test case verifying the fix for unrecognized tool names."
+      },
+      {
+        "name": "Test Consolidate Calls Web Search",
+        "type": "Feature",
+        "description": "A test case verifying correct collapsing of web_search pairs."
+      }
+    ],
+    "relations": [
+      {
+        "source": "_consolidate_calls",
+        "target": "_compat.py",
+        "label": "RELATED_TO",
+        "evidence": "`_consolidate_calls` in `_compat.py`",
+        "evidence_start": 12,
+        "evidence_end": 48
+      },
+      {
+        "source": "If/Elif Chain Issue",
+        "target": "_consolidate_calls",
+        "label": "AFFECTS",
+        "evidence": "`_consolidate_calls` in `_compat.py` has two issues: 1. the `file_search` branch uses a bare `if` instead of `elif`, breaking the mutually exclusive chain that starts with `web_search`.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Unhandled Tool Name",
+        "target": "_consolidate_calls",
+        "label": "AFFECTS",
+        "evidence": "when a `server_tool_call` has a name that doesn't match any known tool (`web_search`, `file_search`, `code_interpreter`, `remote_mcp`, `mcp_list_tools`), the `else` branch does `pass` but the code still falls through to `yield collapsed` — where `collapsed` was never assigned, causing an `UnboundLocalError`.",
+        "evidence_start": 513,
+        "evidence_end": 822
+      },
+      {
+        "source": "Unhandled Tool Name",
+        "target": "UnboundLocalError",
+        "label": "CAUSES",
+        "evidence": "when a `server_tool_call` has a name that doesn't match any known tool (...), the `else` branch does `pass` but the code still falls through to `yield collapsed` — where `collapsed` was never assigned, causing an `UnboundLocalError`.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "File Search",
+        "target": "If/Elif Chain Issue",
+        "label": "RELATED_TO",
+        "evidence": "the `file_search` branch uses a bare `if` instead of `elif`",
+        "evidence_start": 69,
+        "evidence_end": 128
+      },
+      {
+        "source": "Web Search",
+        "target": "If/Elif Chain Issue",
+        "label": "RELATED_TO",
+        "evidence": "breaking the mutually exclusive chain that starts with `web_search`",
+        "evidence_start": 130,
+        "evidence_end": 197
+      },
+      {
+        "source": "OpenAI",
+        "target": "Server Tool Call",
+        "label": "RELATED_TO",
+        "evidence": "this can happen if openai adds new server tool types in the future.",
+        "evidence_start": 823,
+        "evidence_end": 890
+      },
+      {
+        "source": "Test Consolidate Calls Unknown Tool Name",
+        "target": "Unhandled Tool Name",
+        "label": "USES",
+        "evidence": "`test_consolidate_calls_unknown_tool_name`: verifies that unrecognized tool names pass through both items without error",
+        "evidence_start": 1130,
+        "evidence_end": 1249
+      },
+      {
+        "source": "Test Consolidate Calls Web Search",
+        "target": "Web Search",
+        "label": "USES",
+        "evidence": "`test_consolidate_calls_web_search`: verifies that web_search pairs are still collapsed correctly",
+        "evidence_start": 1252,
+        "evidence_end": 1349
+      }
+    ],
+    "summary": "The `_consolidate_calls` function in `_compat.py` had an incorrect `if/elif` chain and an `UnboundLocalError` when encountering unhandled `server_tool_call` names, which is fixed by adjusting the conditional logic and ensuring all calls are emitted."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

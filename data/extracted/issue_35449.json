@@ -1,0 +1,210 @@
+{
+  "id": 35449,
+  "title": "chore: bump nltk from 3.9.2 to 3.9.3 in /libs/text-splitters",
+  "status": "closed",
+  "created_at": "2026-02-25T23:13:52Z",
+  "author_name": "dependabot[bot]",
+  "url": "https://github.com/langchain-ai/langchain/pull/35449",
+  "body_text": "Bumps [nltk](https://github.com/nltk/nltk) from 3.9.2 to 3.9.3.\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://github.com/nltk/nltk/blob/develop/ChangeLog\">nltk's changelog</a>.</em></p>\n<blockquote>\n<p>Version 3.9.3 2026-02-21</p>\n<ul>\n<li>Fix CVE-2025-14009: secure ZIP extraction in nltk.downloader (<a href=\"https://redirect.github.com/nltk/nltk/issues/3468\">#3468</a>)</li>\n<li>Block path traversal/arbitrary reads in nltk.data for protocol-less refs (<a href=\"https://redirect.github.com/nltk/nltk/issues/3467\">#3467</a>)</li>\n<li>Block path traversal/abs paths in corpus readers and FS pointers (<a href=\"https://redirect.github.com/nltk/nltk/issues/3479\">#3479</a>, <a href=\"https://redirect.github.com/nltk/nltk/issues/3480\">#3480</a>)</li>\n<li>Validate external StanfordSegmenter JARs using SHA256 (<a href=\"https://redirect.github.com/nltk/nltk/issues/3477\">#3477</a>)</li>\n<li>Add optional sandbox enforcement for filestring() (<a href=\"https://redirect.github.com/nltk/nltk/issues/3485\">#3485</a>)</li>\n<li>Maintenance: downloader/zipped models, CI/tooling updates</li>\n</ul>\n<p>Thanks to the following contributors to 3.9.3:\nChris Clauss, Eric Kafe, HyperPS, purificant, Shivansh-Game, Christopher Smith</p>\n<p>Version 3.9.2 2025-10-01</p>\n<ul>\n<li>Update download checksums to use SHA256 in built index</li>\n<li>Fix percentage escape in new-style string formatting</li>\n<li>replace shortened URLs using goo.gl</li>\n<li>Make Wordnet interoperable with various taggers and tagged corpora</li>\n<li>Fix saving PerceptronTagger</li>\n<li>Document how to reproduce old Wordnet studies</li>\n<li>properly initialize Portuguese corpus reader</li>\n<li>support for mixed rules conversion into Chomsky Normal Form</li>\n<li>only import tkinter if a GUI is needed</li>\n<li>issue <a href=\"https://redirect.github.com/nltk/nltk/issues/2112\">#2112</a> with Corenlp</li>\n<li>new environment variable NLTK_DOWNLOADER_FORCE_INTERACTIVE_SHELL</li>\n<li>Lesk defaults to most frequent sense in case of ties</li>\n</ul>\n<p>Thanks to the following contributors to 3.9.2:\nJose Cols, Peter de Blanc, GeneralPoxter, Eric Kafe, William LaCroix, Jason Liu,\nSamer Masterson, Mike014, purificant, Andrew Ernest Ritz, samertm, Ikram Ul Haq,\nChristopher Smith, Ryan Mannion</p>\n<p>Version 3.9.1 2024-08-19</p>\n<ul>\n<li>Fixed bug that prevented wordnet from loading</li>\n</ul>\n<p>Version 3.9 2024-08-18</p>\n<ul>\n<li>Fix security vulnerability CVE-2024-39705 (breaking change)</li>\n<li>Replace pickled models (punkt, chunker, taggers) by new pickle-free &quot;_tab&quot; packages</li>\n<li>No longer sort Wordnet synsets and relations (sort in calling function when required)</li>\n<li>Only strip the last suffix in Wordnet Morphy, thus restricting synsets() results</li>\n<li>Add Python 3.12 support</li>\n<li>Many other minor fixes</li>\n</ul>\n<p>Thanks to the following contributors to 3.8.2:\nTom Aarsen, Cat Lee Ball, Veralara Bernhard, Carlos Brandt, Konstantin Chernyshev, Michael Higgins,\nEric Kafe, Vivek Kalyan, David Lukes, Rob Malouf, purificant, Alex Rudnick, Liling Tan, Akihiro Yamazaki.</p>\n<p>Version 3.8.1 2023-01-02</p>\n<ul>\n<li>Resolve RCE vulnerability in localhost WordNet Browser (<a href=\"https://redirect.github.com/nltk/nltk/issues/3100\">#3100</a>)</li>\n</ul>\n<!-- raw HTML omitted -->\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/nltk/nltk/commit/4154eb85e832f266660a09286c7e37e308292284\"><code>4154eb8</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3503\">#3503</a> from ekaf/hotfix-3501</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/7a710cbc8b914628252e9cf2518afe9ba9b13c80\"><code>7a710cb</code></a> Prepare release 3.9.3</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/1056b323af6462455571302e766b67cf300aea18\"><code>1056b32</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3468\">#3468</a> from HyperPS/fix/secure-unzip-rce</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/7dc5baa98f03b4c36300c408a7a66ffc8ea3934f\"><code>7dc5baa</code></a> Resolve merge conflict in tag mapping using normalized nltk resource URL</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/7ef38b8aa6055ef3f82c7f8da490297cc12032b1\"><code>7ef38b8</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3467\">#3467</a> from HyperPS/develop</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/b2e1164bf89277f79b65406c829b99fb20ca1974\"><code>b2e1164</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3485\">#3485</a> from HyperPS/fix-filestring-sandbox-update</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/ac0ce55daa487401f8215a409cef50eae6a4ac98\"><code>ac0ce55</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3480\">#3480</a> from HyperPS/fix/filesystem-sandbox-security</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/603e34d25a2cad4612185ebfa6bc1c0dcfcfb2ab\"><code>603e34d</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3479\">#3479</a> from HyperPS/fix/corpusreader-path-traversal</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/b63a5014aace4d22fe9a713473d2598d409eece4\"><code>b63a501</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3477\">#3477</a> from HyperPS/fix/stanford-segmenter-rce-sha256</li>\n<li><a href=\"https://github.com/nltk/nltk/commit/df38955e506a9fcaa8aba006984a11babd87cec0\"><code>df38955</code></a> Merge pull request <a href=\"https://redirect.github.com/nltk/nltk/issues/3494\">#3494</a> from ekaf/ewnv</li>\n<li>Additional commits viewable in <a href=\"https://github.com/nltk/nltk/compare/3.9.2...3.9.3\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=nltk&package-manager=uv&previous-version=3.9.2&new-version=3.9.3)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\nYou can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/langchain-ai/langchain/network/alerts).\n\n</details>",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "NLTK",
+        "type": "Technology",
+        "description": "A natural language toolkit library."
+      },
+      {
+        "name": "NLTK 3.9.2",
+        "type": "Feature",
+        "description": "A specific previous version of the NLTK library."
+      },
+      {
+        "name": "NLTK 3.9.3",
+        "type": "Feature",
+        "description": "The updated version of the NLTK library."
+      },
+      {
+        "name": "libs/text-splitters",
+        "type": "Technology",
+        "description": "A library component or directory where NLTK is used for text splitting."
+      },
+      {
+        "name": "CVE-2025-14009",
+        "type": "Problem",
+        "description": "A security vulnerability related to insecure ZIP extraction."
+      },
+      {
+        "name": "ZIP Extraction",
+        "type": "Feature",
+        "description": "The functionality within NLTK for extracting content from ZIP archives."
+      },
+      {
+        "name": "nltk.downloader",
+        "type": "Technology",
+        "description": "A component of NLTK responsible for downloading data and models."
+      },
+      {
+        "name": "Path Traversal",
+        "type": "Problem",
+        "description": "A security vulnerability allowing access to unauthorized file system locations."
+      },
+      {
+        "name": "Arbitrary Reads",
+        "type": "Problem",
+        "description": "A security vulnerability allowing unauthorized reading of data."
+      },
+      {
+        "name": "nltk.data",
+        "type": "Technology",
+        "description": "A component of NLTK handling data access and management."
+      },
+      {
+        "name": "Corpus Readers",
+        "type": "Technology",
+        "description": "Components within NLTK used for reading and processing linguistic corpora."
+      },
+      {
+        "name": "FS Pointers",
+        "type": "Technology",
+        "description": "File system pointers used by NLTK for resource management."
+      },
+      {
+        "name": "StanfordSegmenter JARs",
+        "type": "Technology",
+        "description": "External Java Archive files used by the StanfordSegmenter within NLTK."
+      },
+      {
+        "name": "SHA256",
+        "type": "Technology",
+        "description": "A cryptographic hash function used for validating data integrity."
+      },
+      {
+        "name": "Sandbox Enforcement",
+        "type": "Feature",
+        "description": "A security feature to restrict the operations of code within a defined environment."
+      },
+      {
+        "name": "filestring()",
+        "type": "Feature",
+        "description": "A function within NLTK that handles file string operations."
+      }
+    ],
+    "relations": [
+      {
+        "source": "libs/text-splitters",
+        "target": "NLTK",
+        "label": "USES",
+        "evidence": "bump nltk from 3.9.2 to 3.9.3 in /libs/text-splitters",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "NLTK",
+        "target": "NLTK 3.9.2",
+        "label": "RELATED_TO",
+        "evidence": "Bumps [nltk](https://github.com/nltk/nltk) from 3.9.2 to 3.9.3.",
+        "evidence_start": 0,
+        "evidence_end": 63
+      },
+      {
+        "source": "NLTK",
+        "target": "NLTK 3.9.3",
+        "label": "RELATED_TO",
+        "evidence": "Bumps [nltk](https://github.com/nltk/nltk) from 3.9.2 to 3.9.3.",
+        "evidence_start": 0,
+        "evidence_end": 63
+      },
+      {
+        "source": "NLTK 3.9.3",
+        "target": "CVE-2025-14009",
+        "label": "RELATED_TO",
+        "evidence": "Fix CVE-2025-14009: secure ZIP extraction in nltk.downloader",
+        "evidence_start": 270,
+        "evidence_end": 330
+      },
+      {
+        "source": "CVE-2025-14009",
+        "target": "ZIP Extraction",
+        "label": "AFFECTS",
+        "evidence": "Fix CVE-2025-14009: secure ZIP extraction in nltk.downloader",
+        "evidence_start": 270,
+        "evidence_end": 330
+      },
+      {
+        "source": "ZIP Extraction",
+        "target": "nltk.downloader",
+        "label": "RELATED_TO",
+        "evidence": "secure ZIP extraction in nltk.downloader",
+        "evidence_start": 290,
+        "evidence_end": 330
+      },
+      {
+        "source": "NLTK 3.9.3",
+        "target": "Path Traversal",
+        "label": "RELATED_TO",
+        "evidence": "Block path traversal/arbitrary reads in nltk.data for protocol-less refs",
+        "evidence_start": 412,
+        "evidence_end": 484
+      },
+      {
+        "source": "Path Traversal",
+        "target": "nltk.data",
+        "label": "AFFECTS",
+        "evidence": "Block path traversal/arbitrary reads in nltk.data for protocol-less refs",
+        "evidence_start": 412,
+        "evidence_end": 484
+      },
+      {
+        "source": "NLTK 3.9.3",
+        "target": "Arbitrary Reads",
+        "label": "RELATED_TO",
+        "evidence": "Block path traversal/arbitrary reads in nltk.data for protocol-less refs",
+        "evidence_start": 412,
+        "evidence_end": 484
+      },
+      {
+        "source": "Arbitrary Reads",
+        "target": "nltk.data",
+        "label": "AFFECTS",
+        "evidence": "Block path traversal/arbitrary reads in nltk.data for protocol-less refs",
+        "evidence_start": 412,
+        "evidence_end": 484
+      },
+      {
+        "source": "Path Traversal",
+        "target": "Corpus Readers",
+        "label": "AFFECTS",
+        "evidence": "Block path traversal/abs paths in corpus readers and FS pointers",
+        "evidence_start": 566,
+        "evidence_end": 630
+      },
+      {
+        "source": "Path Traversal",
+        "target": "FS Pointers",
+        "label": "AFFECTS",
+        "evidence": "Block path traversal/abs paths in corpus readers and FS pointers",
+        "evidence_start": 566,
+        "evidence_end": 630
+      },
+      {
+        "source": "StanfordSegmenter JARs",
+        "target": "SHA256",
+        "label": "USES",
+        "evidence": "Validate external StanfordSegmenter JARs using SHA256",
+        "evidence_start": 783,
+        "evidence_end": 836
+      },
+      {
+        "source": "Sandbox Enforcement",
+        "target": "filestring()",
+        "label": "RELATED_TO",
+        "evidence": "Add optional sandbox enforcement for filestring()",
+        "evidence_start": 918,
+        "evidence_end": 967
+      }
+    ],
+    "summary": "This issue updates the NLTK library from version 3.9.2 to 3.9.3, which includes fixes for security vulnerabilities such as CVE-2025-14009 (secure ZIP extraction), path traversal, and arbitrary reads in components like nltk.downloader, nltk.data, corpus readers, and FS pointers."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

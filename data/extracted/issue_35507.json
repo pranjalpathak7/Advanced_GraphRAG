@@ -1,0 +1,164 @@
+{
+  "id": 35507,
+  "title": "fix: handle ISO string and numeric timestamps in TimeWeightedVectorSt…",
+  "status": "open",
+  "created_at": "2026-03-02T05:36:12Z",
+  "author_name": "karamvirsingh1998",
+  "url": "https://github.com/langchain-ai/langchain/pull/35507",
+  "body_text": "…oreRetriever\r\n\r\n\r\n\r\nFix TypeError when documents have timestamp metadata stored as ISO strings or numeric timestamps instead of datetime objects. The retriever now properly converts these common formats to datetime before time decay calculations.\r\n\r\n\r\nI was testing TimeWeightedVectorStoreRetriever with documents loaded from a JSON file where timestamps were stored as ISO strings (e.g., \"2024-01-01T12:00:00\"). When I called retriever.invoke(\"query\"), it crashed with TypeError: unsupported operand type(s) for -: 'datetime.datetime' and 'str' because the retriever tried to subtract a string from a datetime when calculating time decay. The fix now properly handles ISO strings, numeric timestamps, and datetime objects in metadata.\r\n\r\n\r\n# PR Description\r\n\r\n## Summary\r\nFix `TypeError` in `TimeWeightedVectorStoreRetriever` when documents have timestamp metadata stored as ISO strings or numeric timestamps instead of datetime objects. The retriever now properly converts these common formats to datetime before time decay calculations.\r\n\r\n## Bug Discovery\r\nI was testing `TimeWeightedVectorStoreRetriever` with documents loaded from a JSON file where timestamps were stored as ISO strings (e.g., `\"2024-01-01T12:00:00\"`). When I called `retriever.invoke(\"query\")`, it crashed with `TypeError: unsupported operand type(s) for -: 'datetime.datetime' and 'str'` because the retriever tried to subtract a string from a datetime when calculating time decay.\r\n\r\n## Changes\r\n- Enhanced `_document_get_date()` method to handle ISO 8601 strings, numeric timestamps (int/float), and datetime objects\r\n- Added fallback to `datetime.now()` for unrecognized formats to prevent crashes\r\n- Added unit tests for ISO string and numeric timestamp handling\r\n\r\n## Testing\r\n- Added unit tests in `test_time_weighted_retriever_dates.py` that verify:\r\n  - ISO 8601 string timestamps are properly converted\r\n  - Numeric timestamp values are properly converted\r\n  - Existing datetime object handling remains unchanged\r\n\r\n## AI Assistance Disclaimer\r\nThis PR was created with assistance from AI tools for code analysis, bug identification, and implementation. The fix addresses a real type safety issue in the retriever's date handling logic.\r\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "TimeWeightedVectorStoreRetriever",
+        "type": "Technology",
+        "description": "A retriever component that calculates time decay for documents based on their timestamps."
+      },
+      {
+        "name": "TypeError",
+        "type": "Problem",
+        "description": "An error indicating an operation was attempted on an inappropriate type, specifically subtracting a string from a datetime object."
+      },
+      {
+        "name": "ISO Strings",
+        "type": "Feature",
+        "description": "A common string format for representing timestamps (e.g., '2024-01-01T12:00:00')."
+      },
+      {
+        "name": "Numeric Timestamps",
+        "type": "Feature",
+        "description": "Timestamps represented as integers or floating-point numbers."
+      },
+      {
+        "name": "Datetime Objects",
+        "type": "Technology",
+        "description": "Python's standard object for representing dates and times, used for time decay calculations."
+      },
+      {
+        "name": "JSON File",
+        "type": "Technology",
+        "description": "A common file format for storing data, used here to load documents with timestamp metadata."
+      },
+      {
+        "name": "_document_get_date()",
+        "type": "Feature",
+        "description": "A method within TimeWeightedVectorStoreRetriever responsible for extracting and converting date information from document metadata."
+      },
+      {
+        "name": "datetime.now()",
+        "type": "Technology",
+        "description": "A function to get the current datetime, used as a fallback for unrecognized timestamp formats."
+      },
+      {
+        "name": "Unit Tests",
+        "type": "Feature",
+        "description": "Automated tests to verify the correct behavior of the code, specifically for timestamp handling."
+      },
+      {
+        "name": "test_time_weighted_retriever_dates.py",
+        "type": "Technology",
+        "description": "A specific file containing unit tests for the TimeWeightedVectorStoreRetriever's date handling logic."
+      }
+    ],
+    "relations": [
+      {
+        "source": "TypeError",
+        "target": "TimeWeightedVectorStoreRetriever",
+        "label": "AFFECTS",
+        "evidence": "Fix TypeError when documents have timestamp metadata stored as ISO strings or numeric timestamps instead of datetime objects.",
+        "evidence_start": 21,
+        "evidence_end": 146
+      },
+      {
+        "source": "ISO Strings",
+        "target": "TypeError",
+        "label": "CAUSES",
+        "evidence": "When I called retriever.invoke(\"query\"), it crashed with TypeError: unsupported operand type(s) for -: 'datetime.datetime' and 'str' because the retriever tried to subtract a string from a datetime when calculating time decay.",
+        "evidence_start": 414,
+        "evidence_end": 640
+      },
+      {
+        "source": "TimeWeightedVectorStoreRetriever",
+        "target": "Datetime Objects",
+        "label": "USES",
+        "evidence": "The retriever now properly converts these common formats to datetime before time decay calculations.",
+        "evidence_start": 147,
+        "evidence_end": 247
+      },
+      {
+        "source": "_document_get_date()",
+        "target": "TimeWeightedVectorStoreRetriever",
+        "label": "RELATED_TO",
+        "evidence": "Enhanced _document_get_date() method to handle ISO 8601 strings, numeric timestamps (int/float), and datetime objects",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_document_get_date()",
+        "target": "ISO Strings",
+        "label": "USES",
+        "evidence": "Enhanced _document_get_date() method to handle ISO 8601 strings",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_document_get_date()",
+        "target": "Numeric Timestamps",
+        "label": "USES",
+        "evidence": "Enhanced _document_get_date() method to handle [...] numeric timestamps (int/float)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_document_get_date()",
+        "target": "Datetime Objects",
+        "label": "USES",
+        "evidence": "Enhanced _document_get_date() method to handle [...] datetime objects",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_document_get_date()",
+        "target": "datetime.now()",
+        "label": "USES",
+        "evidence": "Added fallback to datetime.now() for unrecognized formats to prevent crashes",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "karamvirsingh1998",
+        "target": "TimeWeightedVectorStoreRetriever",
+        "label": "USES",
+        "evidence": "I was testing TimeWeightedVectorStoreRetriever with documents loaded from a JSON file",
+        "evidence_start": 253,
+        "evidence_end": 338
+      },
+      {
+        "source": "karamvirsingh1998",
+        "target": "JSON File",
+        "label": "USES",
+        "evidence": "I was testing TimeWeightedVectorStoreRetriever with documents loaded from a JSON file",
+        "evidence_start": 253,
+        "evidence_end": 338
+      },
+      {
+        "source": "Unit Tests",
+        "target": "TimeWeightedVectorStoreRetriever",
+        "label": "RELATED_TO",
+        "evidence": "Added unit tests in test_time_weighted_retriever_dates.py that verify: - ISO 8601 string timestamps are properly converted - Numeric timestamp values are properly converted - Existing datetime object handling remains unchanged",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "test_time_weighted_retriever_dates.py",
+        "target": "Unit Tests",
+        "label": "USES",
+        "evidence": "Added unit tests in test_time_weighted_retriever_dates.py",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "This issue addresses a TypeError in TimeWeightedVectorStoreRetriever that occurred when document timestamp metadata was stored as ISO strings or numeric timestamps instead of datetime objects, by enhancing the _document_get_date() method to properly convert these formats."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

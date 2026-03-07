@@ -1,0 +1,193 @@
+{
+  "id": 35505,
+  "title": "fix(openai): prevent crash when disable_streaming=\"tool_calling\" in streaming mode",
+  "status": "open",
+  "created_at": "2026-03-02T01:20:29Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35505",
+  "body_text": "## Summary\n\nFixes #35436 — `disable_streaming=\"tool_calling\"` crashes during streaming with `AttributeError: 'AsyncStream' object has no attribute 'model_dump'`.\n\n## Root Cause\n\nWhen `streaming=True` and `disable_streaming=\"tool_calling\"` are both set on `ChatOpenAI`, and tools are bound:\n\n1. `_should_stream()` correctly returns `False` (streaming should be disabled for tool-calling turns)\n2. `stream()`/`astream()` falls back to `invoke()`/`ainvoke()`, which calls `_generate()`/`_agenerate()`\n3. **Bug:** `_generate()`/`_agenerate()` call `_get_request_payload()` which merges `_default_params` — and `_default_params` unconditionally includes `\"stream\": self.streaming` (i.e. `True`)\n4. The OpenAI client receives `stream=True` and returns an `AsyncStream`/`Stream` object\n5. `_create_chat_result()` calls `response.model_dump()` on the stream object → crash\n\n## Fix\n\nStrip the `stream` key from the payload in both `_generate()` and `_agenerate()` immediately after building it. These are the non-streaming code paths and should never send `stream=True` to the API. The streaming methods (`_stream`/`_astream`) already explicitly set `kwargs[\"stream\"] = True` before building the payload, so they are unaffected.\n\nThe existing `payload.pop(\"stream\")` inside the `response_format` branches becomes redundant and is removed (it would raise `KeyError` since `stream` is already popped).\n\n## Tests\n\nAdded 8 unit tests covering:\n- `_generate` payload has no `stream` key when `disable_streaming=\"tool_calling\"`\n- `_agenerate` payload has no `stream` key when `disable_streaming=\"tool_calling\"`\n- `invoke()` with `disable_streaming=\"tool_calling\"` + `streaming=True` + tools does not crash\n- `stream()` with `disable_streaming=\"tool_calling\"` falls back to invoke correctly\n- `disable_streaming=False` still includes `stream=True` in payload (streaming preserved)\n- `_generate` without streaming flag also has no `stream` in payload\n- `_should_stream` returns `False` when `disable_streaming=\"tool_calling\"` and tools are present\n- `_should_stream` returns `True` when `disable_streaming=\"tool_calling\"` but no tools\n\nAll 189 existing unit tests in `test_base.py` continue to pass.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatOpenAI",
+        "type": "Technology",
+        "description": "A component or class within the system that interacts with OpenAI's chat models."
+      },
+      {
+        "name": "disable_streaming=\"tool_calling\"",
+        "type": "Feature",
+        "description": "A configuration setting to disable streaming specifically for tool-calling turns."
+      },
+      {
+        "name": "streaming=True",
+        "type": "Feature",
+        "description": "A configuration setting that enables streaming mode."
+      },
+      {
+        "name": "AttributeError",
+        "type": "Problem",
+        "description": "A Python error indicating an object does not have a certain attribute."
+      },
+      {
+        "name": "AsyncStream Object",
+        "type": "Technology",
+        "description": "An object returned by the OpenAI client when streaming is enabled asynchronously."
+      },
+      {
+        "name": "model_dump()",
+        "type": "Technology",
+        "description": "A method called on response objects to serialize them."
+      },
+      {
+        "name": "_generate()",
+        "type": "Technology",
+        "description": "An internal method responsible for generating chat responses in non-streaming mode."
+      },
+      {
+        "name": "_agenerate()",
+        "type": "Technology",
+        "description": "An internal asynchronous method responsible for generating chat responses in non-streaming mode."
+      },
+      {
+        "name": "OpenAI Client",
+        "type": "Technology",
+        "description": "The client library used to interact with the OpenAI API."
+      },
+      {
+        "name": "Stream Object",
+        "type": "Technology",
+        "description": "An object returned by the OpenAI client when streaming is enabled synchronously."
+      },
+      {
+        "name": "Unit Tests",
+        "type": "Feature",
+        "description": "Automated tests to verify the correctness of individual software components."
+      }
+    ],
+    "relations": [
+      {
+        "source": "disable_streaming=\"tool_calling\"",
+        "target": "ChatOpenAI",
+        "label": "AFFECTS",
+        "evidence": "`disable_streaming=\"tool_calling\"` crashes during streaming with `AttributeError: 'AsyncStream' object has no attribute 'model_dump'`.",
+        "evidence_start": 27,
+        "evidence_end": 161
+      },
+      {
+        "source": "streaming=True",
+        "target": "ChatOpenAI",
+        "label": "AFFECTS",
+        "evidence": "When `streaming=True` and `disable_streaming=\"tool_calling\"` are both set on `ChatOpenAI`, and tools are bound: ... `_create_chat_result()` calls `response.model_dump()` on the stream object → crash",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "AttributeError",
+        "target": "ChatOpenAI",
+        "label": "AFFECTS",
+        "evidence": "`disable_streaming=\"tool_calling\"` crashes during streaming with `AttributeError: 'AsyncStream' object has no attribute 'model_dump'`.",
+        "evidence_start": 27,
+        "evidence_end": 161
+      },
+      {
+        "source": "_generate()",
+        "target": "AttributeError",
+        "label": "CAUSES",
+        "evidence": "`_generate()`/`_agenerate()` call `_get_request_payload()` which merges `_default_params` — and `_default_params` unconditionally includes `\"stream\": self.streaming` (i.e. `True`)",
+        "evidence_start": 510,
+        "evidence_end": 689
+      },
+      {
+        "source": "_agenerate()",
+        "target": "AttributeError",
+        "label": "CAUSES",
+        "evidence": "`_generate()`/`_agenerate()` call `_get_request_payload()` which merges `_default_params` — and `_default_params` unconditionally includes `\"stream\": self.streaming` (i.e. `True`)",
+        "evidence_start": 510,
+        "evidence_end": 689
+      },
+      {
+        "source": "OpenAI Client",
+        "target": "AsyncStream Object",
+        "label": "RELATED_TO",
+        "evidence": "The OpenAI client receives `stream=True` and returns an `AsyncStream`/`Stream` object",
+        "evidence_start": 693,
+        "evidence_end": 778
+      },
+      {
+        "source": "OpenAI Client",
+        "target": "Stream Object",
+        "label": "RELATED_TO",
+        "evidence": "The OpenAI client receives `stream=True` and returns an `AsyncStream`/`Stream` object",
+        "evidence_start": 693,
+        "evidence_end": 778
+      },
+      {
+        "source": "AsyncStream Object",
+        "target": "model_dump()",
+        "label": "RELATED_TO",
+        "evidence": "`AttributeError: 'AsyncStream' object has no attribute 'model_dump'`",
+        "evidence_start": 92,
+        "evidence_end": 160
+      },
+      {
+        "source": "Stream Object",
+        "target": "model_dump()",
+        "label": "RELATED_TO",
+        "evidence": "`_create_chat_result()` calls `response.model_dump()` on the stream object → crash",
+        "evidence_start": 782,
+        "evidence_end": 864
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "_generate()",
+        "label": "USES",
+        "evidence": "`stream()`/`astream()` falls back to `invoke()`/`ainvoke()`, which calls `_generate()`/`_agenerate()`",
+        "evidence_start": 396,
+        "evidence_end": 497
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "_agenerate()",
+        "label": "USES",
+        "evidence": "`stream()`/`astream()` falls back to `invoke()`/`ainvoke()`, which calls `_generate()`/`_agenerate()`",
+        "evidence_start": 396,
+        "evidence_end": 497
+      },
+      {
+        "source": "Unit Tests",
+        "target": "_generate()",
+        "label": "RELATED_TO",
+        "evidence": "Added 8 unit tests covering: - `_generate` payload has no `stream` key when `disable_streaming=\"tool_calling\"`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Unit Tests",
+        "target": "_agenerate()",
+        "label": "RELATED_TO",
+        "evidence": "Added 8 unit tests covering: - `_agenerate` payload has no `stream` key when `disable_streaming=\"tool_calling\"`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Unit Tests",
+        "target": "disable_streaming=\"tool_calling\"",
+        "label": "RELATED_TO",
+        "evidence": "Added 8 unit tests covering: ... `invoke()` with `disable_streaming=\"tool_calling\"` + `streaming=True` + tools does not crash",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Unit Tests",
+        "target": "streaming=True",
+        "label": "RELATED_TO",
+        "evidence": "Added 8 unit tests covering: ... `invoke()` with `disable_streaming=\"tool_calling\"` + `streaming=True` + tools does not crash",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "A bug in `ChatOpenAI` causes a crash with `AttributeError` when `streaming=True` and `disable_streaming=\"tool_calling\"` are simultaneously active, due to `_generate()`/`_agenerate()` incorrectly sending `stream=True` to the OpenAI client, which then returns an `AsyncStream` object that lacks the `model_dump()` method."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,140 @@
+{
+  "id": 35523,
+  "title": "fix(openai): let user-provided User-Agent override the Azure default",
+  "status": "open",
+  "created_at": "2026-03-02T17:02:29Z",
+  "author_name": "OiPunk",
+  "url": "https://github.com/langchain-ai/langchain/pull/35523",
+  "body_text": "## Summary\n- Swapped dict unpacking order so the hardcoded `User-Agent` acts as a **fallback** instead of an **override**\n- Applied to all three Azure classes: `AzureChatOpenAI`, `AzureOpenAI`, and `AzureOpenAIEmbeddings`\n\n## Problem\nThe `default_headers` dict construction placed the hardcoded `User-Agent` **after** the user's headers:\n\n```python\n\"default_headers\": {\n    **(self.default_headers or {}),\n    \"User-Agent\": \"langchain-partner-python-azure-openai\",  # always wins\n},\n```\n\nThis means any `User-Agent` set by the user via `default_headers` is silently overwritten, which caused 403 errors for users whose custom Azure endpoints require a specific User-Agent.\n\n## Fix\nSwap the order so the hardcoded value comes first and user headers come second:\n\n```python\n\"default_headers\": {\n    \"User-Agent\": \"langchain-partner-python-azure-openai\",  # fallback\n    **(self.default_headers or {}),  # user can override\n},\n```\n\nIn Python dict unpacking, later keys override earlier ones, so user-provided headers now take precedence.\n\n## Test plan\n- [ ] `AzureChatOpenAI(default_headers={\"User-Agent\": \"custom\"})` — verify `custom` is used\n- [ ] `AzureChatOpenAI()` — verify default `langchain-partner-python-azure-openai` is still used\n\n**Note:** This PR was generated with AI assistance (Claude Code).\n\nFixes #35521\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "User-Agent Header",
+        "type": "Feature",
+        "description": "An HTTP header used to identify the client application."
+      },
+      {
+        "name": "AzureChatOpenAI",
+        "type": "Technology",
+        "description": "An Azure-specific class for OpenAI chat models."
+      },
+      {
+        "name": "AzureOpenAI",
+        "type": "Technology",
+        "description": "An Azure-specific class for OpenAI models."
+      },
+      {
+        "name": "AzureOpenAIEmbeddings",
+        "type": "Technology",
+        "description": "An Azure-specific class for OpenAI embedding models."
+      },
+      {
+        "name": "Default Headers Dictionary",
+        "type": "Feature",
+        "description": "A configuration dictionary for HTTP headers within Azure OpenAI classes."
+      },
+      {
+        "name": "403 Errors",
+        "type": "Problem",
+        "description": "An HTTP status code indicating forbidden access."
+      },
+      {
+        "name": "Dict Unpacking Logic",
+        "type": "Technology",
+        "description": "The Python mechanism governing how dictionary keys are merged and overridden."
+      },
+      {
+        "name": "Azure Default User-Agent",
+        "type": "Feature",
+        "description": "The specific User-Agent string provided by default for Azure OpenAI services."
+      },
+      {
+        "name": "Custom Azure Endpoints",
+        "type": "Technology",
+        "description": "Azure service endpoints that require a specific User-Agent for access."
+      },
+      {
+        "name": "Issue 35521",
+        "type": "Problem",
+        "description": "A specific GitHub issue that this pull request resolves."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Default Headers Dictionary",
+        "target": "User-Agent Header",
+        "label": "RELATED_TO",
+        "evidence": "The `default_headers` dict construction placed the hardcoded `User-Agent` **after** the user's headers:",
+        "evidence_start": 234,
+        "evidence_end": 337
+      },
+      {
+        "source": "Azure Default User-Agent",
+        "target": "User-Agent Header",
+        "label": "CAUSES",
+        "evidence": "The `default_headers` dict construction placed the hardcoded `User-Agent` **after** the user's headers: ... This means any `User-Agent` set by the user via `default_headers` is silently overwritten",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "User-Agent Header",
+        "target": "403 Errors",
+        "label": "CAUSES",
+        "evidence": "This means any `User-Agent` set by the user via `default_headers` is silently overwritten, which caused 403 errors for users whose custom Azure endpoints require a specific User-Agent.",
+        "evidence_start": 488,
+        "evidence_end": 672
+      },
+      {
+        "source": "Custom Azure Endpoints",
+        "target": "User-Agent Header",
+        "label": "RELATED_TO",
+        "evidence": "users whose custom Azure endpoints require a specific User-Agent.",
+        "evidence_start": 607,
+        "evidence_end": 672
+      },
+      {
+        "source": "AzureChatOpenAI",
+        "target": "Default Headers Dictionary",
+        "label": "USES",
+        "evidence": "Applied to all three Azure classes: `AzureChatOpenAI`, `AzureOpenAI`, and `AzureOpenAIEmbeddings`",
+        "evidence_start": 124,
+        "evidence_end": 221
+      },
+      {
+        "source": "AzureOpenAI",
+        "target": "Default Headers Dictionary",
+        "label": "USES",
+        "evidence": "Applied to all three Azure classes: `AzureChatOpenAI`, `AzureOpenAI`, and `AzureOpenAIEmbeddings`",
+        "evidence_start": 124,
+        "evidence_end": 221
+      },
+      {
+        "source": "AzureOpenAIEmbeddings",
+        "target": "Default Headers Dictionary",
+        "label": "USES",
+        "evidence": "Applied to all three Azure classes: `AzureChatOpenAI`, `AzureOpenAI`, and `AzureOpenAIEmbeddings`",
+        "evidence_start": 124,
+        "evidence_end": 221
+      },
+      {
+        "source": "Dict Unpacking Logic",
+        "target": "User-Agent Header",
+        "label": "RELATED_TO",
+        "evidence": "Swap the order so the hardcoded value comes first and user headers come second: ... In Python dict unpacking, later keys override earlier ones, so user-provided headers now take precedence.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Issue 35521",
+        "target": "403 Errors",
+        "label": "RELATED_TO",
+        "evidence": "Fixes #35521",
+        "evidence_start": 1306,
+        "evidence_end": 1318
+      }
+    ],
+    "summary": "A fix was implemented to allow user-provided User-Agent headers to override the Azure default in AzureChatOpenAI, AzureOpenAI, and AzureOpenAIEmbeddings classes, resolving 403 Errors caused by incorrect Dict Unpacking Logic."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

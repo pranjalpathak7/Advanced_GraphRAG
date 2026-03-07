@@ -1,0 +1,106 @@
+{
+  "id": 35465,
+  "title": "fix(langchain): Implement awrap_tool_call for async middleware",
+  "status": "open",
+  "created_at": "2026-02-27T12:19:23Z",
+  "author_name": "Astroa7m",
+  "url": "https://github.com/langchain-ai/langchain/pull/35465",
+  "body_text": "Add async version of wrap_tool_call for middleware with checks for passed async function and `await handler`. Tested and verified with my own agent through the following snippet:\r\n```\r\n@awrap_tool_call\r\nasync def handle_tool_errors(request, handler):\r\n    try:\r\n        return await handler(request)\r\n    except Exception as e:\r\n        return ToolMessage(\r\n            content=f\"Tool error: Please check your input and try again. ({str(e)})\",\r\n            tool_call_id=request.tool_call[\"id\"],\r\n            is_error=True\r\n        )\r\n```\r\nLinkedIn: https://linkedin.com/in/astroa7m\r\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "awrap_tool_call",
+        "type": "Feature",
+        "description": "An asynchronous wrapper function for tool calls, designed for middleware."
+      },
+      {
+        "name": "async middleware",
+        "type": "Technology",
+        "description": "A type of middleware designed to handle asynchronous operations."
+      },
+      {
+        "name": "wrap_tool_call",
+        "type": "Feature",
+        "description": "The synchronous version of the tool call wrapper."
+      },
+      {
+        "name": "async function",
+        "type": "Technology",
+        "description": "A function designed to execute asynchronously."
+      },
+      {
+        "name": "handler",
+        "type": "Technology",
+        "description": "A function or routine that processes requests or events, often part of a middleware chain."
+      },
+      {
+        "name": "ToolMessage",
+        "type": "Technology",
+        "description": "A specific message type used to convey tool-related information, including error details."
+      },
+      {
+        "name": "Agent",
+        "type": "Technology",
+        "description": "An autonomous software entity, likely an AI agent, that utilizes tools."
+      },
+      {
+        "name": "Tool Error",
+        "type": "Problem",
+        "description": "An error that occurs during the execution of a tool."
+      }
+    ],
+    "relations": [
+      {
+        "source": "awrap_tool_call",
+        "target": "async middleware",
+        "label": "RELATED_TO",
+        "evidence": "Implement awrap_tool_call for async middleware",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "awrap_tool_call",
+        "target": "wrap_tool_call",
+        "label": "RELATED_TO",
+        "evidence": "Add async version of wrap_tool_call",
+        "evidence_start": 0,
+        "evidence_end": 35
+      },
+      {
+        "source": "awrap_tool_call",
+        "target": "async function",
+        "label": "USES",
+        "evidence": "@awrap_tool_call async def handle_tool_errors",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "awrap_tool_call",
+        "target": "handler",
+        "label": "USES",
+        "evidence": "await handler",
+        "evidence_start": 94,
+        "evidence_end": 107
+      },
+      {
+        "source": "Agent",
+        "target": "awrap_tool_call",
+        "label": "USES",
+        "evidence": "Tested and verified with my own agent through the following snippet: @awrap_tool_call async def handle_tool_errors(request, handler):",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ToolMessage",
+        "target": "Tool Error",
+        "label": "RELATED_TO",
+        "evidence": "return ToolMessage(content=f\"Tool error: Please check your input and try again. ({str(e)})\", tool_call_id=request.tool_call[\"id\"], is_error=True)",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "This issue describes the implementation of an asynchronous wrapper, `awrap_tool_call`, for middleware to handle async tool calls, which was verified with an agent."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

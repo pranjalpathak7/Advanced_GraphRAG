@@ -1,0 +1,127 @@
+{
+  "id": 35475,
+  "title": "RunnableRetry.batch/abatch can return corrupted outputs when some items succeed on retry and others still fail",
+  "status": "open",
+  "created_at": "2026-02-28T06:32:38Z",
+  "author_name": "yangbaechu",
+  "url": "https://github.com/langchain-ai/langchain/issues/35475",
+  "body_text": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [ ] langchain\n- [ ] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [x] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n_No response_\n\n### Reproduction Steps / Example Code (Python)\n\n```python\nfrom langchain_core.runnables import RunnableLambda\n\n\nfailed_once = False\n\n\ndef process_item(name: str) -> str:\n    global failed_once\n\n    if name == \"ok\":\n        return \"ok-result\"\n    if name == \"retry_then_ok\":\n        if not failed_once:\n            failed_once = True\n            raise ValueError()\n        return \"retry-result\"\n    raise ValueError()\n\n\nrunnable = RunnableLambda(process_item).with_retry(\n    stop_after_attempt=2,\n    retry_if_exception_type=(ValueError,),\n    wait_exponential_jitter=False,\n)\n\nresult = runnable.batch(\n    [\"ok\", \"retry_then_ok\", \"always_fail\"],\n    return_exceptions=True,\n)\n\n# Expected: the third item is an exception\nprint(result)\nassert isinstance(result[2], Exception)\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\n\n```\n\n### Description\n\n* I'm using `RunnableLambda(...).with_retry(...).batch(...)` with `return_exceptions=True`.\n* I expect an input that still fails after all retry attempts to remain an exception in the matching output position.\n* Instead, if one item succeeds on retry while another still fails, the failing item can be replaced by the successful item's output.\n\n### System Info\n\nSystem Information\n------------------\n> OS:  Linux\n> OS Version:  #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025\n> Python Version:  3.10.12 (main, Jan 26 2026, 14:55:28) [GCC 11.4.0]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.16\n> langchain: 1.2.10\n> langsmith: 0.7.9\n> langchain_openai: 1.1.10\n> langgraph_sdk: 0.3.9\n\nOptional packages not installed\n-------------------------------\n> deepagents\n> deepagents-cli\n\nOther Dependencies\n------------------\n> httpx: 0.28.1\n> jsonpatch: 1.33\n> langgraph: 1.0.10\n> openai: 2.24.0\n> orjson: 3.11.7\n> packaging: 26.0\n> pydantic: 2.12.5\n> pyyaml: 6.0.3\n> requests: 2.32.5\n> requests-toolbelt: 1.0.0\n> tenacity: 9.1.4\n> tiktoken: 0.12.0\n> typing-extensions: 4.15.0\n> uuid-utils: 0.14.1\n> xxhash: 3.6.0\n> zstandard: 0.25.0",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Runnable Batch with Retry",
+        "type": "Feature",
+        "description": "The batch processing functionality of a LangChain runnable configured with retry logic."
+      },
+      {
+        "name": "Corrupted Outputs",
+        "type": "Problem",
+        "description": "Incorrect or unexpected data returned by a batch process."
+      },
+      {
+        "name": "langchain-core",
+        "type": "Technology",
+        "description": "A core package within the LangChain framework, containing fundamental runnable components."
+      },
+      {
+        "name": "RunnableLambda",
+        "type": "Technology",
+        "description": "A LangChain runnable that wraps a Python function, used as an example for the bug."
+      },
+      {
+        "name": "ValueError",
+        "type": "Problem",
+        "description": "A standard Python exception type, used to trigger retry attempts in the example."
+      },
+      {
+        "name": "return_exceptions=True",
+        "type": "Feature",
+        "description": "A parameter for LangChain's batch methods that specifies exceptions should be returned in the output list rather than raised."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "The open-source framework for developing applications powered by large language models."
+      },
+      {
+        "name": "Exception",
+        "type": "Problem",
+        "description": "A general base class for all non-exit exceptions in Python, expected to be returned for failed items."
+      },
+      {
+        "name": "with_retry",
+        "type": "Feature",
+        "description": "A method applied to a LangChain runnable to enable retry logic for failed executions."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Runnable Batch with Retry",
+        "target": "Corrupted Outputs",
+        "label": "CAUSES",
+        "evidence": "RunnableRetry.batch/abatch can return corrupted outputs when some items succeed on retry and others still fail",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Corrupted Outputs",
+        "target": "langchain-core",
+        "label": "AFFECTS",
+        "evidence": "RunnableRetry.batch/abatch can return corrupted outputs",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "LangChain",
+        "target": "langchain-core",
+        "label": "RELATED_TO",
+        "evidence": "I am sure that this is a bug in LangChain rather than my code. - langchain-core",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "RunnableLambda",
+        "target": "with_retry",
+        "label": "USES",
+        "evidence": "I'm using `RunnableLambda(...).with_retry(...).batch(...)`",
+        "evidence_start": 2053,
+        "evidence_end": 2111
+      },
+      {
+        "source": "Runnable Batch with Retry",
+        "target": "return_exceptions=True",
+        "label": "USES",
+        "evidence": "I'm using `RunnableLambda(...).with_retry(...).batch(...)` with `return_exceptions=True`.",
+        "evidence_start": 2053,
+        "evidence_end": 2142
+      },
+      {
+        "source": "with_retry",
+        "target": "ValueError",
+        "label": "USES",
+        "evidence": "retry_if_exception_type=(ValueError,)",
+        "evidence_start": 1689,
+        "evidence_end": 1726
+      },
+      {
+        "source": "Corrupted Outputs",
+        "target": "Exception",
+        "label": "RELATED_TO",
+        "evidence": "the failing item can be replaced by the successful item's output.",
+        "evidence_start": 2329,
+        "evidence_end": 2394
+      },
+      {
+        "source": "with_retry",
+        "target": "Runnable Batch with Retry",
+        "label": "RELATED_TO",
+        "evidence": "RunnableRetry.batch/abatch",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "When using `Runnable.batch` or `Runnable.abatch` with `with_retry` and `return_exceptions=True` in `langchain-core`, items that fail after all retries can incorrectly be replaced by successful item outputs, leading to corrupted results."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

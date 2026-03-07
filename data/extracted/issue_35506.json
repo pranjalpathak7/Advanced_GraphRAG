@@ -1,0 +1,270 @@
+{
+  "id": 35506,
+  "title": "Add AnchorBrowser — cloud browser platform for AI agents",
+  "status": "closed",
+  "created_at": "2026-03-02T01:52:32Z",
+  "author_name": "mehranakila56-ops",
+  "url": "https://github.com/langchain-ai/langchain/pull/35506",
+  "body_text": "## About AnchorBrowser\n\nAnchorBrowser is a cloud browser platform built specifically for AI agents. It provides managed Chromium instances with stealth capabilities, enabling agents to automate any website reliably.\n\n**Key capabilities:**\n- 🌐 Connect via Puppeteer/Playwright over WebSocket/CDP — zero infrastructure\n- 🛡️ Custom Chromium with stealth — verified as human traffic by Cloudflare\n- 🔐 Handles SSO, MFA, session cookies across automation runs\n- ⚡ Native MCP server for Claude, GPT, Cursor, and other AI tools\n- 🚀 Batch sessions: up to 5,000 concurrent browsers\n- 🏢 Enterprise: SOC2, ISO27001, GDPR, HIPAA compliant\n\n**Quick start:**\n```javascript\n// Create a session and connect with Puppeteer\nconst session = await fetch('https://api.anchorbrowser.io/v1/sessions', {\n  method: 'POST', headers: { 'anchor-api-key': 'YOUR_KEY' }\n}).then(r => r.json());\n\nconst browser = await puppeteer.connect({\n  browserWSEndpoint: session.cdp_url\n});\n```\n\n🔗 **Website:** https://anchorbrowser.io | **Docs:** https://docs.anchorbrowser.io\n> This PR follows the guidelines in [CONTRIBUTING.md](https://github.com/langchain-ai/langchain/blob/master/CONTRIBUTING.md).\n\n---\n*Added to section: `## Additional resources`*",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "AnchorBrowser",
+        "type": "Technology",
+        "description": "A cloud browser platform built specifically for AI agents, providing managed Chromium instances with stealth capabilities."
+      },
+      {
+        "name": "AI Agents",
+        "type": "Technology",
+        "description": "Software entities designed to automate tasks, for which AnchorBrowser provides a browsing platform."
+      },
+      {
+        "name": "Chromium",
+        "type": "Technology",
+        "description": "The open-source browser project that AnchorBrowser's managed instances are based on, featuring custom stealth capabilities."
+      },
+      {
+        "name": "Puppeteer",
+        "type": "Technology",
+        "description": "A Node.js library that provides a high-level API to control Chrome or Chromium over the DevTools Protocol, used to connect to AnchorBrowser."
+      },
+      {
+        "name": "Playwright",
+        "type": "Technology",
+        "description": "A Node.js library to automate Chromium, Firefox and WebKit with a single API, used to connect to AnchorBrowser."
+      },
+      {
+        "name": "WebSocket",
+        "type": "Technology",
+        "description": "A communication protocol providing full-duplex communication channels over a single TCP connection, used for connecting to AnchorBrowser."
+      },
+      {
+        "name": "CDP",
+        "type": "Technology",
+        "description": "Chrome DevTools Protocol, used for connecting to AnchorBrowser instances."
+      },
+      {
+        "name": "Cloudflare",
+        "type": "Technology",
+        "description": "A web infrastructure and website security company that verifies traffic, which AnchorBrowser's custom Chromium is designed to bypass as human."
+      },
+      {
+        "name": "SSO",
+        "type": "Feature",
+        "description": "Single Sign-On, a user authentication process that allows a user to access multiple applications with one set of login credentials, handled by AnchorBrowser."
+      },
+      {
+        "name": "MFA",
+        "type": "Feature",
+        "description": "Multi-Factor Authentication, a security system that requires more than one method of authentication from independent categories of credentials, handled by AnchorBrowser."
+      },
+      {
+        "name": "Session Cookies",
+        "type": "Feature",
+        "description": "Temporary cookies used to maintain user sessions, handled by AnchorBrowser across automation runs."
+      },
+      {
+        "name": "MCP Server",
+        "type": "Technology",
+        "description": "A native server provided by AnchorBrowser for various AI tools like Claude, GPT, and Cursor."
+      },
+      {
+        "name": "Claude",
+        "type": "Technology",
+        "description": "An AI tool supported by AnchorBrowser's native MCP server."
+      },
+      {
+        "name": "GPT",
+        "type": "Technology",
+        "description": "An AI tool supported by AnchorBrowser's native MCP server."
+      },
+      {
+        "name": "Cursor",
+        "type": "Technology",
+        "description": "An AI tool supported by AnchorBrowser's native MCP server."
+      },
+      {
+        "name": "Batch Sessions",
+        "type": "Feature",
+        "description": "A capability of AnchorBrowser allowing up to 5,000 concurrent browser instances."
+      },
+      {
+        "name": "SOC2",
+        "type": "Feature",
+        "description": "A compliance standard for service organizations, which AnchorBrowser is compliant with."
+      },
+      {
+        "name": "ISO27001",
+        "type": "Feature",
+        "description": "An international standard for information security management systems, which AnchorBrowser is compliant with."
+      },
+      {
+        "name": "GDPR",
+        "type": "Feature",
+        "description": "General Data Protection Regulation, a data privacy and security law, which AnchorBrowser is compliant with."
+      },
+      {
+        "name": "HIPAA",
+        "type": "Feature",
+        "description": "Health Insurance Portability and Accountability Act, a US law protecting patient health information, which AnchorBrowser is compliant with."
+      }
+    ],
+    "relations": [
+      {
+        "source": "AnchorBrowser",
+        "target": "AI Agents",
+        "label": "RELATED_TO",
+        "evidence": "AnchorBrowser is a cloud browser platform built specifically for AI agents.",
+        "evidence_start": 24,
+        "evidence_end": 99
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "Chromium",
+        "label": "USES",
+        "evidence": "It provides managed Chromium instances with stealth capabilities",
+        "evidence_start": 100,
+        "evidence_end": 164
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "Puppeteer",
+        "label": "USES",
+        "evidence": "Connect via Puppeteer/Playwright over WebSocket/CDP",
+        "evidence_start": 243,
+        "evidence_end": 294
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "Playwright",
+        "label": "USES",
+        "evidence": "Connect via Puppeteer/Playwright over WebSocket/CDP",
+        "evidence_start": 243,
+        "evidence_end": 294
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "WebSocket",
+        "label": "USES",
+        "evidence": "Connect via Puppeteer/Playwright over WebSocket/CDP",
+        "evidence_start": 243,
+        "evidence_end": 294
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "CDP",
+        "label": "USES",
+        "evidence": "Connect via Puppeteer/Playwright over WebSocket/CDP",
+        "evidence_start": 243,
+        "evidence_end": 294
+      },
+      {
+        "source": "Custom Chromium",
+        "target": "Cloudflare",
+        "label": "RELATED_TO",
+        "evidence": "Custom Chromium with stealth — verified as human traffic by Cloudflare",
+        "evidence_start": 322,
+        "evidence_end": 392
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "SSO",
+        "label": "RELATED_TO",
+        "evidence": "Handles SSO, MFA, session cookies across automation runs",
+        "evidence_start": 397,
+        "evidence_end": 453
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "MFA",
+        "label": "RELATED_TO",
+        "evidence": "Handles SSO, MFA, session cookies across automation runs",
+        "evidence_start": 397,
+        "evidence_end": 453
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "Session Cookies",
+        "label": "RELATED_TO",
+        "evidence": "Handles SSO, MFA, session cookies across automation runs",
+        "evidence_start": 397,
+        "evidence_end": 453
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "MCP Server",
+        "label": "USES",
+        "evidence": "Native MCP server for Claude, GPT, Cursor, and other AI tools",
+        "evidence_start": 458,
+        "evidence_end": 519
+      },
+      {
+        "source": "MCP Server",
+        "target": "Claude",
+        "label": "RELATED_TO",
+        "evidence": "Native MCP server for Claude, GPT, Cursor, and other AI tools",
+        "evidence_start": 458,
+        "evidence_end": 519
+      },
+      {
+        "source": "MCP Server",
+        "target": "GPT",
+        "label": "RELATED_TO",
+        "evidence": "Native MCP server for Claude, GPT, Cursor, and other AI tools",
+        "evidence_start": 458,
+        "evidence_end": 519
+      },
+      {
+        "source": "MCP Server",
+        "target": "Cursor",
+        "label": "RELATED_TO",
+        "evidence": "Native MCP server for Claude, GPT, Cursor, and other AI tools",
+        "evidence_start": 458,
+        "evidence_end": 519
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "Batch Sessions",
+        "label": "RELATED_TO",
+        "evidence": "Batch sessions: up to 5,000 concurrent browsers",
+        "evidence_start": 524,
+        "evidence_end": 571
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "SOC2",
+        "label": "RELATED_TO",
+        "evidence": "Enterprise: SOC2, ISO27001, GDPR, HIPAA compliant",
+        "evidence_start": 576,
+        "evidence_end": 625
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "ISO27001",
+        "label": "RELATED_TO",
+        "evidence": "Enterprise: SOC2, ISO27001, GDPR, HIPAA compliant",
+        "evidence_start": 576,
+        "evidence_end": 625
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "GDPR",
+        "label": "RELATED_TO",
+        "evidence": "Enterprise: SOC2, ISO27001, GDPR, HIPAA compliant",
+        "evidence_start": 576,
+        "evidence_end": 625
+      },
+      {
+        "source": "AnchorBrowser",
+        "target": "HIPAA",
+        "label": "RELATED_TO",
+        "evidence": "Enterprise: SOC2, ISO27001, GDPR, HIPAA compliant",
+        "evidence_start": 576,
+        "evidence_end": 625
+      }
+    ],
+    "summary": "AnchorBrowser is a cloud browser platform for AI agents, offering managed, stealthy Chromium instances with Puppeteer/Playwright connectivity, handling SSO/MFA, and providing compliance with SOC2, ISO27001, GDPR, and HIPAA."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

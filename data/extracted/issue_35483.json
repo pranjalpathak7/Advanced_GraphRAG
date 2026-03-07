@@ -1,0 +1,109 @@
+{
+  "id": 35483,
+  "title": "langchain-huggingface==1.2.1 was not released to pypi",
+  "status": "closed",
+  "created_at": "2026-02-28T13:04:49Z",
+  "author_name": "MichaelKarpe",
+  "url": "https://github.com/langchain-ai/langchain/issues/35483",
+  "body_text": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [ ] langchain\n- [ ] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [x] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n#35182 \n\n### Reproduction Steps / Example Code (Python)\n\n```python\npip install langchain-huggingface==1.2.1\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\nERROR: Could not find a version that satisfies the requirement langchain-huggingface==1.2.1 (from versions: 0.0.1, 0.0.2, 0.0.3, 0.1.0.dev1, 0.1.0, 0.1.1, 0.1.2, 0.2.0, 0.3.0, 0.3.1, 1.0.0a1, 1.0.0, 1.0.1, 1.1.0, 1.2.0)\nERROR: No matching distribution found for langchain-huggingface==1.2.1\n```\n\n### Description\n\nDespite #35182, langchain-huggingface==1.2.1 has not been released to pypi and installing this version with pip does not work\n\n### System Info\n\nSystem Information\n------------------\n> OS:  Linux\n> OS Version:  #1 SMP Mon Feb  2 12:27:57 UTC 2026\n> Python Version:  3.12.12 (main, Oct 10 2025, 08:52:57) [GCC 11.4.0]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.15\n> langchain: 1.2.10\n> langsmith: 0.7.6\n> langgraph_sdk: 0.3.9\n\nOptional packages not installed\n-------------------------------\n> deepagents\n> deepagents-cli\n\nOther Dependencies\n------------------\n> google-adk: 1.25.1\n> httpx: 0.28.1\n> jsonpatch: 1.33\n> langgraph: 1.0.9\n> opentelemetry-api: 1.38.0\n> opentelemetry-exporter-otlp-proto-http: 1.38.0\n> opentelemetry-sdk: 1.38.0\n> orjson: 3.11.7\n> packaging: 26.0\n> pydantic: 2.12.3\n> pytest: 8.4.2\n> pyyaml: 6.0.3\n> requests: 2.32.4\n> requests-toolbelt: 1.0.0\n> rich: 13.9.4\n> tenacity: 9.1.4\n> typing-extensions: 4.15.0\n> uuid-utils: 0.14.1\n> wrapt: 2.1.1\n> xxhash: 3.6.0\n> zstandard: 0.25.0",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "langchain-huggingface",
+        "type": "Technology",
+        "description": "An integration package for the LangChain framework."
+      },
+      {
+        "name": "pypi",
+        "type": "Technology",
+        "description": "The Python Package Index, a repository for Python software."
+      },
+      {
+        "name": "pip",
+        "type": "Technology",
+        "description": "The standard package installer for Python."
+      },
+      {
+        "name": "langchain-huggingface==1.2.1",
+        "type": "Technology",
+        "description": "A specific version of the langchain-huggingface package."
+      },
+      {
+        "name": "Missing PyPI Release",
+        "type": "Problem",
+        "description": "The issue where a specific package version was not published to PyPI."
+      },
+      {
+        "name": "#35182",
+        "type": "Feature",
+        "description": "A GitHub issue or pull request related to the release process of the package."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "The open-source framework that includes the langchain-huggingface package."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Missing PyPI Release",
+        "target": "langchain-huggingface==1.2.1",
+        "label": "AFFECTS",
+        "evidence": "langchain-huggingface==1.2.1 has not been released to pypi",
+        "evidence_start": 1675,
+        "evidence_end": 1733
+      },
+      {
+        "source": "Missing PyPI Release",
+        "target": "pypi",
+        "label": "AFFECTS",
+        "evidence": "langchain-huggingface==1.2.1 has not been released to pypi",
+        "evidence_start": 1675,
+        "evidence_end": 1733
+      },
+      {
+        "source": "pip",
+        "target": "langchain-huggingface==1.2.1",
+        "label": "USES",
+        "evidence": "pip install langchain-huggingface==1.2.1",
+        "evidence_start": 1240,
+        "evidence_end": 1280
+      },
+      {
+        "source": "Missing PyPI Release",
+        "target": "ERROR: Could not find a version that satisfies the requirement langchain-huggingface==1.2.1",
+        "label": "CAUSES",
+        "evidence": "ERROR: Could not find a version that satisfies the requirement langchain-huggingface==1.2.1",
+        "evidence_start": 1346,
+        "evidence_end": 1437
+      },
+      {
+        "source": "Missing PyPI Release",
+        "target": "ERROR: No matching distribution found for langchain-huggingface==1.2.1",
+        "label": "CAUSES",
+        "evidence": "ERROR: No matching distribution found for langchain-huggingface==1.2.1",
+        "evidence_start": 1566,
+        "evidence_end": 1636
+      },
+      {
+        "source": "#35182",
+        "target": "Missing PyPI Release",
+        "label": "RELATED_TO",
+        "evidence": "Despite #35182, langchain-huggingface==1.2.1 has not been released to pypi",
+        "evidence_start": 1659,
+        "evidence_end": 1733
+      },
+      {
+        "source": "langchain-huggingface",
+        "target": "LangChain",
+        "label": "RELATED_TO",
+        "evidence": "I am sure that this is a bug in LangChain rather than my code.",
+        "evidence_start": 228,
+        "evidence_end": 290
+      }
+    ],
+    "summary": "The langchain-huggingface==1.2.1 package was not released to pypi, preventing its installation via pip despite a related GitHub PR."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

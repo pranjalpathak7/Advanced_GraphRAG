@@ -1,0 +1,208 @@
+{
+  "id": 35509,
+  "title": "ChatAnthropic in streaming output scenarios, usage input_tokens is always 0",
+  "status": "open",
+  "created_at": "2026-03-02T07:01:28Z",
+  "author_name": "deku0818",
+  "url": "https://github.com/langchain-ai/langchain/issues/35509",
+  "body_text": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [ ] langchain\n- [ ] langchain-openai\n- [x] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n_No response_\n\n### Reproduction Steps / Example Code (Python)\n\n```python\nimport asyncio\n\nfrom langchain_anthropic import ChatAnthropic\nfrom langchain_core.messages import HumanMessage, SystemMessage\n\nllm = ChatAnthropic(\n    model=\"us.anthropic.claude-sonnet-4-5-20250929-v1:0\",\n    streaming=True,\n    stream_usage=True\n)\n\n\nasync def main():\n    messages = [\n        HumanMessage(\n            content=\"你好\"\n        ),\n    ]\n\n    print(\"=== astream_events 流式输出 ===\\n\")\n\n    async for event in llm.astream_events(messages, version=\"v2\"):\n        kind = event[\"event\"]\n\n        # 流式输出 token\n        if kind == \"on_chat_model_stream\":\n            chunk = event[\"data\"][\"chunk\"]\n            if chunk.content:\n                print(chunk.content, end=\"\", flush=True)\n\n        # 模型调用结束，打印 usage\n        elif kind == \"on_chat_model_end\":\n            output = event[\"data\"][\"output\"]\n            metadata = output.response_metadata or {}\n            usage = metadata.get(\"usage\", {})\n            cache = usage.get(\"cache_creation\", {})\n\n            print(\"\\n\")\n            print(f\"usage_metadata: {output.usage_metadata}\")\n            print(f\"input_tokens: {usage.get('input_tokens')}\")\n            print(f\"output_tokens: {usage.get('output_tokens')}\")\n            print(f\"cache_read_input_tokens: {usage.get('cache_read_input_tokens')}\")\n            print(f\"cache_creation_input_tokens: {usage.get('cache_creation_input_tokens')}\")\n            print(f\"ephemeral_5m_input_tokens: {cache.get('ephemeral_5m_input_tokens')}\")\n            print(f\"ephemeral_1h_input_tokens: {cache.get('ephemeral_1h_input_tokens')}\")\n\n\nasyncio.run(main())\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\n\n```\n\n### Description\n\nChatAnthropic in streaming output scenarios, usage input_tokens is always 0\n\nusage_metadata: {'input_tokens': 0, 'output_tokens': 29, 'total_tokens': 29, 'input_token_details': {}}\ninput_tokens: None\noutput_tokens: None\ncache_read_input_tokens: None\ncache_creation_input_tokens: None\nephemeral_5m_input_tokens: None\nephemeral_1h_input_tokens: None\n\n## claude code fix\n● Update(.venv/lib/python3.11/site-packages/langchain_anthropic/chat_models.py)          \n  ⎿  Added 7 lines, removed 2 lines                                                      \n      1996      # Reference: Anthropic SDK streaming implementation                      \n      1997      # https://github.com/anthropics/anthropic-sdk-python/blob/main/src       \n            /anthropic/lib/streaming/_messages.py  # noqa: E501                          \n      1998      if event.type == \"message_start\" and stream_usage:                       \n      1999 -        # Capture model name, but don't include usage_metadata yet           \n      2000 -        # as it will be properly reported in message_delta with comple     \n           -te info                                                                      \n      1999          if hasattr(event.message, \"model\"):                                  \n      2000              response_metadata: dict[str, Any] = {\"model_name\": event.m       \n            essage.model}                                                                \n      2001          else:                                                                \n      2002              response_metadata = {}\n      2003  \n      2004 +        # Include input_tokens from message_start, as message_delta   \n      2005 +        # only contains output_tokens.                                \n      2006 +        usage_metadata = None                                         \n      2007 +        if hasattr(event.message, \"usage\") and event.message.usage is \n           +not None:                                                             \n      2008 +            usage_metadata = _create_usage_metadata(event.message.usag\n           +e)                                                                    \n      2009 +                                                                      \n      2010          message_chunk = AIMessageChunk(\n      2011              content=\"\" if coerce_content_to_string else [],\n      2012              response_metadata=response_metadata,\n      2013 +            **({\"usage_metadata\": usage_metadata} if usage_metadata el\n           +se {}),                                                               \n      2014          )\n      2015  \n      2016      elif (\n\n### System Info\n\nSystem Information\n------------------\n> OS:  Linux\n> OS Version:  #18~24.04.1-Ubuntu SMP Mon Nov 24 19:46:27 UTC 2025\n> Python Version:  3.11.10 (main, Dec  3 2024, 05:23:21) [GCC 12.2.0]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.16\n> langchain: 1.2.10\n> langsmith: 0.7.9\n> langchain_anthropic: 1.3.4\n> langchain_mcp_adapters: 0.2.1\n> langchain_openai: 1.1.10\n> langgraph_api: 0.7.27\n> langgraph_cli: 0.4.12\n> langgraph_runtime_inmem: 0.24.0\n> langgraph_sdk: 0.3.9\n\nOptional packages not installed\n-------------------------------\n> deepagents\n> deepagents-cli\n\nOther Dependencies\n------------------\n> anthropic: 0.84.0\n> blockbuster: 1.5.26\n> click: 8.3.1\n> cloudpickle: 3.1.2\n> croniter: 6.0.0\n> cryptography: 46.0.5\n> grpcio: 1.78.0\n> grpcio-health-checking: 1.78.0\n> grpcio-tools: 1.78.0\n> httpx: 0.28.1\n> jsonpatch: 1.33\n> jsonschema-rs: 0.29.1\n> langgraph: 1.0.10\n> langgraph-checkpoint: 4.0.1\n> mcp: 1.26.0\n> openai: 2.24.0\n> opentelemetry-api: 1.39.1\n> opentelemetry-exporter-otlp-proto-http: 1.39.1\n> opentelemetry-sdk: 1.39.1\n> orjson: 3.11.7\n> packaging: 26.0\n> protobuf: 6.33.5\n> pydantic: 2.12.5\n> pyjwt: 2.11.0\n> pytest: 9.0.2\n> python-dotenv: 1.2.2\n> pyyaml: 6.0.3\n> requests: 2.32.5\n> requests-toolbelt: 1.0.0\n> rich: 14.3.3\n> sse-starlette: 2.1.3\n> starlette: 0.46.2\n> structlog: 25.5.0\n> tenacity: 9.1.4\n> tiktoken: 0.12.0\n> truststore: 0.10.4\n> typing-extensions: 4.15.0\n> uuid-utils: 0.14.1\n> uvicorn: 0.41.0\n> watchfiles: 1.1.1\n> xxhash: 3.6.0\n> zstandard: 0.25.0",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatAnthropic",
+        "type": "Technology",
+        "description": "A LangChain class for interacting with Anthropic models."
+      },
+      {
+        "name": "Streaming Output",
+        "type": "Feature",
+        "description": "A mode of operation where model responses are delivered incrementally."
+      },
+      {
+        "name": "Input Tokens",
+        "type": "Problem",
+        "description": "A metric representing the number of tokens in the input to a language model, reported as 0 in streaming scenarios."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "A framework for developing applications powered by language models."
+      },
+      {
+        "name": "langchain-anthropic",
+        "type": "Technology",
+        "description": "The specific LangChain package providing Anthropic integrations."
+      },
+      {
+        "name": "Anthropic SDK",
+        "type": "Technology",
+        "description": "The official Python SDK for interacting with Anthropic's API."
+      },
+      {
+        "name": "message_start event",
+        "type": "Feature",
+        "description": "An event type from the Anthropic streaming API, indicating the start of a message and containing initial usage information."
+      },
+      {
+        "name": "message_delta event",
+        "type": "Feature",
+        "description": "An event type from the Anthropic streaming API, providing incremental message content and output token usage."
+      },
+      {
+        "name": "usage_metadata",
+        "type": "Feature",
+        "description": "A dictionary containing token usage information, including input and output tokens."
+      },
+      {
+        "name": "Output Tokens",
+        "type": "Feature",
+        "description": "A metric representing the number of tokens generated by a language model."
+      },
+      {
+        "name": "Claude Sonnet 4.5",
+        "type": "Technology",
+        "description": "A specific large language model from Anthropic."
+      },
+      {
+        "name": "astream_events",
+        "type": "Feature",
+        "description": "An asynchronous method in LangChain for streaming events from a chat model."
+      },
+      {
+        "name": "on_chat_model_end",
+        "type": "Feature",
+        "description": "An event kind in `astream_events` for indicating the end of a chat model call, where usage metadata is typically reported."
+      },
+      {
+        "name": "AIMessageChunk",
+        "type": "Technology",
+        "description": "A data structure used in LangChain to represent a chunk of an AI message."
+      }
+    ],
+    "relations": [
+      {
+        "source": "ChatAnthropic",
+        "target": "Input Tokens",
+        "label": "CAUSES",
+        "evidence": "ChatAnthropic in streaming output scenarios, usage input_tokens is always 0",
+        "evidence_start": 2887,
+        "evidence_end": 2962
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "Streaming Output",
+        "label": "USES",
+        "evidence": "ChatAnthropic in streaming output scenarios",
+        "evidence_start": 2887,
+        "evidence_end": 2930
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "Claude Sonnet 4.5",
+        "label": "USES",
+        "evidence": "llm = ChatAnthropic(model=\"us.anthropic.claude-sonnet-4-5-20250929-v1:0\", streaming=True, stream_usage=True)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "langchain-anthropic",
+        "target": "ChatAnthropic",
+        "label": "RELATED_TO",
+        "evidence": "[x] langchain-anthropic",
+        "evidence_start": 649,
+        "evidence_end": 672
+      },
+      {
+        "source": "LangChain",
+        "target": "langchain-anthropic",
+        "label": "USES",
+        "evidence": "I am sure that this is a bug in LangChain rather than my code.",
+        "evidence_start": 228,
+        "evidence_end": 290
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "astream_events",
+        "label": "USES",
+        "evidence": "async for event in llm.astream_events(messages, version=\"v2\")",
+        "evidence_start": 1646,
+        "evidence_end": 1707
+      },
+      {
+        "source": "astream_events",
+        "target": "on_chat_model_end",
+        "label": "RELATED_TO",
+        "evidence": "elif kind == \"on_chat_model_end\":",
+        "evidence_start": 1969,
+        "evidence_end": 2002
+      },
+      {
+        "source": "on_chat_model_end",
+        "target": "usage_metadata",
+        "label": "USES",
+        "evidence": "print(f\"usage_metadata: {output.usage_metadata}\")",
+        "evidence_start": 2237,
+        "evidence_end": 2286
+      },
+      {
+        "source": "usage_metadata",
+        "target": "Input Tokens",
+        "label": "RELATED_TO",
+        "evidence": "print(f\"input_tokens: {usage.get('input_tokens')}\")",
+        "evidence_start": 2299,
+        "evidence_end": 2350
+      },
+      {
+        "source": "usage_metadata",
+        "target": "Output Tokens",
+        "label": "RELATED_TO",
+        "evidence": "print(f\"output_tokens: {usage.get('output_tokens')}\")",
+        "evidence_start": 2363,
+        "evidence_end": 2416
+      },
+      {
+        "source": "Anthropic SDK",
+        "target": "message_start event",
+        "label": "RELATED_TO",
+        "evidence": "Reference: Anthropic SDK streaming implementation https://github.com/anthropics/anthropic-sdk-python/blob/main/src/anthropic/lib/streaming/_messages.py  # noqa: E501 if event.type == \"message_start\" and stream_usage:",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Anthropic SDK",
+        "target": "message_delta event",
+        "label": "RELATED_TO",
+        "evidence": "Reference: Anthropic SDK streaming implementation https://github.com/anthropics/anthropic-sdk-python/blob/main/src/anthropic/lib/streaming/_messages.py  # noqa: E501",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "message_start event",
+        "target": "Input Tokens",
+        "label": "RELATED_TO",
+        "evidence": "Include input_tokens from message_start, as message_delta only contains output_tokens.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "message_delta event",
+        "target": "Output Tokens",
+        "label": "RELATED_TO",
+        "evidence": "message_delta only contains output_tokens.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "AIMessageChunk",
+        "target": "usage_metadata",
+        "label": "USES",
+        "evidence": "**({\"usage_metadata\": usage_metadata} if usage_metadata else {}),",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "The ChatAnthropic class in langchain-anthropic incorrectly reports input_tokens as 0 when using astream_events in streaming output scenarios, due to usage_metadata not being properly populated from the message_start event."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

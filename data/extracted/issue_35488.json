@@ -1,0 +1,179 @@
+{
+  "id": 35488,
+  "title": "fix(openai): enable bind_tools after with_structured_output",
+  "status": "open",
+  "created_at": "2026-02-28T22:51:16Z",
+  "author_name": "ademicho123",
+  "url": "https://github.com/langchain-ai/langchain/pull/35488",
+  "body_text": "Wraps the chain returned by \"with_structured_output\" so users can call \"bind_tools\" on it. Before this fix, calling \"structured_llm.bind_tools([...])\" threw \"RunnableSequence\" object has no attribute \"bind_tools\".\r\n\r\nFixes #28848\r\n\r\nI added \"RunnableWithStructuredOutput\" wrapper class that delegates to the underlying chain but exposes \"bind_tools\". When \"bind_tools\" is called, it rebuilds the chain with \"include_raw=True\" which is required for tool usage.\r\n\r\nI tested it by adding 3 unit tests for the new functionality and ran \"make format\" and \"make lint\" which both passed. Also, ran existing \"with_structured_output\" tests to make sure nothing broke",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "bind_tools",
+        "type": "Feature",
+        "description": "A method to attach tools to a chain."
+      },
+      {
+        "name": "with_structured_output",
+        "type": "Feature",
+        "description": "A function that configures an LLM to produce structured output."
+      },
+      {
+        "name": "RunnableSequence",
+        "type": "Technology",
+        "description": "A class representing a sequence of runnable components."
+      },
+      {
+        "name": "RunnableWithStructuredOutput",
+        "type": "Technology",
+        "description": "A new wrapper class introduced to enable bind_tools on structured output chains."
+      },
+      {
+        "name": "Tool Usage",
+        "type": "Feature",
+        "description": "The capability of an LLM chain to utilize external tools."
+      },
+      {
+        "name": "Unit Tests",
+        "type": "Feature",
+        "description": "Automated tests to verify specific functionalities."
+      },
+      {
+        "name": "make format",
+        "type": "Technology",
+        "description": "A command-line tool used for code formatting."
+      },
+      {
+        "name": "make lint",
+        "type": "Technology",
+        "description": "A command-line tool used for static code analysis (linting)."
+      },
+      {
+        "name": "include_raw=True",
+        "type": "Feature",
+        "description": "A configuration parameter required for tool usage when rebuilding a chain."
+      },
+      {
+        "name": "Attribute Error",
+        "type": "Problem",
+        "description": "An error indicating a missing attribute on an object."
+      },
+      {
+        "name": "Chain",
+        "type": "Technology",
+        "description": "A sequence of operations or components in a system."
+      },
+      {
+        "name": "Existing with_structured_output Tests",
+        "type": "Feature",
+        "description": "Pre-existing tests for the with_structured_output functionality."
+      },
+      {
+        "name": "Structured LLM",
+        "type": "Technology",
+        "description": "A Large Language Model configured to produce structured output."
+      }
+    ],
+    "relations": [
+      {
+        "source": "bind_tools",
+        "target": "with_structured_output",
+        "label": "RELATED_TO",
+        "evidence": "enable bind_tools after with_structured_output",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Structured LLM",
+        "target": "Attribute Error",
+        "label": "CAUSES",
+        "evidence": "calling \"structured_llm.bind_tools([...])\" threw \"RunnableSequence\" object has no attribute \"bind_tools\".",
+        "evidence_start": 108,
+        "evidence_end": 213
+      },
+      {
+        "source": "RunnableSequence",
+        "target": "Attribute Error",
+        "label": "CAUSES",
+        "evidence": "\"RunnableSequence\" object has no attribute \"bind_tools\"",
+        "evidence_start": 157,
+        "evidence_end": 212
+      },
+      {
+        "source": "Attribute Error",
+        "target": "bind_tools",
+        "label": "AFFECTS",
+        "evidence": "threw \"RunnableSequence\" object has no attribute \"bind_tools\".",
+        "evidence_start": 151,
+        "evidence_end": 213
+      },
+      {
+        "source": "RunnableWithStructuredOutput",
+        "target": "bind_tools",
+        "label": "RELATED_TO",
+        "evidence": "exposes \"bind_tools\"",
+        "evidence_start": 329,
+        "evidence_end": 349
+      },
+      {
+        "source": "RunnableWithStructuredOutput",
+        "target": "Chain",
+        "label": "USES",
+        "evidence": "delegates to the underlying chain",
+        "evidence_start": 291,
+        "evidence_end": 324
+      },
+      {
+        "source": "bind_tools",
+        "target": "include_raw=True",
+        "label": "USES",
+        "evidence": "When \"bind_tools\" is called, it rebuilds the chain with \"include_raw=True\"",
+        "evidence_start": 351,
+        "evidence_end": 425
+      },
+      {
+        "source": "include_raw=True",
+        "target": "Tool Usage",
+        "label": "RELATED_TO",
+        "evidence": "which is required for tool usage.",
+        "evidence_start": 426,
+        "evidence_end": 459
+      },
+      {
+        "source": "Unit Tests",
+        "target": "RunnableWithStructuredOutput",
+        "label": "RELATED_TO",
+        "evidence": "I added 3 unit tests for the new functionality",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "make format",
+        "target": "RunnableWithStructuredOutput",
+        "label": "RELATED_TO",
+        "evidence": "ran \"make format\"",
+        "evidence_start": 528,
+        "evidence_end": 545
+      },
+      {
+        "source": "make lint",
+        "target": "RunnableWithStructuredOutput",
+        "label": "RELATED_TO",
+        "evidence": "ran \"make lint\"",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Existing with_structured_output Tests",
+        "target": "with_structured_output",
+        "label": "RELATED_TO",
+        "evidence": "ran existing \"with_structured_output\" tests to make sure nothing broke",
+        "evidence_start": 587,
+        "evidence_end": 657
+      }
+    ],
+    "summary": "This issue fixes an Attribute Error when calling bind_tools on a chain returned by with_structured_output by introducing a RunnableWithStructuredOutput wrapper that exposes bind_tools and rebuilds the chain with include_raw=True for tool usage."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

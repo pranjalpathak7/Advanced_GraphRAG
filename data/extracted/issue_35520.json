@@ -1,0 +1,114 @@
+{
+  "id": 35520,
+  "title": "fix(openai): extract reasoning_content from DeepSeek streaming responses",
+  "status": "closed",
+  "created_at": "2026-03-02T14:37:54Z",
+  "author_name": "squallopen",
+  "url": "https://github.com/langchain-ai/langchain/pull/35520",
+  "body_text": "## Summary\n\nExtract `reasoning_content` from delta in `_convert_delta_to_message_chunk` to make DeepSeek's thinking process available in `additional_kwargs`.\n\n## Changes\n\n- Added extraction of `reasoning_content` from delta in `libs/partners/openai/langchain_openai/chat_models/base.py`\n\n## Testing\n\nVerified the fix works with DeepSeek `deepseek-reasoner` model.\n\n## Related Issue\n\nFixes #35516",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "reasoning_content",
+        "type": "Feature",
+        "description": "A specific field containing the reasoning process from DeepSeek models."
+      },
+      {
+        "name": "DeepSeek",
+        "type": "Technology",
+        "description": "An AI model provider or platform."
+      },
+      {
+        "name": "DeepSeek Streaming Responses",
+        "type": "Technology",
+        "description": "The streaming output format from DeepSeek models."
+      },
+      {
+        "name": "_convert_delta_to_message_chunk",
+        "type": "Technology",
+        "description": "A function in `langchain_openai` responsible for converting delta objects into message chunks."
+      },
+      {
+        "name": "additional_kwargs",
+        "type": "Feature",
+        "description": "A dictionary for storing extra keyword arguments or metadata in message chunks."
+      },
+      {
+        "name": "langchain_openai",
+        "type": "Technology",
+        "description": "A library for integrating with OpenAI and similar models."
+      },
+      {
+        "name": "deepseek-reasoner",
+        "type": "Technology",
+        "description": "A specific DeepSeek model."
+      },
+      {
+        "name": "Issue #35516",
+        "type": "Problem",
+        "description": "A previously reported issue that this fix addresses."
+      }
+    ],
+    "relations": [
+      {
+        "source": "_convert_delta_to_message_chunk",
+        "target": "DeepSeek Streaming Responses",
+        "label": "USES",
+        "evidence": "Extract `reasoning_content` from delta in `_convert_delta_to_message_chunk` to make DeepSeek's thinking process available in `additional_kwargs`.",
+        "evidence_start": 12,
+        "evidence_end": 157
+      },
+      {
+        "source": "_convert_delta_to_message_chunk",
+        "target": "reasoning_content",
+        "label": "RELATED_TO",
+        "evidence": "Extract `reasoning_content` from delta in `_convert_delta_to_message_chunk`",
+        "evidence_start": 12,
+        "evidence_end": 87
+      },
+      {
+        "source": "reasoning_content",
+        "target": "additional_kwargs",
+        "label": "RELATED_TO",
+        "evidence": "make DeepSeek's thinking process available in `additional_kwargs`.",
+        "evidence_start": 91,
+        "evidence_end": 157
+      },
+      {
+        "source": "langchain_openai",
+        "target": "_convert_delta_to_message_chunk",
+        "label": "RELATED_TO",
+        "evidence": "Added extraction of `reasoning_content` from delta in `libs/partners/openai/langchain_openai/chat_models/base.py`",
+        "evidence_start": 173,
+        "evidence_end": 286
+      },
+      {
+        "source": "DeepSeek",
+        "target": "deepseek-reasoner",
+        "label": "RELATED_TO",
+        "evidence": "DeepSeek `deepseek-reasoner` model.",
+        "evidence_start": 328,
+        "evidence_end": 363
+      },
+      {
+        "source": "langchain_openai",
+        "target": "deepseek-reasoner",
+        "label": "AFFECTS",
+        "evidence": "Verified the fix works with DeepSeek `deepseek-reasoner` model.",
+        "evidence_start": 300,
+        "evidence_end": 363
+      },
+      {
+        "source": "Issue #35516",
+        "target": "reasoning_content",
+        "label": "CAUSES",
+        "evidence": "Fixes #35516",
+        "evidence_start": 383,
+        "evidence_end": 395
+      }
+    ],
+    "summary": "This issue describes extracting `reasoning_content` from DeepSeek streaming responses within `_convert_delta_to_message_chunk` in `langchain_openai` to make it available in `additional_kwargs`, thereby fixing `Issue #35516` and improving compatibility with the `deepseek-reasoner` model."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

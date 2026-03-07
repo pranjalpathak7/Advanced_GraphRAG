@@ -1,0 +1,62 @@
+{
+  "id": 35528,
+  "title": "fix: Streaming tool call executed with empty args {} due to SSE fra...",
+  "status": "open",
+  "created_at": "2026-03-02T23:28:16Z",
+  "author_name": "JiwaniZakir",
+  "url": "https://github.com/langchain-ai/langchain/pull/35528",
+  "body_text": "## Summary\n\nFixes #35514\n\n## Changes\n\nAuto-generated contribution addressing: Streaming tool call executed with empty args {} due to SSE fragmentation of tool call arguments\n\n## Testing\n\n- Ran the project's test suite\n- Verified the fix addresses the issue\n\n---\n*Contributed via automated open-source bot*\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Streaming Tool Call",
+        "type": "Feature",
+        "description": "A feature where tool calls are executed in a streaming manner."
+      },
+      {
+        "name": "Empty Args {}",
+        "type": "Problem",
+        "description": "A problem where tool call arguments are empty."
+      },
+      {
+        "name": "SSE Fragmentation",
+        "type": "Problem",
+        "description": "A technical issue related to Server-Sent Events causing data fragmentation."
+      },
+      {
+        "name": "Tool Call Arguments",
+        "type": "Feature",
+        "description": "The arguments passed to a tool call."
+      }
+    ],
+    "relations": [
+      {
+        "source": "SSE Fragmentation",
+        "target": "Empty Args {}",
+        "label": "CAUSES",
+        "evidence": "Streaming tool call executed with empty args {} due to SSE fragmentation of tool call arguments",
+        "evidence_start": 78,
+        "evidence_end": 173
+      },
+      {
+        "source": "Empty Args {}",
+        "target": "Streaming Tool Call",
+        "label": "AFFECTS",
+        "evidence": "Streaming tool call executed with empty args {}",
+        "evidence_start": 78,
+        "evidence_end": 125
+      },
+      {
+        "source": "SSE Fragmentation",
+        "target": "Tool Call Arguments",
+        "label": "AFFECTS",
+        "evidence": "SSE fragmentation of tool call arguments",
+        "evidence_start": 133,
+        "evidence_end": 173
+      }
+    ],
+    "summary": "This issue addresses a fix for streaming tool calls that execute with empty arguments due to SSE fragmentation of tool call arguments."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,62 @@
+{
+  "id": 35537,
+  "title": "fix(langchain)!: default to `google_genai` instead of `google_vertexai`",
+  "status": "open",
+  "created_at": "2026-03-03T15:40:42Z",
+  "author_name": "mdrxy",
+  "url": "https://github.com/langchain-ai/langchain/pull/35537",
+  "body_text": "Vertex is deprecated\r\n\r\nhttps://github.com/langchain-ai/langchain-google/discussions/1422",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Google GenAI",
+        "type": "Technology",
+        "description": "The new default API/library for LangChain."
+      },
+      {
+        "name": "Google VertexAI",
+        "type": "Technology",
+        "description": "The deprecated API/library that was previously the default for LangChain."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "A framework whose default API for Google services is being updated."
+      },
+      {
+        "name": "Deprecation",
+        "type": "Problem",
+        "description": "The status indicating that Google VertexAI is no longer recommended for use."
+      }
+    ],
+    "relations": [
+      {
+        "source": "LangChain",
+        "target": "Google GenAI",
+        "label": "USES",
+        "evidence": "default to `google_genai`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "LangChain",
+        "target": "Google VertexAI",
+        "label": "USES",
+        "evidence": "instead of `google_vertexai`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Deprecation",
+        "target": "Google VertexAI",
+        "label": "AFFECTS",
+        "evidence": "Vertex is deprecated",
+        "evidence_start": 0,
+        "evidence_end": 20
+      }
+    ],
+    "summary": "This issue updates LangChain to default to `google_genai` instead of `google_vertexai` due to the deprecation of Vertex."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,229 @@
+{
+  "id": 35544,
+  "title": "anthropic: drop forced tool_choice when thinking is enabled",
+  "status": "open",
+  "created_at": "2026-03-03T23:12:27Z",
+  "author_name": "roli-lpci",
+  "url": "https://github.com/langchain-ai/langchain/pull/35544",
+  "body_text": "## Description\n\nFixes #35539.\n\n`ChatAnthropic.bind_tools()` now detects when thinking mode is active and `tool_choice` forces tool use (`\"any\"` or a specific tool name). In that case it drops the forced `tool_choice` and emits a warning, preventing the Anthropic API error: *\"Thinking may not be enabled when tool_choice forces tool use.\"*\n\nThis matches the existing behavior in `_get_llm_for_structured_output_when_thinking_is_enabled` (line 1451), which already omits `tool_choice` for the same reason when called via `with_structured_output()`. The gap was that `bind_tools()` had no such guard, so callers like `create_agent` with `ToolStrategy` would pass `tool_choice=\"any\"` through to the API.\n\n## Changes\n\n- **`langchain_anthropic/chat_models.py`**: After tool_choice normalization in `bind_tools()`, check `self.thinking` is enabled and tool_choice type is `\"any\"` or `\"tool\"`. If so, delete tool_choice from kwargs and warn.\n- **`tests/unit_tests/test_chat_models.py`**: 8 test cases covering all forced tool_choice variants (string and dict), `auto` passthrough, and thinking-disabled/None/absent passthrough.\n\n## Issue\n\nWhen using `create_agent(model, response_format=Schema)` with a `ChatAnthropic` model that has `thinking={\"type\": \"enabled\"}`, the agent sends `tool_choice=\"any\"` to the Anthropic API, which rejects it with a 400 error.\n\n## Test plan\n\n- [x] `test_bind_tools_drops_forced_tool_choice_when_thinking_enabled` — verifies all forced variants are dropped with warning\n- [x] `test_bind_tools_keeps_forced_tool_choice_when_thinking_disabled` — verifies no regression for non-thinking usage\n- [x] Existing `test_anthropic_bind_tools_tool_choice` — verifies no regression on standard tool_choice behavior",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatAnthropic",
+        "type": "Technology",
+        "description": "A chat model from Anthropic."
+      },
+      {
+        "name": "tool_choice",
+        "type": "Feature",
+        "description": "A parameter used to specify tool usage behavior in language models, which can force tool use."
+      },
+      {
+        "name": "Thinking Mode",
+        "type": "Feature",
+        "description": "A mode of operation for the ChatAnthropic model where it can 'think' before responding."
+      },
+      {
+        "name": "Anthropic API",
+        "type": "Technology",
+        "description": "The application programming interface for Anthropic's language models."
+      },
+      {
+        "name": "Anthropic API Error",
+        "type": "Problem",
+        "description": "An error returned by the Anthropic API, specifically a 400 error, when 'thinking' is enabled and 'tool_choice' forces tool use."
+      },
+      {
+        "name": "bind_tools()",
+        "type": "Feature",
+        "description": "A method within ChatAnthropic for binding tools to the model."
+      },
+      {
+        "name": "_get_llm_for_structured_output_when_thinking_is_enabled",
+        "type": "Feature",
+        "description": "An internal method that handles LLM configuration when thinking mode is active for structured output."
+      },
+      {
+        "name": "with_structured_output()",
+        "type": "Feature",
+        "description": "A method for enabling structured output from an LLM."
+      },
+      {
+        "name": "create_agent",
+        "type": "Feature",
+        "description": "A function used to create agents, which can utilize models and tools."
+      },
+      {
+        "name": "ToolStrategy",
+        "type": "Technology",
+        "description": "A strategy for tool usage, often used with agent creation."
+      },
+      {
+        "name": "langchain_anthropic/chat_models.py",
+        "type": "Technology",
+        "description": "The Python file containing the implementation of ChatAnthropic and related models."
+      },
+      {
+        "name": "Issue #35539",
+        "type": "Problem",
+        "description": "A related GitHub issue that this change addresses."
+      },
+      {
+        "name": "400 Error",
+        "type": "Problem",
+        "description": "A specific HTTP status code indicating a bad request."
+      },
+      {
+        "name": "Schema",
+        "type": "Technology",
+        "description": "A definition for the expected structure of a response."
+      },
+      {
+        "name": "tests/unit_tests/test_chat_models.py",
+        "type": "Technology",
+        "description": "The Python file containing unit tests for chat models, specifically for bind_tools behavior."
+      }
+    ],
+    "relations": [
+      {
+        "source": "bind_tools()",
+        "target": "tool_choice",
+        "label": "USES",
+        "evidence": "`ChatAnthropic.bind_tools()` now detects when thinking mode is active and `tool_choice` forces tool use",
+        "evidence_start": 31,
+        "evidence_end": 134
+      },
+      {
+        "source": "bind_tools()",
+        "target": "Thinking Mode",
+        "label": "USES",
+        "evidence": "`ChatAnthropic.bind_tools()` now detects when thinking mode is active and `tool_choice` forces tool use",
+        "evidence_start": 31,
+        "evidence_end": 134
+      },
+      {
+        "source": "Thinking Mode",
+        "target": "Anthropic API Error",
+        "label": "CAUSES",
+        "evidence": "Thinking may not be enabled when tool_choice forces tool use.",
+        "evidence_start": 276,
+        "evidence_end": 337
+      },
+      {
+        "source": "tool_choice",
+        "target": "Anthropic API Error",
+        "label": "CAUSES",
+        "evidence": "Thinking may not be enabled when tool_choice forces tool use.",
+        "evidence_start": 276,
+        "evidence_end": 337
+      },
+      {
+        "source": "Anthropic API Error",
+        "target": "400 Error",
+        "label": "RELATED_TO",
+        "evidence": "the agent sends `tool_choice=\"any\"` to the Anthropic API, which rejects it with a 400 error.",
+        "evidence_start": 1259,
+        "evidence_end": 1351
+      },
+      {
+        "source": "bind_tools()",
+        "target": "Anthropic API Error",
+        "label": "AFFECTS",
+        "evidence": "In that case it drops the forced `tool_choice` and emits a warning, preventing the Anthropic API error",
+        "evidence_start": 170,
+        "evidence_end": 272
+      },
+      {
+        "source": "_get_llm_for_structured_output_when_thinking_is_enabled",
+        "target": "tool_choice",
+        "label": "USES",
+        "evidence": "which already omits `tool_choice` for the same reason when called via `with_structured_output()`.",
+        "evidence_start": 450,
+        "evidence_end": 547
+      },
+      {
+        "source": "_get_llm_for_structured_output_when_thinking_is_enabled",
+        "target": "Thinking Mode",
+        "label": "USES",
+        "evidence": "`_get_llm_for_structured_output_when_thinking_is_enabled` (line 1451), which already omits `tool_choice` for the same reason when called via `with_structured_output()`.",
+        "evidence_start": 379,
+        "evidence_end": 547
+      },
+      {
+        "source": "with_structured_output()",
+        "target": "_get_llm_for_structured_output_when_thinking_is_enabled",
+        "label": "USES",
+        "evidence": "when called via `with_structured_output()`.",
+        "evidence_start": 504,
+        "evidence_end": 547
+      },
+      {
+        "source": "create_agent",
+        "target": "ChatAnthropic",
+        "label": "USES",
+        "evidence": "When using `create_agent(model, response_format=Schema)` with a `ChatAnthropic` model",
+        "evidence_start": 1132,
+        "evidence_end": 1217
+      },
+      {
+        "source": "create_agent",
+        "target": "ToolStrategy",
+        "label": "USES",
+        "evidence": "callers like `create_agent` with `ToolStrategy` would pass `tool_choice=\"any\"` through to the API.",
+        "evidence_start": 602,
+        "evidence_end": 700
+      },
+      {
+        "source": "create_agent",
+        "target": "Schema",
+        "label": "USES",
+        "evidence": "When using `create_agent(model, response_format=Schema)`",
+        "evidence_start": 1132,
+        "evidence_end": 1188
+      },
+      {
+        "source": "create_agent",
+        "target": "Anthropic API Error",
+        "label": "CAUSES",
+        "evidence": "the agent sends `tool_choice=\"any\"` to the Anthropic API, which rejects it with a 400 error.",
+        "evidence_start": 1259,
+        "evidence_end": 1351
+      },
+      {
+        "source": "langchain_anthropic/chat_models.py",
+        "target": "ChatAnthropic",
+        "label": "RELATED_TO",
+        "evidence": "`langchain_anthropic/chat_models.py`: After tool_choice normalization in `bind_tools()`, check `self.thinking` is enabled and tool_choice type is `",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "langchain_anthropic/chat_models.py",
+        "target": "Anthropic API Error",
+        "label": "AFFECTS",
+        "evidence": "`langchain_anthropic/chat_models.py`: After tool_choice normalization in `bind_tools()`, check `self.thinking` is enabled and tool_choice type is `",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Issue #35539",
+        "target": "Anthropic API Error",
+        "label": "RELATED_TO",
+        "evidence": "Fixes #35539.",
+        "evidence_start": 16,
+        "evidence_end": 29
+      },
+      {
+        "source": "tests/unit_tests/test_chat_models.py",
+        "target": "langchain_anthropic/chat_models.py",
+        "label": "RELATED_TO",
+        "evidence": "`tests/unit_tests/test_chat_models.py`: 8 test cases covering all forced tool_choice variants (string and dict), `auto` passthrough, and thinking-disabled/None/absent passthrough.",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "The `ChatAnthropic.bind_tools()` method was incorrectly passing a forced `tool_choice` parameter to the `Anthropic API` when `thinking mode` was enabled, leading to a 400 error, which is now fixed by dropping the `tool_choice` in such scenarios."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

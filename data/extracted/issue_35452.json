@@ -1,0 +1,135 @@
+{
+  "id": 35452,
+  "title": "Will langchain support create_agent with pimono-like loop in loop capability.",
+  "status": "open",
+  "created_at": "2026-02-26T06:00:50Z",
+  "author_name": "lylingzhen",
+  "url": "https://github.com/langchain-ai/langchain/issues/35452",
+  "body_text": "### Checked other resources\n\n- [x] This is a feature request, not a bug report or usage question.\n- [x] I added a clear and descriptive title that summarizes the feature request.\n- [x] I used the GitHub search to find a similar feature request and didn't find it.\n- [x] I checked the LangChain documentation and API reference to see if this feature already exists.\n- [x] This is not related to the langchain-community package.\n\n### Package (Required)\n\n- [x] langchain\n- [ ] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [x] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [x] Other / not sure / general\n\n### Feature Description\n\nI would like langchain to support loop in loop react agent. Just like pi-mono-agent-core.\n\n### Use Case\n\nThis feature would help user to build loop-in-loop agent pattern which can support 'interrupt', 'append' actions like pi-mono-agent-core while agent is running.\nFurthermore, we can also provide time travel base on session tree.\n\n### Proposed Solution\n\n_No response_\n\n### Alternatives Considered\n\n_No response_\n\n### Additional Context\n\n_No response_",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "A Python framework for developing applications powered by language models."
+      },
+      {
+        "name": "Create Agent",
+        "type": "Feature",
+        "description": "A function or capability within LangChain to create agents."
+      },
+      {
+        "name": "Pi-Mono-Agent-Core",
+        "type": "Technology",
+        "description": "An agent core that provides loop-in-loop capabilities and actions like 'interrupt' and 'append'."
+      },
+      {
+        "name": "Loop In Loop Capability",
+        "type": "Feature",
+        "description": "A capability allowing nested loops within an agent's operation."
+      },
+      {
+        "name": "Loop In Loop React Agent",
+        "type": "Feature",
+        "description": "A type of agent that supports nested loop patterns, similar to Pi-Mono-Agent-Core."
+      },
+      {
+        "name": "Interrupt Action",
+        "type": "Feature",
+        "description": "An action to pause or stop an agent while it is running."
+      },
+      {
+        "name": "Append Action",
+        "type": "Feature",
+        "description": "An action to add to an agent's process while it is running."
+      },
+      {
+        "name": "Time Travel",
+        "type": "Feature",
+        "description": "A capability to review or revert agent states based on a session tree."
+      },
+      {
+        "name": "Session Tree",
+        "type": "Technology",
+        "description": "A data structure used to manage and track agent sessions, enabling features like time travel."
+      }
+    ],
+    "relations": [
+      {
+        "source": "LangChain",
+        "target": "Create Agent",
+        "label": "RELATED_TO",
+        "evidence": "Will langchain support create_agent",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Create Agent",
+        "target": "Loop In Loop Capability",
+        "label": "RELATED_TO",
+        "evidence": "create_agent with pimono-like loop in loop capability.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Loop In Loop Capability",
+        "target": "Pi-Mono-Agent-Core",
+        "label": "RELATED_TO",
+        "evidence": "pimono-like loop in loop capability.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "LangChain",
+        "target": "Loop In Loop React Agent",
+        "label": "RELATED_TO",
+        "evidence": "I would like langchain to support loop in loop react agent.",
+        "evidence_start": 1016,
+        "evidence_end": 1075
+      },
+      {
+        "source": "Loop In Loop React Agent",
+        "target": "Pi-Mono-Agent-Core",
+        "label": "RELATED_TO",
+        "evidence": "Just like pi-mono-agent-core.",
+        "evidence_start": 1076,
+        "evidence_end": 1105
+      },
+      {
+        "source": "Loop In Loop React Agent",
+        "target": "Interrupt Action",
+        "label": "USES",
+        "evidence": "This feature would help user to build loop-in-loop agent pattern which can support 'interrupt'",
+        "evidence_start": 1121,
+        "evidence_end": 1215
+      },
+      {
+        "source": "Loop In Loop React Agent",
+        "target": "Append Action",
+        "label": "USES",
+        "evidence": "which can support 'interrupt', 'append' actions like pi-mono-agent-core while agent is running.",
+        "evidence_start": 1186,
+        "evidence_end": 1281
+      },
+      {
+        "source": "Time Travel",
+        "target": "Session Tree",
+        "label": "USES",
+        "evidence": "we can also provide time travel base on session tree.",
+        "evidence_start": 1295,
+        "evidence_end": 1348
+      },
+      {
+        "source": "Loop In Loop React Agent",
+        "target": "Time Travel",
+        "label": "RELATED_TO",
+        "evidence": "Furthermore, we can also provide time travel base on session tree.",
+        "evidence_start": 1282,
+        "evidence_end": 1348
+      }
+    ],
+    "summary": "The user requests LangChain to support a loop-in-loop react agent pattern, similar to Pi-Mono-Agent-Core, which would enable features like 'interrupt', 'append' actions, and time travel based on a session tree."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

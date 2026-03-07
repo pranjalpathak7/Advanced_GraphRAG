@@ -1,0 +1,75 @@
+{
+  "id": 35532,
+  "title": "fix(anthropic): populate input_tokens in streaming usage metadata",
+  "status": "open",
+  "created_at": "2026-03-03T06:56:28Z",
+  "author_name": "Jaredw2289-svg",
+  "url": "https://github.com/langchain-ai/langchain/pull/35532",
+  "body_text": "Fixes #35509\n\nIn ChatAnthropic streaming, `input_tokens` was always 0 because the value from Anthropic's `message_start` event was not being passed through to usage metadata. This PR correctly maps it.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatAnthropic Streaming",
+        "type": "Feature",
+        "description": "A streaming capability within the ChatAnthropic service."
+      },
+      {
+        "name": "Input Tokens",
+        "type": "Problem",
+        "description": "A metric representing the number of input tokens, which was incorrectly reported as 0."
+      },
+      {
+        "name": "Anthropic Message Start Event",
+        "type": "Technology",
+        "description": "An event from Anthropic's API that contains the correct input token count."
+      },
+      {
+        "name": "Usage Metadata",
+        "type": "Technology",
+        "description": "A system component or data structure where usage information is stored."
+      },
+      {
+        "name": "Anthropic",
+        "type": "Organization",
+        "description": "The organization providing the ChatAnthropic service."
+      }
+    ],
+    "relations": [
+      {
+        "source": "ChatAnthropic Streaming",
+        "target": "Input Tokens",
+        "label": "AFFECTS",
+        "evidence": "In ChatAnthropic streaming, `input_tokens` was always 0",
+        "evidence_start": 14,
+        "evidence_end": 69
+      },
+      {
+        "source": "Anthropic Message Start Event",
+        "target": "Input Tokens",
+        "label": "CAUSES",
+        "evidence": "the value from Anthropic's `message_start` event was not being passed through to usage metadata.",
+        "evidence_start": 78,
+        "evidence_end": 174
+      },
+      {
+        "source": "Input Tokens",
+        "target": "Usage Metadata",
+        "label": "RELATED_TO",
+        "evidence": "input_tokens was always 0 because the value from Anthropic's `message_start` event was not being passed through to usage metadata.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Anthropic",
+        "target": "ChatAnthropic Streaming",
+        "label": "RELATED_TO",
+        "evidence": "ChatAnthropic streaming",
+        "evidence_start": 17,
+        "evidence_end": 40
+      }
+    ],
+    "summary": "The `input_tokens` metric in ChatAnthropic streaming was incorrectly reported as 0 because the value from Anthropic's `message_start` event was not being passed to usage metadata."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

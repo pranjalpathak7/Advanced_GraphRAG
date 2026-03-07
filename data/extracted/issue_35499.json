@@ -1,0 +1,281 @@
+{
+  "id": 35499,
+  "title": "fix(text-splitters): lazy-import nltk/spacy/sentence-transformers to avoid ~700MB memory bloat",
+  "status": "open",
+  "created_at": "2026-03-01T20:19:41Z",
+  "author_name": "sxu75374",
+  "url": "https://github.com/langchain-ai/langchain/pull/35499",
+  "body_text": "## Problem\n\nImporting `langchain_text_splitters` eagerly pulls in `nltk`, `spacy`, and `sentence-transformers` (plus `torch` transitively) at module level, adding ~700 MiB RSS even when only lightweight splitters like `RecursiveCharacterTextSplitter` are used.\n\nThis regression was introduced in 1.0.0 when [PLC0415](https://docs.astral.sh/ruff/rules/import-outside-top-level/) moved lazy imports to top-level (PR #32325).\n\n## Root Cause\n\n`__init__.py` imports from `.nltk`, `.spacy`, and `.sentence_transformers` at module level. Each of these files does `try: import heavy_lib` at the top, so merely importing the package triggers the full import chain.\n\n## Fix\n\nMove the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`) behind a `__getattr__` lazy loader, following the exact same pattern used throughout `langchain-core` (e.g., `langchain_core.embeddings`, `langchain_core.callbacks`).\n\n- **`__all__` is unchanged** — public API is identical\n- **`TYPE_CHECKING` block** preserves type-checker visibility\n- **`globals()[attr_name] = result`** caches the import so subsequent accesses are free\n\n## Tests Added\n\n`tests/unit_tests/test_lazy_imports.py`:\n- Bare package import does not pull in heavy deps\n- Lazy `__getattr__` correctly resolves each class\n- Unknown attributes raise `AttributeError`\n- Lightweight splitters remain directly importable\n- E2E: using `RecursiveCharacterTextSplitter` doesn't import heavy deps\n\n## Reproduction (from issue)\n\n```python\nimport os, psutil\ndef mem(): return psutil.Process(os.getpid()).memory_info().rss / 1024 / 1024\n\nprint(f\"Start: {mem():.1f} MiB\")\nfrom langchain_text_splitters import RecursiveCharacterTextSplitter\nprint(f\"After: {mem():.1f} MiB\")\n# Before: 74 → 736 MiB (+662 MiB)\n# After:  74 → ~80 MiB (no heavy deps loaded)\n```\n\nFixes #35437",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "langchain_text_splitters",
+        "type": "Technology",
+        "description": "A Python package for text splitting that was causing memory bloat."
+      },
+      {
+        "name": "NLTK",
+        "type": "Technology",
+        "description": "A natural language toolkit eagerly imported by `langchain_text_splitters`."
+      },
+      {
+        "name": "SpaCy",
+        "type": "Technology",
+        "description": "A natural language processing library eagerly imported by `langchain_text_splitters`."
+      },
+      {
+        "name": "Sentence-Transformers",
+        "type": "Technology",
+        "description": "A library for sentence embeddings eagerly imported by `langchain_text_splitters`."
+      },
+      {
+        "name": "Torch",
+        "type": "Technology",
+        "description": "A machine learning framework transitively imported by `sentence-transformers`."
+      },
+      {
+        "name": "Memory Bloat",
+        "type": "Problem",
+        "description": "An issue causing ~700 MiB RSS memory increase due to eager imports."
+      },
+      {
+        "name": "RecursiveCharacterTextSplitter",
+        "type": "Technology",
+        "description": "A lightweight text splitter that was affected by the memory bloat."
+      },
+      {
+        "name": "PLC0415",
+        "type": "Technology",
+        "description": "A Ruff rule for import-outside-top-level that contributed to the regression."
+      },
+      {
+        "name": "1.0.0",
+        "type": "Technology",
+        "description": "A version of a software package where the memory regression was introduced."
+      },
+      {
+        "name": "PR #32325",
+        "type": "Technology",
+        "description": "A Pull Request that moved lazy imports to top-level, causing the regression."
+      },
+      {
+        "name": "__init__.py",
+        "type": "Technology",
+        "description": "A Python module initialization file responsible for eager imports."
+      },
+      {
+        "name": "NLTKTextSplitter",
+        "type": "Technology",
+        "description": "A text splitter class that uses NLTK."
+      },
+      {
+        "name": "SpacyTextSplitter",
+        "type": "Technology",
+        "description": "A text splitter class that uses SpaCy."
+      },
+      {
+        "name": "SentenceTransformersTokenTextSplitter",
+        "type": "Technology",
+        "description": "A text splitter class that uses Sentence-Transformers."
+      },
+      {
+        "name": "Lazy Loader",
+        "type": "Feature",
+        "description": "A mechanism to defer module imports, implemented using `__getattr__`."
+      },
+      {
+        "name": "__getattr__",
+        "type": "Technology",
+        "description": "A Python special method used to implement the lazy loading mechanism."
+      },
+      {
+        "name": "langchain-core",
+        "type": "Technology",
+        "description": "A core library that uses a similar lazy loading pattern."
+      },
+      {
+        "name": "test_lazy_imports.py",
+        "type": "Technology",
+        "description": "A unit test file added to verify the lazy import fix."
+      },
+      {
+        "name": "Lightweight Splitters",
+        "type": "Feature",
+        "description": "A category of text splitters that do not consume much memory."
+      }
+    ],
+    "relations": [
+      {
+        "source": "langchain_text_splitters",
+        "target": "Memory Bloat",
+        "label": "CAUSES",
+        "evidence": "Importing `langchain_text_splitters` eagerly pulls in `nltk`, `spacy`, and `sentence-transformers` (plus `torch` transitively) at module level, adding ~700 MiB RSS",
+        "evidence_start": 12,
+        "evidence_end": 175
+      },
+      {
+        "source": "langchain_text_splitters",
+        "target": "NLTK",
+        "label": "USES",
+        "evidence": "Importing `langchain_text_splitters` eagerly pulls in `nltk`",
+        "evidence_start": 12,
+        "evidence_end": 72
+      },
+      {
+        "source": "langchain_text_splitters",
+        "target": "SpaCy",
+        "label": "USES",
+        "evidence": "Importing `langchain_text_splitters` eagerly pulls in `spacy`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "langchain_text_splitters",
+        "target": "Sentence-Transformers",
+        "label": "USES",
+        "evidence": "Importing `langchain_text_splitters` eagerly pulls in `sentence-transformers`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Sentence-Transformers",
+        "target": "Torch",
+        "label": "USES",
+        "evidence": "Importing `langchain_text_splitters` eagerly pulls in `nltk`, `spacy`, and `sentence-transformers` (plus `torch` transitively)",
+        "evidence_start": 12,
+        "evidence_end": 138
+      },
+      {
+        "source": "PLC0415",
+        "target": "Memory Bloat",
+        "label": "CAUSES",
+        "evidence": "This regression was introduced in 1.0.0 when [PLC0415](https://docs.astral.sh/ruff/rules/import-outside-top-level/) moved lazy imports to top-level",
+        "evidence_start": 262,
+        "evidence_end": 409
+      },
+      {
+        "source": "1.0.0",
+        "target": "Memory Bloat",
+        "label": "RELATED_TO",
+        "evidence": "This regression was introduced in 1.0.0",
+        "evidence_start": 262,
+        "evidence_end": 301
+      },
+      {
+        "source": "PR #32325",
+        "target": "Memory Bloat",
+        "label": "RELATED_TO",
+        "evidence": "PR #32325",
+        "evidence_start": 411,
+        "evidence_end": 420
+      },
+      {
+        "source": "__init__.py",
+        "target": "Memory Bloat",
+        "label": "CAUSES",
+        "evidence": "`__init__.py` imports from `.nltk`, `.spacy`, and `.sentence_transformers` at module level.",
+        "evidence_start": 439,
+        "evidence_end": 530
+      },
+      {
+        "source": "Memory Bloat",
+        "target": "RecursiveCharacterTextSplitter",
+        "label": "AFFECTS",
+        "evidence": "even when only lightweight splitters like `RecursiveCharacterTextSplitter` are used.",
+        "evidence_start": 176,
+        "evidence_end": 260
+      },
+      {
+        "source": "Lazy Loader",
+        "target": "Memory Bloat",
+        "label": "AFFECTS",
+        "evidence": "Move the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`) behind a `__getattr__` lazy loader",
+        "evidence_start": 665,
+        "evidence_end": 824
+      },
+      {
+        "source": "Lazy Loader",
+        "target": "__getattr__",
+        "label": "USES",
+        "evidence": "behind a `__getattr__` lazy loader",
+        "evidence_start": 790,
+        "evidence_end": 824
+      },
+      {
+        "source": "Lazy Loader",
+        "target": "NLTKTextSplitter",
+        "label": "RELATED_TO",
+        "evidence": "Move the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`) behind a `__getattr__` lazy loader",
+        "evidence_start": 665,
+        "evidence_end": 824
+      },
+      {
+        "source": "Lazy Loader",
+        "target": "SpacyTextSplitter",
+        "label": "RELATED_TO",
+        "evidence": "Move the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`) behind a `__getattr__` lazy loader",
+        "evidence_start": 665,
+        "evidence_end": 824
+      },
+      {
+        "source": "Lazy Loader",
+        "target": "SentenceTransformersTokenTextSplitter",
+        "label": "RELATED_TO",
+        "evidence": "Move the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`) behind a `__getattr__` lazy loader",
+        "evidence_start": 665,
+        "evidence_end": 824
+      },
+      {
+        "source": "langchain-core",
+        "target": "Lazy Loader",
+        "label": "USES",
+        "evidence": "following the exact same pattern used throughout `langchain-core`",
+        "evidence_start": 826,
+        "evidence_end": 891
+      },
+      {
+        "source": "test_lazy_imports.py",
+        "target": "Lazy Loader",
+        "label": "RELATED_TO",
+        "evidence": "`tests/unit_tests/test_lazy_imports.py`: - Bare package import does not pull in heavy deps - Lazy `__getattr__` correctly resolves each class",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "NLTKTextSplitter",
+        "target": "NLTK",
+        "label": "USES",
+        "evidence": "Move the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`)",
+        "evidence_start": 665,
+        "evidence_end": 789
+      },
+      {
+        "source": "SpacyTextSplitter",
+        "target": "SpaCy",
+        "label": "USES",
+        "evidence": "Move the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`)",
+        "evidence_start": 665,
+        "evidence_end": 789
+      },
+      {
+        "source": "SentenceTransformersTokenTextSplitter",
+        "target": "Sentence-Transformers",
+        "label": "USES",
+        "evidence": "Move the three heavy-dep splitter imports (`NLTKTextSplitter`, `SpacyTextSplitter`, `SentenceTransformersTokenTextSplitter`)",
+        "evidence_start": 665,
+        "evidence_end": 789
+      },
+      {
+        "source": "RecursiveCharacterTextSplitter",
+        "target": "Lightweight Splitters",
+        "label": "RELATED_TO",
+        "evidence": "lightweight splitters like `RecursiveCharacterTextSplitter`",
+        "evidence_start": 191,
+        "evidence_end": 250
+      }
+    ],
+    "summary": "The `langchain_text_splitters` package causes a ~700 MiB memory bloat due to eager top-level imports of heavy libraries like NLTK, SpaCy, and Sentence-Transformers, which is fixed by implementing a `__getattr__` lazy loader."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

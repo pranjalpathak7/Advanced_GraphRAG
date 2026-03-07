@@ -1,0 +1,205 @@
+{
+  "id": 35469,
+  "title": "fix(text-splitters): restore lazy imports for heavy optional dependencies",
+  "status": "open",
+  "created_at": "2026-02-28T01:24:30Z",
+  "author_name": "gitbalaji",
+  "url": "https://github.com/langchain-ai/langchain/pull/35469",
+  "body_text": "## Summary\n\n- Moves `nltk`, `spacy`, `sentence-transformers`, and `konlpy` imports back inside class constructors/functions so they are only loaded when the respective splitter is actually instantiated\n- Adds a subprocess-based regression test to verify no heavy packages are imported at `langchain_text_splitters` load time\n\n## Why\n\nPR #32325 moved these optional dependency imports to module-level `try/except` blocks (to satisfy ruff's `PLC0415` rule). Since `__init__.py` imports all four splitter modules, this caused `import langchain_text_splitters` to eagerly load all optional heavy packages, resulting in:\n\n- A PyTorch NVML warning (`UserWarning: Can't initialize NVML`) on non-GPU machines\n- A ~650MB memory spike on import (74MB → 736MB), vs ~50MB in 0.3.x\n\nThe fix restores the lazy import pattern with `# noqa: PLC0415` to suppress the linter rule, which is the correct trade-off when a dependency has high instantiation cost.\n\n## Review notes\n\n- The `PLC0415` suppressions are intentional — these are optional heavy dependencies that should never be loaded unless the user explicitly instantiates the splitter class\n- The regression test uses a subprocess for proper isolation (the test file itself imports `langchain_text_splitters` at the top, so `sys.modules` checks within the same process would not reflect a clean import state)\n\nFixes #35437.\n\n> **AI disclaimer:** This PR was developed with assistance from Claude Code (Anthropic AI).",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "NLTK",
+        "type": "Technology",
+        "description": "A natural language toolkit, identified as an optional heavy dependency."
+      },
+      {
+        "name": "SpaCy",
+        "type": "Technology",
+        "description": "A natural language processing library, identified as an optional heavy dependency."
+      },
+      {
+        "name": "Sentence-Transformers",
+        "type": "Technology",
+        "description": "A library for sentence embeddings, identified as an optional heavy dependency."
+      },
+      {
+        "name": "Konlpy",
+        "type": "Technology",
+        "description": "A Korean natural language processing library, identified as an optional heavy dependency."
+      },
+      {
+        "name": "Langchain Text Splitters",
+        "type": "Technology",
+        "description": "A module within Langchain that provides text splitting functionalities and uses optional heavy dependencies."
+      },
+      {
+        "name": "PR #32325",
+        "type": "Problem",
+        "description": "A previous Pull Request that introduced eager loading of optional dependencies in `langchain_text_splitters`."
+      },
+      {
+        "name": "Eager Loading",
+        "type": "Problem",
+        "description": "The issue of optional heavy packages being loaded immediately upon module import, leading to performance problems."
+      },
+      {
+        "name": "PyTorch NVML Warning",
+        "type": "Problem",
+        "description": "A warning related to NVML initialization that occurs on non-GPU machines due to eager loading."
+      },
+      {
+        "name": "Memory Spike",
+        "type": "Problem",
+        "description": "A significant increase in memory usage upon importing `langchain_text_splitters` caused by eager loading."
+      },
+      {
+        "name": "Lazy Imports",
+        "type": "Feature",
+        "description": "A pattern where dependencies are loaded only when needed, not at module import time, used to fix the eager loading issue."
+      },
+      {
+        "name": "PLC0415",
+        "type": "Technology",
+        "description": "A ruff linter rule that was previously satisfied by module-level imports, but is now suppressed for lazy imports."
+      },
+      {
+        "name": "Regression Test",
+        "type": "Feature",
+        "description": "A test added to verify that heavy packages are not imported at `langchain_text_splitters` load time."
+      },
+      {
+        "name": "Subprocess",
+        "type": "Technology",
+        "description": "A method used by the regression test for proper isolation."
+      },
+      {
+        "name": "Claude Code",
+        "type": "Technology",
+        "description": "An AI tool from Anthropic AI that assisted in the development of this PR."
+      },
+      {
+        "name": "Anthropic AI",
+        "type": "Organization",
+        "description": "The organization behind the Claude Code AI tool."
+      }
+    ],
+    "relations": [
+      {
+        "source": "PR #32325",
+        "target": "Eager Loading",
+        "label": "CAUSES",
+        "evidence": "PR #32325 moved these optional dependency imports to module-level `try/except` blocks (to satisfy ruff's `PLC0415` rule). Since `__init__.py` imports all four splitter modules, this caused `import langchain_text_splitters` to eagerly load all optional heavy packages",
+        "evidence_start": 334,
+        "evidence_end": 600
+      },
+      {
+        "source": "Eager Loading",
+        "target": "Langchain Text Splitters",
+        "label": "AFFECTS",
+        "evidence": "this caused `import langchain_text_splitters` to eagerly load all optional heavy packages",
+        "evidence_start": 511,
+        "evidence_end": 600
+      },
+      {
+        "source": "Eager Loading",
+        "target": "PyTorch NVML Warning",
+        "label": "CAUSES",
+        "evidence": "resulting in: - A PyTorch NVML warning (`UserWarning: Can't initialize NVML`) on non-GPU machines",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Eager Loading",
+        "target": "Memory Spike",
+        "label": "CAUSES",
+        "evidence": "resulting in: - A ~650MB memory spike on import (74MB → 736MB), vs ~50MB in 0.3.x",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Langchain Text Splitters",
+        "target": "NLTK",
+        "label": "USES",
+        "evidence": "Moves `nltk`, `spacy`, `sentence-transformers`, and `konlpy` imports back inside class constructors/functions so they are only loaded when the respective splitter is actually instantiated",
+        "evidence_start": 14,
+        "evidence_end": 201
+      },
+      {
+        "source": "Langchain Text Splitters",
+        "target": "SpaCy",
+        "label": "USES",
+        "evidence": "Moves `nltk`, `spacy`, `sentence-transformers`, and `konlpy` imports back inside class constructors/functions so they are only loaded when the respective splitter is actually instantiated",
+        "evidence_start": 14,
+        "evidence_end": 201
+      },
+      {
+        "source": "Langchain Text Splitters",
+        "target": "Sentence-Transformers",
+        "label": "USES",
+        "evidence": "Moves `nltk`, `spacy`, `sentence-transformers`, and `konlpy` imports back inside class constructors/functions so they are only loaded when the respective splitter is actually instantiated",
+        "evidence_start": 14,
+        "evidence_end": 201
+      },
+      {
+        "source": "Langchain Text Splitters",
+        "target": "Konlpy",
+        "label": "USES",
+        "evidence": "Moves `nltk`, `spacy`, `sentence-transformers`, and `konlpy` imports back inside class constructors/functions so they are only loaded when the respective splitter is actually instantiated",
+        "evidence_start": 14,
+        "evidence_end": 201
+      },
+      {
+        "source": "Lazy Imports",
+        "target": "Langchain Text Splitters",
+        "label": "RELATED_TO",
+        "evidence": "The fix restores the lazy import pattern with `# noqa: PLC0415` to suppress the linter rule, which is the correct trade-off when a dependency has high instantiation cost.",
+        "evidence_start": 770,
+        "evidence_end": 940
+      },
+      {
+        "source": "PR #32325",
+        "target": "PLC0415",
+        "label": "RELATED_TO",
+        "evidence": "PR #32325 moved these optional dependency imports to module-level `try/except` blocks (to satisfy ruff's `PLC0415` rule).",
+        "evidence_start": 334,
+        "evidence_end": 455
+      },
+      {
+        "source": "Lazy Imports",
+        "target": "PLC0415",
+        "label": "CAUSES",
+        "evidence": "The fix restores the lazy import pattern with `# noqa: PLC0415` to suppress the linter rule",
+        "evidence_start": 770,
+        "evidence_end": 861
+      },
+      {
+        "source": "Regression Test",
+        "target": "Subprocess",
+        "label": "USES",
+        "evidence": "The regression test uses a subprocess for proper isolation",
+        "evidence_start": 1133,
+        "evidence_end": 1191
+      },
+      {
+        "source": "Regression Test",
+        "target": "Langchain Text Splitters",
+        "label": "RELATED_TO",
+        "evidence": "Adds a subprocess-based regression test to verify no heavy packages are imported at `langchain_text_splitters` load time",
+        "evidence_start": 204,
+        "evidence_end": 324
+      },
+      {
+        "source": "Claude Code",
+        "target": "Anthropic AI",
+        "label": "RELATED_TO",
+        "evidence": "This PR was developed with assistance from Claude Code (Anthropic AI).",
+        "evidence_start": 1386,
+        "evidence_end": 1456
+      }
+    ],
+    "summary": "This issue fixes eager loading of heavy optional dependencies like NLTK and SpaCy in `langchain_text_splitters`, which was introduced by PR #32325 and caused memory spikes and NVML warnings, by restoring lazy imports and adding a regression test."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

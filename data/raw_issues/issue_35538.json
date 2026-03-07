@@ -1,0 +1,121 @@
+{
+  "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35538",
+  "repository_url": "https://api.github.com/repos/langchain-ai/langchain",
+  "labels_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35538/labels{/name}",
+  "comments_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35538/comments",
+  "events_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35538/events",
+  "html_url": "https://github.com/langchain-ai/langchain/issues/35538",
+  "id": 4017651110,
+  "node_id": "I_kwDOIPDwls7veH2m",
+  "number": 35538,
+  "title": "PydanticSerializationUnexpectedValue warning when using structured output",
+  "user": {
+    "login": "johnayoub-wtw",
+    "id": 151544040,
+    "node_id": "U_kgDOCQhg6A",
+    "avatar_url": "https://avatars.githubusercontent.com/u/151544040?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/johnayoub-wtw",
+    "html_url": "https://github.com/johnayoub-wtw",
+    "followers_url": "https://api.github.com/users/johnayoub-wtw/followers",
+    "following_url": "https://api.github.com/users/johnayoub-wtw/following{/other_user}",
+    "gists_url": "https://api.github.com/users/johnayoub-wtw/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/johnayoub-wtw/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/johnayoub-wtw/subscriptions",
+    "organizations_url": "https://api.github.com/users/johnayoub-wtw/orgs",
+    "repos_url": "https://api.github.com/users/johnayoub-wtw/repos",
+    "events_url": "https://api.github.com/users/johnayoub-wtw/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/johnayoub-wtw/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 5680700839,
+      "node_id": "LA_kwDOIPDwls8AAAABUpidpw",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/bug",
+      "name": "bug",
+      "color": "b60205",
+      "default": true,
+      "description": "Related to a bug, vulnerability, unexpected error with an existing feature"
+    },
+    {
+      "id": 9019019264,
+      "node_id": "LA_kwDOIPDwls8AAAACGZNQAA",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/langchain",
+      "name": "langchain",
+      "color": "f9d0c4",
+      "default": false,
+      "description": "`langchain` package issues & PRs"
+    },
+    {
+      "id": 9605600086,
+      "node_id": "LA_kwDOIPDwls8AAAACPInTVg",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/openai",
+      "name": "openai",
+      "color": "e1b975",
+      "default": false,
+      "description": "`langchain-openai` package issues & PRs"
+    },
+    {
+      "id": 10037429975,
+      "node_id": "LA_kwDOIPDwls8AAAACVkcG1w",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/external",
+      "name": "external",
+      "color": "d32751",
+      "default": false,
+      "description": ""
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [],
+  "milestone": null,
+  "comments": 0,
+  "created_at": "2026-03-03T16:41:01Z",
+  "updated_at": "2026-03-03T16:41:12Z",
+  "closed_at": null,
+  "assignee": null,
+  "author_association": "NONE",
+  "type": {
+    "id": 18879550,
+    "node_id": "IT_kwDOB43M6c4BIBQ-",
+    "name": "Bug",
+    "description": "An unexpected problem or behavior",
+    "color": "red",
+    "created_at": "2024-02-16T01:43:33Z",
+    "updated_at": "2024-07-26T15:00:33Z",
+    "is_enabled": true
+  },
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [x] langchain\n- [x] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n_No response_\n\n### Reproduction Steps / Example Code (Python)\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom pydantic.main import BaseModel\n\nllm = ChatOpenAI(...) # not using responses API\n\nclass ModelOutput(BaseModel):\n    output: str\n\n\noutput = llm.with_structured_output(ModelOutput).invoke(\"What is the capital of France?\")\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\nPydanticSerializationUnexpectedValue(Expected `none` - serialized value may not be as expected [field_name='parsed', input_value=ModelOutput(output='The c...al of France is Paris.'), input_type=ModelOutput])\n  return self.__pydantic_serializer__.to_python(\n```\n\n### Description\n\nusing structured output produces a serializer warning. This behavior seems to have been introduced with one the recent langchain releases.\n\n### System Info\n\n\nSystem Information\n------------------\n> OS:  Linux\n> OS Version:  #1 SMP Tue Nov 5 00:21:55 UTC 2024\n> Python Version:  3.14.3 (main, Feb  3 2026, 22:52:18) [Clang 21.1.4 ]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.17\n> langchain: 1.2.10\n> langchain_community: 0.4.1\n> langsmith: 0.7.10\n> langchain_classic: 1.0.1\n> langchain_openai: 1.1.10\n> langchain_text_splitters: 1.1.1\n> langgraph_sdk: 0.3.9\n\nOptional packages not installed\n-------------------------------\n> deepagents\n> deepagents-cli\n\nOther Dependencies\n------------------\n> aiohttp: 3.13.3\n> dataclasses-json: 0.6.7\n> httpx: 0.28.1\n> httpx-sse: 0.4.3\n> jsonpatch: 1.33\n> langgraph: 1.0.10\n> numpy: 2.4.2\n> openai: 2.24.0\n> opentelemetry-api: 1.39.0\n> opentelemetry-exporter-otlp-proto-http: 1.39.0\n> opentelemetry-sdk: 1.39.0\n> orjson: 3.11.7\n> packaging: 26.0\n> pydantic: 2.12.5\n> pydantic-settings: 2.13.1\n> pytest: 9.0.2\n> pyyaml: 6.0.3\n> PyYAML: 6.0.3\n> requests: 2.32.5\n> requests-toolbelt: 1.0.0\n> rich: 14.3.3\n> SQLAlchemy: 2.0.48\n> sqlalchemy: 2.0.48\n> tenacity: 9.1.4\n> tiktoken: 0.12.0\n> typing-extensions: 4.15.0\n> uuid-utils: 0.14.1\n> wrapt: 1.17.3\n> xxhash: 3.6.0\n> zstandard: 0.25.0",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35538/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35538/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}

@@ -1,0 +1,197 @@
+{
+  "id": 35526,
+  "title": "fix(core): extract usage metadata from serialized tracer message outputs",
+  "status": "closed",
+  "created_at": "2026-03-02T21:09:17Z",
+  "author_name": "mdrxy",
+  "url": "https://github.com/langchain-ai/langchain/pull/35526",
+  "body_text": "Fixes missing `run.metadata.usage_metadata` population in `LangChainTracer` for real LLM/chat traces following #34414\n\n- Fix extraction to read usage from serialized tracer message shape: `outputs.generations[*][*].message.kwargs.usage_metadata`\n- Remove non-serialized direct message shape handling (`message.usage_metadata`) from extractor to match real tracer output path\n- Clarify tracer docstrings around chat callback naming (`on_chat_model_start` + shared `on_llm_end`) to reduce ambiguity\n\n## Why\n\n#34414 introduced usage duplication into `run.metadata.usage_metadata`, but the extractor read `message.usage_metadata`.\n\nIn real tracer flow, messages are serialized with `dumpd(...)` during run completion, so usage metadata lives under `message.kwargs.usage_metadata`. Because of this mismatch, duplication  did not trigger in real traces.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "LangChainTracer",
+        "type": "Technology",
+        "description": "A component responsible for tracing LLM/chat model runs."
+      },
+      {
+        "name": "Usage Metadata",
+        "type": "Feature",
+        "description": "Data related to the usage of LLM/chat models."
+      },
+      {
+        "name": "Missing Usage Metadata Population",
+        "type": "Problem",
+        "description": "The issue where usage metadata is not correctly populated in `run.metadata.usage_metadata`."
+      },
+      {
+        "name": "run.metadata.usage_metadata",
+        "type": "Feature",
+        "description": "The specific field within run metadata where usage information should be stored."
+      },
+      {
+        "name": "LLM/Chat Traces",
+        "type": "Technology",
+        "description": "Traces generated from Large Language Model and chat model interactions."
+      },
+      {
+        "name": "Issue #34414",
+        "type": "Problem",
+        "description": "A previous GitHub issue that introduced usage duplication."
+      },
+      {
+        "name": "Usage Duplication",
+        "type": "Problem",
+        "description": "An issue where usage metadata is duplicated."
+      },
+      {
+        "name": "Extractor",
+        "type": "Technology",
+        "description": "The component responsible for reading usage metadata from tracer outputs."
+      },
+      {
+        "name": "message.usage_metadata",
+        "type": "Feature",
+        "description": "The incorrect path previously used by the extractor for usage metadata."
+      },
+      {
+        "name": "outputs.generations[*][*].message.kwargs.usage_metadata",
+        "type": "Feature",
+        "description": "The correct path for usage metadata in serialized tracer messages."
+      },
+      {
+        "name": "Serialized Tracer Message Shape",
+        "type": "Technology",
+        "description": "The data structure of messages output by the tracer after serialization."
+      },
+      {
+        "name": "Tracer Docstrings",
+        "type": "Feature",
+        "description": "Documentation strings for the LangChainTracer component."
+      },
+      {
+        "name": "on_chat_model_start",
+        "type": "Feature",
+        "description": "A callback name used in the LangChainTracer."
+      },
+      {
+        "name": "on_llm_end",
+        "type": "Feature",
+        "description": "A callback name used in the LangChainTracer."
+      },
+      {
+        "name": "dumpd(...)",
+        "type": "Technology",
+        "description": "A serialization function used in the tracer flow."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Missing Usage Metadata Population",
+        "target": "LangChainTracer",
+        "label": "AFFECTS",
+        "evidence": "Fixes missing `run.metadata.usage_metadata` population in `LangChainTracer`",
+        "evidence_start": 0,
+        "evidence_end": 75
+      },
+      {
+        "source": "Missing Usage Metadata Population",
+        "target": "run.metadata.usage_metadata",
+        "label": "RELATED_TO",
+        "evidence": "Fixes missing `run.metadata.usage_metadata` population in `LangChainTracer`",
+        "evidence_start": 0,
+        "evidence_end": 75
+      },
+      {
+        "source": "LangChainTracer",
+        "target": "LLM/Chat Traces",
+        "label": "USES",
+        "evidence": "`LangChainTracer` for real LLM/chat traces",
+        "evidence_start": 58,
+        "evidence_end": 100
+      },
+      {
+        "source": "Issue #34414",
+        "target": "Usage Duplication",
+        "label": "CAUSES",
+        "evidence": "#34414 introduced usage duplication into `run.metadata.usage_metadata`",
+        "evidence_start": 506,
+        "evidence_end": 576
+      },
+      {
+        "source": "Extractor",
+        "target": "Missing Usage Metadata Population",
+        "label": "CAUSES",
+        "evidence": "the extractor read `message.usage_metadata`. In real tracer flow, messages are serialized with `dumpd(...)` during run completion, so usage metadata lives under `message.kwargs.usage_metadata`. Because of this mismatch, duplication did not trigger in real traces.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Extractor",
+        "target": "message.usage_metadata",
+        "label": "USES",
+        "evidence": "the extractor read `message.usage_metadata`",
+        "evidence_start": 582,
+        "evidence_end": 625
+      },
+      {
+        "source": "Extractor",
+        "target": "outputs.generations[*][*].message.kwargs.usage_metadata",
+        "label": "USES",
+        "evidence": "Fix extraction to read usage from serialized tracer message shape: `outputs.generations[*][*].message.kwargs.usage_metadata`",
+        "evidence_start": 121,
+        "evidence_end": 245
+      },
+      {
+        "source": "Serialized Tracer Message Shape",
+        "target": "outputs.generations[*][*].message.kwargs.usage_metadata",
+        "label": "RELATED_TO",
+        "evidence": "serialized tracer message shape: `outputs.generations[*][*].message.kwargs.usage_metadata`",
+        "evidence_start": 155,
+        "evidence_end": 245
+      },
+      {
+        "source": "LangChainTracer",
+        "target": "Tracer Docstrings",
+        "label": "USES",
+        "evidence": "Clarify tracer docstrings around chat callback naming",
+        "evidence_start": 377,
+        "evidence_end": 430
+      },
+      {
+        "source": "Tracer Docstrings",
+        "target": "on_chat_model_start",
+        "label": "RELATED_TO",
+        "evidence": "chat callback naming (`on_chat_model_start`",
+        "evidence_start": 410,
+        "evidence_end": 453
+      },
+      {
+        "source": "Tracer Docstrings",
+        "target": "on_llm_end",
+        "label": "RELATED_TO",
+        "evidence": "chat callback naming (`on_chat_model_start` + shared `on_llm_end`)",
+        "evidence_start": 410,
+        "evidence_end": 476
+      },
+      {
+        "source": "LangChainTracer",
+        "target": "dumpd(...)",
+        "label": "USES",
+        "evidence": "messages are serialized with `dumpd(...)` during run completion",
+        "evidence_start": 649,
+        "evidence_end": 712
+      },
+      {
+        "source": "dumpd(...)",
+        "target": "Serialized Tracer Message Shape",
+        "label": "CAUSES",
+        "evidence": "messages are serialized with `dumpd(...)` during run completion, so usage metadata lives under `message.kwargs.usage_metadata`",
+        "evidence_start": 649,
+        "evidence_end": 775
+      }
+    ],
+    "summary": "The `LangChainTracer` component was failing to populate `run.metadata.usage_metadata` due to an incorrect extraction path for serialized tracer messages, a problem that also masked usage duplication introduced by `Issue #34414`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

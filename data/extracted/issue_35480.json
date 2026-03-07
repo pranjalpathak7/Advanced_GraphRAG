@@ -1,0 +1,12 @@
+{
+  "id": 35480,
+  "title": "fix(openai): strip stream param in _generate/_agenerate to fix disable_streaming crash",
+  "status": "closed",
+  "created_at": "2026-02-28T09:49:07Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35480",
+  "body_text": "## Problem\n\nWhen `disable_streaming=\"tool_calling\"` triggers, `BaseChatModel._agenerate_with_cache` calls `_agenerate()` instead of `_astream()`. But `_get_request_payload()` includes `stream=True` from `_default_params`, so the OpenAI client returns an `AsyncStream` object instead of a `ChatCompletion`. The subsequent `response.model_dump()` then crashes:\n\n```\nAttributeError: 'AsyncStream' object has no attribute 'model_dump'\n```\n\nThis makes `disable_streaming=\"tool_calling\"` completely unusable with `ChatOpenAI` when `streaming=True`.\n\n## Root Cause\n\n`BaseChatOpenAI._default_params` hardcodes `\"stream\": self.streaming`. When `self.streaming=True`, this ends up in the payload for `_generate()/_agenerate()` — which are the non-streaming code paths. The `response_format` branch already handled this by popping `stream`, but the regular completion path did not.\n\n## Fix\n\nPop `stream` from the payload at the start of both `_generate()` and `_agenerate()` since these are non-streaming code paths that should never send `stream=True` to the API.\n\n## Tests\n\nAll 181 existing unit tests pass (2 consecutive clean runs).\n\nFixes #35436",
+  "extracted_data": null,
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": 35457
+}

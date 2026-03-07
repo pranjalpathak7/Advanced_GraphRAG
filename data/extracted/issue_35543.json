@@ -1,0 +1,192 @@
+{
+  "id": 35543,
+  "title": "fix(openai): avoid PydanticSerializationUnexpectedValue for structured output",
+  "status": "open",
+  "created_at": "2026-03-03T22:51:21Z",
+  "author_name": "JasonCZMeng",
+  "url": "https://github.com/langchain-ai/langchain/pull/35543",
+  "body_text": "## Summary\n\nExclude the `parsed` field from `model_dump()` in `_create_chat_result()` to prevent `PydanticSerializationUnexpectedValue` warnings when using structured output.\n\nFixes #35538\n\n## Root Cause\n\nWhen OpenAI returns a parsed completion, `message.parsed` holds an arbitrary Pydantic `BaseModel` instance (the user's structured output schema). The existing code calls `response.model_dump()` which tries to serialize this into a dict — but the OpenAI SDK's `ParsedChatCompletion` types the `parsed` field as `None`, so Pydantic emits a serialization warning when it encounters a real model there.\n\n## Fix\n\nExclude `parsed` from the `model_dump()` call since it's already copied separately into `additional_kwargs[\"parsed\"]` from the typed response object (at ~L1602). No data is lost.\n\n## Changes\n\n**`libs/partners/openai/langchain_openai/chat_models/base.py`**\n- Added `exclude={\"choices\": {\"__all__\": {\"message\": {\"parsed\"}}}}` to the `model_dump()` call in `_create_chat_result()`\n\n**`libs/partners/openai/tests/unit_tests/chat_models/test_base.py`**\n- Added `test_create_chat_result_avoids_parsed_model_dump_warning()` — mocks an OpenAI completion with a BaseModel in `parsed` and asserts no serialization warning is emitted",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "PydanticSerializationUnexpectedValue",
+        "type": "Problem",
+        "description": "A specific warning emitted by Pydantic during serialization."
+      },
+      {
+        "name": "Structured Output",
+        "type": "Feature",
+        "description": "A capability of OpenAI to return completions in a structured format."
+      },
+      {
+        "name": "model_dump()",
+        "type": "Technology",
+        "description": "A Pydantic method used for serializing a model instance into a dictionary."
+      },
+      {
+        "name": "_create_chat_result()",
+        "type": "Technology",
+        "description": "A function in the `langchain_openai` library responsible for creating chat results."
+      },
+      {
+        "name": "OpenAI",
+        "type": "Technology",
+        "description": "The AI platform/API providing chat completions."
+      },
+      {
+        "name": "Pydantic",
+        "type": "Technology",
+        "description": "A Python library for data validation and settings management."
+      },
+      {
+        "name": "BaseModel",
+        "type": "Technology",
+        "description": "The base class for data models in Pydantic."
+      },
+      {
+        "name": "OpenAI SDK",
+        "type": "Technology",
+        "description": "The Software Development Kit for interacting with OpenAI APIs."
+      },
+      {
+        "name": "ParsedChatCompletion",
+        "type": "Technology",
+        "description": "A type within the OpenAI SDK that represents a chat completion with a parsed field."
+      },
+      {
+        "name": "Serialization Warning",
+        "type": "Problem",
+        "description": "A general warning related to the process of converting an object into a format that can be stored or transmitted."
+      },
+      {
+        "name": "langchain_openai/chat_models/base.py",
+        "type": "Technology",
+        "description": "The file path where the `_create_chat_result()` function is located."
+      },
+      {
+        "name": "test_create_chat_result_avoids_parsed_model_dump_warning()",
+        "type": "Feature",
+        "description": "A unit test added to verify the fix for the serialization warning."
+      },
+      {
+        "name": "Parsed Field",
+        "type": "Technology",
+        "description": "The 'parsed' field within a message object, intended to hold structured output."
+      },
+      {
+        "name": "additional_kwargs",
+        "type": "Technology",
+        "description": "A dictionary used to store extra keyword arguments or data."
+      }
+    ],
+    "relations": [
+      {
+        "source": "_create_chat_result()",
+        "target": "model_dump()",
+        "label": "USES",
+        "evidence": "Exclude the `parsed` field from `model_dump()` in `_create_chat_result()`",
+        "evidence_start": 12,
+        "evidence_end": 85
+      },
+      {
+        "source": "model_dump()",
+        "target": "PydanticSerializationUnexpectedValue",
+        "label": "CAUSES",
+        "evidence": "Exclude the `parsed` field from `model_dump()` in `_create_chat_result()` to prevent `PydanticSerializationUnexpectedValue` warnings",
+        "evidence_start": 12,
+        "evidence_end": 144
+      },
+      {
+        "source": "PydanticSerializationUnexpectedValue",
+        "target": "Structured Output",
+        "label": "AFFECTS",
+        "evidence": "prevent `PydanticSerializationUnexpectedValue` warnings when using structured output.",
+        "evidence_start": 89,
+        "evidence_end": 174
+      },
+      {
+        "source": "OpenAI",
+        "target": "ParsedChatCompletion",
+        "label": "RELATED_TO",
+        "evidence": "When OpenAI returns a parsed completion, `message.parsed` holds an arbitrary Pydantic `BaseModel` instance",
+        "evidence_start": 205,
+        "evidence_end": 311
+      },
+      {
+        "source": "Parsed Field",
+        "target": "BaseModel",
+        "label": "RELATED_TO",
+        "evidence": "`message.parsed` holds an arbitrary Pydantic `BaseModel` instance",
+        "evidence_start": 246,
+        "evidence_end": 311
+      },
+      {
+        "source": "OpenAI SDK",
+        "target": "ParsedChatCompletion",
+        "label": "RELATED_TO",
+        "evidence": "the OpenAI SDK's `ParsedChatCompletion` types the `parsed` field as `None`",
+        "evidence_start": 447,
+        "evidence_end": 521
+      },
+      {
+        "source": "ParsedChatCompletion",
+        "target": "Parsed Field",
+        "label": "RELATED_TO",
+        "evidence": "the OpenAI SDK's `ParsedChatCompletion` types the `parsed` field as `None`",
+        "evidence_start": 447,
+        "evidence_end": 521
+      },
+      {
+        "source": "Pydantic",
+        "target": "Serialization Warning",
+        "label": "CAUSES",
+        "evidence": "Pydantic emits a serialization warning when it encounters a real model there.",
+        "evidence_start": 526,
+        "evidence_end": 603
+      },
+      {
+        "source": "PydanticSerializationUnexpectedValue",
+        "target": "Serialization Warning",
+        "label": "RELATED_TO",
+        "evidence": "prevent `PydanticSerializationUnexpectedValue` warnings",
+        "evidence_start": 89,
+        "evidence_end": 144
+      },
+      {
+        "source": "_create_chat_result()",
+        "target": "langchain_openai/chat_models/base.py",
+        "label": "RELATED_TO",
+        "evidence": "Added `exclude={\"choices\": {\"__all__\": {\"message\": {\"parsed\"}}}}` to the `model_dump()` call in `_create_chat_result()` in `libs/partners/openai/langchain_openai/chat_models/base.py`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Parsed Field",
+        "target": "additional_kwargs",
+        "label": "USES",
+        "evidence": "it's already copied separately into `additional_kwargs[\"parsed\"]`",
+        "evidence_start": 665,
+        "evidence_end": 730
+      },
+      {
+        "source": "test_create_chat_result_avoids_parsed_model_dump_warning()",
+        "target": "Serialization Warning",
+        "label": "RELATED_TO",
+        "evidence": "asserts no serialization warning is emitted",
+        "evidence_start": 1192,
+        "evidence_end": 1235
+      },
+      {
+        "source": "test_create_chat_result_avoids_parsed_model_dump_warning()",
+        "target": "BaseModel",
+        "label": "USES",
+        "evidence": "mocks an OpenAI completion with a BaseModel in `parsed`",
+        "evidence_start": 1132,
+        "evidence_end": 1187
+      }
+    ],
+    "summary": "A `PydanticSerializationUnexpectedValue` warning occurs when `model_dump()` in `_create_chat_result()` attempts to serialize the `parsed` field, which contains a Pydantic `BaseModel` instance, while the `OpenAI SDK`'s `ParsedChatCompletion` types it as `None`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

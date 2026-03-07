@@ -1,0 +1,184 @@
+{
+  "id": 35460,
+  "title": "fix(core): cancel pending tasks in `abatch_as_completed` on exception or early exit",
+  "status": "open",
+  "created_at": "2026-02-26T22:25:39Z",
+  "author_name": "Anandesh-Sharma",
+  "url": "https://github.com/langchain-ai/langchain/pull/35460",
+  "body_text": "## Summary\n\n- **Bug:** `abatch_as_completed` did not cancel remaining asyncio tasks when the caller broke out of the `async for` loop early or when a task raised an exception (with default `return_exceptions=False`). This caused background tasks to keep running, wasting resources and API credits.\n- **Fix:** Wrap the yield loop in a `try/finally` block that cancels all outstanding tasks when the async generator is closed, matching the existing behavior of the sync `batch_as_completed` method.\n- **Tests:** Added two new tests verifying tasks are cancelled on exception and on early `break`.\n\nCloses #35419\n\n## Detailed changes\n\nIn `Runnable.abatch_as_completed` (`libs/core/langchain_core/runnables/base.py`):\n\n1. Create explicit `asyncio.Task` objects from the coroutines (via `asyncio.ensure_future`) so we hold references to them.\n2. Wrap the `for task in asyncio.as_completed(tasks): yield await task` loop in `try/finally`.\n3. In the `finally` block, cancel all tasks and `await asyncio.gather(*tasks, return_exceptions=True)` to allow clean cancellation propagation.\n\nThis mirrors the sync version which already does:\n```python\ntry:\n    while futures:\n        done, futures = wait(futures, return_when=FIRST_COMPLETED)\n        while done:\n            yield done.pop().result()\nfinally:\n    for future in futures:\n        future.cancel()\n```\n\n## Test plan\n\n- [x] `test_abatch_as_completed_cancels_on_exception` -- verifies that when one task raises a `ValueError`, the remaining long-running tasks are cancelled and do not complete\n- [x] `test_abatch_as_completed_cancels_on_early_break` -- verifies that when the caller `break`s after the first result, the remaining long-running tasks are cancelled and do not complete\n- [x] All existing concurrency tests continue to pass\n\n## Disclaimer\n\nThis contribution was developed with the assistance of an AI coding agent (Claude).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "abatch_as_completed",
+        "type": "Technology",
+        "description": "An asynchronous function in `langchain_core` designed to process tasks as they complete."
+      },
+      {
+        "name": "Asyncio Tasks",
+        "type": "Technology",
+        "description": "Asynchronous units of work managed by the `asyncio` library."
+      },
+      {
+        "name": "Resource Waste",
+        "type": "Problem",
+        "description": "Unnecessary consumption of system resources due to uncancelled background tasks."
+      },
+      {
+        "name": "API Credits Waste",
+        "type": "Problem",
+        "description": "Unnecessary consumption of API usage credits due to uncancelled background tasks."
+      },
+      {
+        "name": "Cancellation Logic",
+        "type": "Feature",
+        "description": "The implemented mechanism to cancel outstanding tasks in `abatch_as_completed`."
+      },
+      {
+        "name": "Try/Finally Block",
+        "type": "Technology",
+        "description": "A Python control structure used to ensure cleanup code execution."
+      },
+      {
+        "name": "asyncio.Task",
+        "type": "Technology",
+        "description": "Explicit task objects created and managed by `asyncio`."
+      },
+      {
+        "name": "asyncio.ensure_future",
+        "type": "Technology",
+        "description": "An `asyncio` function used to convert coroutines into `Task` objects."
+      },
+      {
+        "name": "asyncio.gather",
+        "type": "Technology",
+        "description": "An `asyncio` function used to concurrently run and await multiple tasks, including for cancellation propagation."
+      },
+      {
+        "name": "batch_as_completed",
+        "type": "Technology",
+        "description": "The synchronous counterpart to `abatch_as_completed`, whose cancellation behavior is mirrored."
+      },
+      {
+        "name": "Langchain Core",
+        "type": "Technology",
+        "description": "The Python library containing the `abatch_as_completed` function."
+      },
+      {
+        "name": "ValueError",
+        "type": "Problem",
+        "description": "A specific exception type used to test task cancellation."
+      },
+      {
+        "name": "Async For Loop Early Exit",
+        "type": "Problem",
+        "description": "A scenario where an `async for` loop is exited prematurely, leading to uncancelled tasks."
+      },
+      {
+        "name": "Claude Code",
+        "type": "Technology",
+        "description": "An AI coding agent that assisted in the development of the fix."
+      }
+    ],
+    "relations": [
+      {
+        "source": "abatch_as_completed",
+        "target": "Resource Waste",
+        "label": "CAUSES",
+        "evidence": "`abatch_as_completed` did not cancel remaining asyncio tasks when the caller broke out of the `async for` loop early or when a task raised an exception (with default `return_exceptions=False`). This caused background tasks to keep running, wasting resources",
+        "evidence_start": 23,
+        "evidence_end": 280
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "API Credits Waste",
+        "label": "CAUSES",
+        "evidence": "`abatch_as_completed` did not cancel remaining asyncio tasks when the caller broke out of the `async for` loop early or when a task raised an exception (with default `return_exceptions=False`). This caused background tasks to keep running, wasting resources and API credits.",
+        "evidence_start": 23,
+        "evidence_end": 297
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "Asyncio Tasks",
+        "label": "AFFECTS",
+        "evidence": "`abatch_as_completed` did not cancel remaining asyncio tasks when the caller broke out of the `async for` loop early or when a task raised an exception (with default `return_exceptions=False`).",
+        "evidence_start": 23,
+        "evidence_end": 216
+      },
+      {
+        "source": "Cancellation Logic",
+        "target": "Try/Finally Block",
+        "label": "USES",
+        "evidence": "Wrap the yield loop in a `try/finally` block that cancels all outstanding tasks when the async generator is closed",
+        "evidence_start": 309,
+        "evidence_end": 423
+      },
+      {
+        "source": "Cancellation Logic",
+        "target": "asyncio.Task",
+        "label": "USES",
+        "evidence": "Create explicit `asyncio.Task` objects from the coroutines",
+        "evidence_start": 718,
+        "evidence_end": 776
+      },
+      {
+        "source": "Cancellation Logic",
+        "target": "asyncio.ensure_future",
+        "label": "USES",
+        "evidence": "Create explicit `asyncio.Task` objects from the coroutines (via `asyncio.ensure_future`)",
+        "evidence_start": 718,
+        "evidence_end": 806
+      },
+      {
+        "source": "Cancellation Logic",
+        "target": "asyncio.gather",
+        "label": "USES",
+        "evidence": "cancel all tasks and `await asyncio.gather(*tasks, return_exceptions=True)` to allow clean cancellation propagation.",
+        "evidence_start": 960,
+        "evidence_end": 1076
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "batch_as_completed",
+        "label": "RELATED_TO",
+        "evidence": "matching the existing behavior of the sync `batch_as_completed` method.",
+        "evidence_start": 425,
+        "evidence_end": 496
+      },
+      {
+        "source": "abatch_as_completed",
+        "target": "Langchain Core",
+        "label": "RELATED_TO",
+        "evidence": "In `Runnable.abatch_as_completed` (`libs/core/langchain_core/runnables/base.py`)",
+        "evidence_start": 632,
+        "evidence_end": 712
+      },
+      {
+        "source": "Cancellation Logic",
+        "target": "ValueError",
+        "label": "RELATED_TO",
+        "evidence": "`test_abatch_as_completed_cancels_on_exception` -- verifies that when one task raises a `ValueError`, the remaining long-running tasks are cancelled and do not complete",
+        "evidence_start": 1372,
+        "evidence_end": 1540
+      },
+      {
+        "source": "Cancellation Logic",
+        "target": "Async For Loop Early Exit",
+        "label": "RELATED_TO",
+        "evidence": "`abatch_as_completed` did not cancel remaining asyncio tasks when the caller broke out of the `async for` loop early",
+        "evidence_start": 23,
+        "evidence_end": 139
+      },
+      {
+        "source": "Claude Code",
+        "target": "Cancellation Logic",
+        "label": "RELATED_TO",
+        "evidence": "This contribution was developed with the assistance of an AI coding agent (Claude).",
+        "evidence_start": 1800,
+        "evidence_end": 1883
+      }
+    ],
+    "summary": "The `abatch_as_completed` function in `langchain_core` was fixed to properly cancel pending `asyncio` tasks on exception or early exit from an `async for` loop, preventing resource and API credit waste."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

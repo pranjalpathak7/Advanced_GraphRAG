@@ -1,0 +1,182 @@
+{
+  "id": 35468,
+  "title": "Fix for First argument to super() is not enclosing class",
+  "status": "open",
+  "created_at": "2026-02-27T23:42:51Z",
+  "author_name": "jkennedyvz",
+  "url": "https://github.com/langchain-ai/langchain/pull/35468",
+  "body_text": "To fix the problem, we should avoid calling `super()` with a dynamically varying first argument drawn from the full MRO. Instead, we can emulate what `super(cls, self)` is doing by manually walking the MRO and aggregating `lc_secrets` and `lc_attributes` from each class. Since those are accessed as classmethods/properties bound to `Serializable`-like classes, we can safely call them on the classes themselves (or via an instance created by the class) rather than by rebinding `self` with `super`.\n\nThe best minimally invasive fix is:\n\n- Remove the `super(cls, self)` call and the `this` variable.\n- Iterate over the MRO entries (skipping `None` and stopping at `Serializable`) and, for each class, access its `lc_secrets` and `lc_attributes` as class-level properties via a temporary instance constructed from that class, or—if they are defined as `@property`/`@cached_property` on `Serializable` that only use `self.__class__`—just use `self` but rely on `cls` to conditionally select behavior. Here, however, the code clearly wants per-class values, so the safest general approach without more context is to call the classmethods directly on the class if they are defined as such.\n- Because we are instructed not to assume details of definitions outside the shown snippet, the safest change that preserves current semantics is to keep using `self` for these lookups but eliminate the dynamic `super` binding. That is, when `cls is None` we use `self`, and for other classes in the MRO we access `lc_secrets` and `lc_attributes` on `cls` rather than via an instance-binding `this`. This matches typical patterns where these are `@classmethod` or class attributes.\n\nConcretely, in `libs/core/langchain_core/load/serializable.py`:\n\n- Replace the line `this = cast(\"Serializable\", self if cls is None else super(cls, self))` with logic that:\n  - For `cls is None`, uses `self` as before.\n  - For other `cls`, uses the class itself for attribute access, e.g.:\n\n  ```py\n  if cls is None:\n      lc_secrets_source = cast(\"Serializable\", self)\n      lc_attributes_source = cast(\"Serializable\", self)\n  else:\n      lc_secrets_source = cast(\"Serializable\", cls)\n      lc_attributes_source = cast(\"Serializable\", cls)\n  ```\n\n  and then use `lc_secrets_source.lc_secrets` and `lc_attributes_source.lc_attributes`.\n\nThis removes the dynamic `super()` call while preserving the iteration over the same set of classes and the accumulation behavior of `lc_secrets` and `lc_attributes`.\n\n\n_Suggested fixes powered by Copilot Autofix. Review carefully before merging._",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "First Argument To Super() Is Not Enclosing Class",
+        "type": "Problem",
+        "description": "A Python runtime error occurring when `super()` is called with an incorrect first argument, specifically not the enclosing class."
+      },
+      {
+        "name": "super()",
+        "type": "Technology",
+        "description": "A Python built-in function used to delegate calls to a parent or sibling class."
+      },
+      {
+        "name": "MRO",
+        "type": "Technology",
+        "description": "Method Resolution Order, the sequence in which Python looks for a method in a class hierarchy."
+      },
+      {
+        "name": "Serializable",
+        "type": "Technology",
+        "description": "A base class in `langchain_core` that defines serialization behavior and manages `lc_secrets` and `lc_attributes`."
+      },
+      {
+        "name": "lc_secrets",
+        "type": "Feature",
+        "description": "A class-level property or attribute used to store secret configurations within `Serializable`-like classes."
+      },
+      {
+        "name": "lc_attributes",
+        "type": "Feature",
+        "description": "A class-level property or attribute used to store attributes within `Serializable`-like classes."
+      },
+      {
+        "name": "@classmethod",
+        "type": "Feature",
+        "description": "A Python decorator that defines a method bound to the class rather than its instance."
+      },
+      {
+        "name": "@property",
+        "type": "Feature",
+        "description": "A Python decorator that allows methods to be accessed as attributes."
+      },
+      {
+        "name": "@cached_property",
+        "type": "Feature",
+        "description": "A Python decorator for properties whose value is computed once and then cached."
+      },
+      {
+        "name": "langchain_core",
+        "type": "Technology",
+        "description": "A core library within the LangChain ecosystem."
+      },
+      {
+        "name": "serializable.py",
+        "type": "Technology",
+        "description": "A Python file within the `langchain_core` library that contains the `Serializable` class definition."
+      },
+      {
+        "name": "cast",
+        "type": "Technology",
+        "description": "A Python typing utility used for type hinting to assert the type of an expression."
+      }
+    ],
+    "relations": [
+      {
+        "source": "First Argument To Super() Is Not Enclosing Class",
+        "target": "super()",
+        "label": "AFFECTS",
+        "evidence": "Fix for First argument to super() is not enclosing class",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "super()",
+        "target": "MRO",
+        "label": "USES",
+        "evidence": "avoid calling `super()` with a dynamically varying first argument drawn from the full MRO.",
+        "evidence_start": 30,
+        "evidence_end": 120
+      },
+      {
+        "source": "Serializable",
+        "target": "lc_secrets",
+        "label": "USES",
+        "evidence": "aggregating `lc_secrets` and `lc_attributes` from each class. Since those are accessed as classmethods/properties bound to `Serializable`-like classes",
+        "evidence_start": 210,
+        "evidence_end": 360
+      },
+      {
+        "source": "Serializable",
+        "target": "lc_attributes",
+        "label": "USES",
+        "evidence": "aggregating `lc_secrets` and `lc_attributes` from each class. Since those are accessed as classmethods/properties bound to `Serializable`-like classes",
+        "evidence_start": 210,
+        "evidence_end": 360
+      },
+      {
+        "source": "langchain_core",
+        "target": "serializable.py",
+        "label": "RELATED_TO",
+        "evidence": "Concretely, in `libs/core/langchain_core/load/serializable.py`",
+        "evidence_start": 1669,
+        "evidence_end": 1731
+      },
+      {
+        "source": "serializable.py",
+        "target": "Serializable",
+        "label": "RELATED_TO",
+        "evidence": "Replace the line `this = cast(\"Serializable\", self if cls is None else super(cls, self))`",
+        "evidence_start": 1736,
+        "evidence_end": 1825
+      },
+      {
+        "source": "lc_secrets",
+        "target": "@classmethod",
+        "label": "RELATED_TO",
+        "evidence": "accessed as classmethods/properties bound to `Serializable`-like classes",
+        "evidence_start": 288,
+        "evidence_end": 360
+      },
+      {
+        "source": "lc_secrets",
+        "target": "@property",
+        "label": "RELATED_TO",
+        "evidence": "accessed as classmethods/properties bound to `Serializable`-like classes",
+        "evidence_start": 288,
+        "evidence_end": 360
+      },
+      {
+        "source": "lc_attributes",
+        "target": "@classmethod",
+        "label": "RELATED_TO",
+        "evidence": "accessed as classmethods/properties bound to `Serializable`-like classes",
+        "evidence_start": 288,
+        "evidence_end": 360
+      },
+      {
+        "source": "lc_attributes",
+        "target": "@property",
+        "label": "RELATED_TO",
+        "evidence": "accessed as classmethods/properties bound to `Serializable`-like classes",
+        "evidence_start": 288,
+        "evidence_end": 360
+      },
+      {
+        "source": "super()",
+        "target": "cast",
+        "label": "RELATED_TO",
+        "evidence": "this = cast(\"Serializable\", self if cls is None else super(cls, self))",
+        "evidence_start": 1754,
+        "evidence_end": 1824
+      },
+      {
+        "source": "lc_secrets",
+        "target": "@cached_property",
+        "label": "RELATED_TO",
+        "evidence": "if they are defined as `@property`/`@cached_property` on `Serializable`",
+        "evidence_start": 828,
+        "evidence_end": 899
+      },
+      {
+        "source": "lc_attributes",
+        "target": "@cached_property",
+        "label": "RELATED_TO",
+        "evidence": "if they are defined as `@property`/`@cached_property` on `Serializable`",
+        "evidence_start": 828,
+        "evidence_end": 899
+      }
+    ],
+    "summary": "This issue proposes a fix for the \"First argument to super() is not enclosing class\" error in `langchain_core/load/serializable.py` by replacing a dynamic `super()` call with manual MRO traversal and direct class-level access to `lc_secrets` and `lc_attributes`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

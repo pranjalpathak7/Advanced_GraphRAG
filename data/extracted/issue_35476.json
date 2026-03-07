@@ -1,0 +1,184 @@
+{
+  "id": 35476,
+  "title": "fix(core): RunnableRetry.batch corrupted outputs on partial retry success",
+  "status": "closed",
+  "created_at": "2026-02-28T07:01:04Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35476",
+  "body_text": "## Summary\n\nFixes #35475\n\n`RunnableRetry.batch()` and `abatch()` return corrupted outputs when some items succeed on retry while others still fail after all attempts. A successful result appears in the output position of a permanently-failed item.\n\n## Root Cause\n\nAfter retries exhaust, the output assembly loop (lines 282-288) uses `result.pop(0)` on the raw last-batch result list. But `result` still contains **both** successful outputs (already stored in `results_map`) **and** exceptions. Popping from the front returns a successful result instead of the expected exception.\n\n**Example:** With inputs `[\"ok\", \"retry_then_ok\", \"always_fail\"]`:\n1. After final retry: `result = [\"retry-result\", ValueError()]`\n2. `\"retry-result\"` is already in `results_map[1]`\n3. For failed index 2: `result.pop(0)` → `\"retry-result\"` ❌ (should be `ValueError`)\n\n## Fix\n\nFilter the last-batch result to only contain exceptions before assembling the output list, since successful results are already captured in `results_map`:\n\n```python\nexceptions = [r for r in result if isinstance(r, BaseException)]\n```\n\nApplied to both `_batch()` and `_abatch()`.\n\n## Tests\n\nAdded 2 regression tests (`test_retry_batch_mixed_success_and_permanent_failure` + async variant) that reproduce the exact issue scenario. All 6 retry-related tests pass.\n\n```\n6 passed in 0.75s\n```",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "RunnableRetry.batch()",
+        "type": "Technology",
+        "description": "A method for batch processing with retry logic."
+      },
+      {
+        "name": "abatch()",
+        "type": "Technology",
+        "description": "An asynchronous method for batch processing with retry logic."
+      },
+      {
+        "name": "Corrupted Outputs",
+        "type": "Problem",
+        "description": "The issue where successful results appear in the output position of permanently-failed items."
+      },
+      {
+        "name": "Output Assembly Loop",
+        "type": "Technology",
+        "description": "A specific code section responsible for combining results after retries."
+      },
+      {
+        "name": "result",
+        "type": "Technology",
+        "description": "A list variable holding intermediate processing results, including both successful outputs and exceptions."
+      },
+      {
+        "name": "result.pop(0)",
+        "type": "Technology",
+        "description": "A specific list method call used in the output assembly loop."
+      },
+      {
+        "name": "results_map",
+        "type": "Technology",
+        "description": "A data structure used to store successful outputs during retry processing."
+      },
+      {
+        "name": "Exceptions",
+        "type": "Problem",
+        "description": "A general category of errors encountered during processing."
+      },
+      {
+        "name": "ValueError",
+        "type": "Problem",
+        "description": "A specific type of exception mentioned in the example scenario."
+      },
+      {
+        "name": "Fix",
+        "type": "Feature",
+        "description": "The proposed solution to prevent corrupted outputs by filtering exceptions."
+      },
+      {
+        "name": "Regression Tests",
+        "type": "Feature",
+        "description": "Tests added to ensure the fix works and prevents recurrence of the issue."
+      },
+      {
+        "name": "test_retry_batch_mixed_success_and_permanent_failure",
+        "type": "Feature",
+        "description": "A specific regression test case that reproduces the exact issue scenario."
+      },
+      {
+        "name": "_batch()",
+        "type": "Technology",
+        "description": "An internal batch processing method where the fix is applied."
+      },
+      {
+        "name": "_abatch()",
+        "type": "Technology",
+        "description": "An internal asynchronous batch processing method where the fix is applied."
+      }
+    ],
+    "relations": [
+      {
+        "source": "RunnableRetry.batch()",
+        "target": "Corrupted Outputs",
+        "label": "AFFECTS",
+        "evidence": "RunnableRetry.batch() and abatch() return corrupted outputs when some items succeed on retry while others still fail after all attempts.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "abatch()",
+        "target": "Corrupted Outputs",
+        "label": "AFFECTS",
+        "evidence": "RunnableRetry.batch() and abatch() return corrupted outputs when some items succeed on retry while others still fail after all attempts.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Output Assembly Loop",
+        "target": "Corrupted Outputs",
+        "label": "CAUSES",
+        "evidence": "After retries exhaust, the output assembly loop (lines 282-288) uses result.pop(0) on the raw last-batch result list. But result still contains both successful outputs (already stored in results_map) and exceptions. Popping from the front returns a successful result instead of the expected exception.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Output Assembly Loop",
+        "target": "result.pop(0)",
+        "label": "USES",
+        "evidence": "the output assembly loop (lines 282-288) uses result.pop(0) on the raw last-batch result list.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "result.pop(0)",
+        "target": "Corrupted Outputs",
+        "label": "CAUSES",
+        "evidence": "Popping from the front returns a successful result instead of the expected exception.",
+        "evidence_start": 494,
+        "evidence_end": 579
+      },
+      {
+        "source": "result",
+        "target": "Output Assembly Loop",
+        "label": "RELATED_TO",
+        "evidence": "the output assembly loop (lines 282-288) uses result.pop(0) on the raw last-batch result list.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "result",
+        "target": "results_map",
+        "label": "RELATED_TO",
+        "evidence": "result still contains both successful outputs (already stored in results_map)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "result",
+        "target": "Exceptions",
+        "label": "RELATED_TO",
+        "evidence": "result still contains both successful outputs (already stored in results_map) and exceptions.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ValueError",
+        "target": "Exceptions",
+        "label": "RELATED_TO",
+        "evidence": "result = [\"retry-result\", ValueError()]",
+        "evidence_start": 671,
+        "evidence_end": 710
+      },
+      {
+        "source": "Fix",
+        "target": "_batch()",
+        "label": "RELATED_TO",
+        "evidence": "Applied to both _batch()",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Fix",
+        "target": "_abatch()",
+        "label": "RELATED_TO",
+        "evidence": "Applied to both _abatch()",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Regression Tests",
+        "target": "test_retry_batch_mixed_success_and_permanent_failure",
+        "label": "USES",
+        "evidence": "Added 2 regression tests (test_retry_batch_mixed_success_and_permanent_failure + async variant)",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "RunnableRetry.batch() and abatch() return corrupted outputs when some items succeed on retry while others still fail after all attempts due to incorrect output assembly logic."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

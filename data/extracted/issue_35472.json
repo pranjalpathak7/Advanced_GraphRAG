@@ -1,0 +1,164 @@
+{
+  "id": 35472,
+  "title": "perf(core): use deque for result reassembly in RunnableRetry batch",
+  "status": "closed",
+  "created_at": "2026-02-28T04:30:07Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35472",
+  "body_text": "## Problem\n\n`RunnableRetry._batch()` and `_abatch()` use `list.pop(0)` to reassemble batch outputs by merging a `results_map` (already-succeeded inputs) with remaining results consumed front-to-back.\n\n`list.pop(0)` is **O(n)** per call because CPython must shift every remaining element. For large batch sizes this accumulates to **O(n²)** total work in the reassembly loop.\n\n## Solution\n\nConvert the `result` list to a `collections.deque` just before the reassembly loop and replace `.pop(0)` with `.popleft()`, which is **O(1)** amortised.\n\nThe original `result` list is not used after reassembly, so the conversion is safe. The deque is consumed exactly once, front-to-back.\n\n## Testing\n\nAll 4 retry-related tests pass:\n- `test_retrying`\n- `test_retry_batch_preserves_order`\n- `test_async_retry_batch_preserves_order`\n- `test_async_retrying`\n\n(2 consecutive clean runs)\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "RunnableRetry._batch()",
+        "type": "Technology",
+        "description": "A method used for batch processing in the RunnableRetry component."
+      },
+      {
+        "name": "RunnableRetry._abatch()",
+        "type": "Technology",
+        "description": "An asynchronous method used for batch processing in the RunnableRetry component."
+      },
+      {
+        "name": "list.pop(0)",
+        "type": "Technology",
+        "description": "A Python list method used to remove and return the first element, which has O(n) complexity."
+      },
+      {
+        "name": "Performance Degradation",
+        "type": "Problem",
+        "description": "A performance issue caused by the O(n²) complexity of list.pop(0) in the reassembly loop for large batch sizes."
+      },
+      {
+        "name": "CPython",
+        "type": "Technology",
+        "description": "The default implementation of the Python programming language."
+      },
+      {
+        "name": "collections.deque",
+        "type": "Technology",
+        "description": "A Python data structure that supports O(1) amortized appends and pops from both ends."
+      },
+      {
+        "name": ".popleft()",
+        "type": "Technology",
+        "description": "A method of collections.deque to remove and return an element from the left end, with O(1) amortized complexity."
+      },
+      {
+        "name": "Result Reassembly",
+        "type": "Feature",
+        "description": "The process of merging successful inputs with remaining results to form the final batch output."
+      },
+      {
+        "name": "Copilot",
+        "type": "Organization",
+        "description": "An AI assistant that co-authored the solution."
+      },
+      {
+        "name": "giulio-leone",
+        "type": "Organization",
+        "description": "The author of the issue."
+      }
+    ],
+    "relations": [
+      {
+        "source": "RunnableRetry._batch()",
+        "target": "list.pop(0)",
+        "label": "USES",
+        "evidence": "`RunnableRetry._batch()` and `_abatch()` use `list.pop(0)`",
+        "evidence_start": 12,
+        "evidence_end": 70
+      },
+      {
+        "source": "RunnableRetry._abatch()",
+        "target": "list.pop(0)",
+        "label": "USES",
+        "evidence": "`RunnableRetry._batch()` and `_abatch()` use `list.pop(0)`",
+        "evidence_start": 12,
+        "evidence_end": 70
+      },
+      {
+        "source": "list.pop(0)",
+        "target": "Performance Degradation",
+        "label": "CAUSES",
+        "evidence": "`list.pop(0)` is **O(n)** per call because CPython must shift every remaining element. For large batch sizes this accumulates to **O(n²)** total work in the reassembly loop.",
+        "evidence_start": 201,
+        "evidence_end": 374
+      },
+      {
+        "source": "Performance Degradation",
+        "target": "RunnableRetry._batch()",
+        "label": "AFFECTS",
+        "evidence": "`RunnableRetry._batch()` and `_abatch()` use `list.pop(0)` to reassemble batch outputs by merging a `results_map` (already-succeeded inputs) with remaining results consumed front-to-back. `list.pop(0)` is **O(n)** per call because CPython must shift every remaining element. For large batch sizes this accumulates to **O(n²)** total work in the reassembly loop.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Performance Degradation",
+        "target": "RunnableRetry._abatch()",
+        "label": "AFFECTS",
+        "evidence": "`RunnableRetry._batch()` and `_abatch()` use `list.pop(0)` to reassemble batch outputs by merging a `results_map` (already-succeeded inputs) with remaining results consumed front-to-back. `list.pop(0)` is **O(n)** per call because CPython must shift every remaining element. For large batch sizes this accumulates to **O(n²)** total work in the reassembly loop.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "CPython",
+        "target": "list.pop(0)",
+        "label": "RELATED_TO",
+        "evidence": "`list.pop(0)` is **O(n)** per call because CPython must shift every remaining element.",
+        "evidence_start": 201,
+        "evidence_end": 287
+      },
+      {
+        "source": "Result Reassembly",
+        "target": "list.pop(0)",
+        "label": "USES",
+        "evidence": "`RunnableRetry._batch()` and `_abatch()` use `list.pop(0)` to reassemble batch outputs",
+        "evidence_start": 12,
+        "evidence_end": 98
+      },
+      {
+        "source": "giulio-leone",
+        "target": "collections.deque",
+        "label": "USES",
+        "evidence": "Convert the `result` list to a `collections.deque` just before the reassembly loop and replace `.pop(0)` with `.popleft()`, which is **O(1)** amortised.",
+        "evidence_start": 389,
+        "evidence_end": 541
+      },
+      {
+        "source": "collections.deque",
+        "target": ".popleft()",
+        "label": "RELATED_TO",
+        "evidence": "replace `.pop(0)` with `.popleft()`, which is **O(1)** amortised.",
+        "evidence_start": 476,
+        "evidence_end": 541
+      },
+      {
+        "source": "Result Reassembly",
+        "target": "collections.deque",
+        "label": "USES",
+        "evidence": "Convert the `result` list to a `collections.deque` just before the reassembly loop",
+        "evidence_start": 389,
+        "evidence_end": 471
+      },
+      {
+        "source": "Copilot",
+        "target": "giulio-leone",
+        "label": "RELATED_TO",
+        "evidence": "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+        "evidence_start": 874,
+        "evidence_end": 942
+      },
+      {
+        "source": "giulio-leone",
+        "target": ".popleft()",
+        "label": "USES",
+        "evidence": "replace `.pop(0)` with `.popleft()`, which is **O(1)** amortised.",
+        "evidence_start": 476,
+        "evidence_end": 541
+      }
+    ],
+    "summary": "The issue addresses a performance problem in `RunnableRetry._batch()` and `_abatch()` where `list.pop(0)` causes O(n²) complexity during result reassembly, proposing a solution to use `collections.deque` and its O(1) `popleft()` method."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

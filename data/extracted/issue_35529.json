@@ -1,0 +1,346 @@
+{
+  "id": 35529,
+  "title": "feat(core): GovernanceCallbackHandler for tool execution authorization",
+  "status": "open",
+  "created_at": "2026-03-03T00:04:30Z",
+  "author_name": "devongenerally-png",
+  "url": "https://github.com/langchain-ai/langchain/pull/35529",
+  "body_text": "## Summary\n\nAdds `GovernanceCallbackHandler` — a callback handler that enforces deterministic governance policies on tool calls using the existing `on_tool_start` / `raise_error` mechanism. No core changes required.\n\n### What it does\n\nImplements a three-phase authorization pipeline for tool calls:\n\n- **PROPOSE**: Converts each `on_tool_start` invocation into a structured intent object with a SHA-256 content hash\n- **DECIDE**: Evaluates the intent against user-defined policy rules — pure function, no LLM involvement, no interpretation ambiguity\n- **PROMOTE**: Allows approved calls to proceed normally; raises `ToolExecutionDenied` for denied calls (propagated via `raise_error=True`)\n\n### Policy format\n\n```python\npolicy = {\n    \"default\": \"deny\",  # fail-closed\n    \"rules\": [\n        {\"tools\": [\"search\", \"wikipedia\"], \"verdict\": \"approve\"},\n        {\"tools\": [\"shell\"], \"verdict\": \"deny\"},\n        {\n            \"tools\": [\"python_repl\"],\n            \"verdict\": \"approve\",\n            \"constraints\": {\"blocked_patterns\": [\"os.system\", \"subprocess\"]},\n        },\n    ],\n}\nhandler = GovernanceCallbackHandler(policy=policy, witness_path=\"witness.jsonl\")\nagent.invoke(inputs, config={\"callbacks\": [handler]})\n```\n\n### Witness logging\n\nOptional hash-chained audit trail (`witness_path` parameter). Each entry links to the previous via SHA-256, making tampering detectable. Includes `verify_witness_log()` utility for independent chain verification.\n\n## Changes\n\n- `libs/core/langchain_core/callbacks/governance.py` — handler implementation\n- `libs/core/tests/unit_tests/callbacks/test_governance.py` — 24 unit tests\n\n## Design decisions\n\n- **`raise_error = True` by default** — the handler must be able to block tool execution. This uses the existing `handle_event` exception propagation, requiring zero changes to the callback manager.\n- **Fail-closed default** — when no rule matches a tool, the default verdict is `deny`. Unknown tools require explicit policy approval.\n- **Static methods for propose/decide** — both phases are pure functions, independently testable without handler instantiation.\n\n## Test plan\n\n- [x] 24 unit tests covering: intent hashing, policy evaluation, constraint matching, exception propagation, witness chain integrity, tamper detection\n- [x] Verify no existing tests regress\n\nFor a more complete standalone implementation with YAML policy files and adversarial test coverage, see [Governance-Guard](https://github.com/MetaCortex-Dynamics/governance-guard).\n\n> This PR was developed with AI assistance.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "GovernanceCallbackHandler",
+        "type": "Feature",
+        "description": "A new callback handler that enforces deterministic governance policies on tool calls."
+      },
+      {
+        "name": "Tool Execution Authorization",
+        "type": "Feature",
+        "description": "The process of controlling which tool calls are allowed to proceed based on defined policies."
+      },
+      {
+        "name": "Tool Calls",
+        "type": "Technology",
+        "description": "Invocations of external tools within an agent's execution flow."
+      },
+      {
+        "name": "on_tool_start",
+        "type": "Technology",
+        "description": "An existing callback mechanism used to trigger the start of a tool invocation."
+      },
+      {
+        "name": "raise_error",
+        "type": "Technology",
+        "description": "An existing mechanism within callback handlers for propagating exceptions."
+      },
+      {
+        "name": "ToolExecutionDenied",
+        "type": "Problem",
+        "description": "An exception raised when a tool call is denied by the governance policy."
+      },
+      {
+        "name": "Authorization Pipeline",
+        "type": "Feature",
+        "description": "A three-phase process (PROPOSE, DECIDE, PROMOTE) implemented for authorizing tool calls."
+      },
+      {
+        "name": "PROPOSE Phase",
+        "type": "Feature",
+        "description": "The first phase of the authorization pipeline, converting tool invocations into structured intent objects with a SHA-256 hash."
+      },
+      {
+        "name": "DECIDE Phase",
+        "type": "Feature",
+        "description": "The second phase of the authorization pipeline, evaluating the intent against user-defined policy rules."
+      },
+      {
+        "name": "PROMOTE Phase",
+        "type": "Feature",
+        "description": "The third phase of the authorization pipeline, allowing approved calls or raising an error for denied calls."
+      },
+      {
+        "name": "Policy Rules",
+        "type": "Feature",
+        "description": "User-defined rules that determine the verdict (approve/deny) for tool calls, including constraints."
+      },
+      {
+        "name": "SHA-256",
+        "type": "Technology",
+        "description": "A cryptographic hash function used for content hashing and ensuring audit trail integrity."
+      },
+      {
+        "name": "Witness Logging",
+        "type": "Feature",
+        "description": "An optional hash-chained audit trail for tool calls, designed to detect tampering."
+      },
+      {
+        "name": "verify_witness_log()",
+        "type": "Feature",
+        "description": "A utility function for independently verifying the integrity of the witness log chain."
+      },
+      {
+        "name": "Callback Manager",
+        "type": "Technology",
+        "description": "The core component responsible for managing and invoking callback handlers."
+      },
+      {
+        "name": "Governance-Guard",
+        "type": "Technology",
+        "description": "A more complete, standalone implementation of governance with YAML policy files and adversarial test coverage."
+      },
+      {
+        "name": "YAML Policy Files",
+        "type": "Technology",
+        "description": "A file format used for defining policies in the Governance-Guard project."
+      },
+      {
+        "name": "Adversarial Test Coverage",
+        "type": "Feature",
+        "description": "A testing methodology used in Governance-Guard to ensure robustness against malicious inputs."
+      },
+      {
+        "name": "Python REPL",
+        "type": "Technology",
+        "description": "A tool that executes Python code, subject to governance policies."
+      },
+      {
+        "name": "os.system",
+        "type": "Technology",
+        "description": "A Python function for executing shell commands, which can be blocked by policies."
+      },
+      {
+        "name": "subprocess",
+        "type": "Technology",
+        "description": "A Python module for spawning new processes, which can be blocked by policies."
+      },
+      {
+        "name": "Search Tool",
+        "type": "Technology",
+        "description": "An external tool that can be approved by governance policies."
+      },
+      {
+        "name": "Wikipedia Tool",
+        "type": "Technology",
+        "description": "An external tool that can be approved by governance policies."
+      },
+      {
+        "name": "Shell Tool",
+        "type": "Technology",
+        "description": "An external tool that can be denied by governance policies."
+      }
+    ],
+    "relations": [
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "Tool Execution Authorization",
+        "label": "RELATED_TO",
+        "evidence": "Adds `GovernanceCallbackHandler` — a callback handler that enforces deterministic governance policies on tool calls",
+        "evidence_start": 12,
+        "evidence_end": 127
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "Tool Calls",
+        "label": "AFFECTS",
+        "evidence": "enforces deterministic governance policies on tool calls",
+        "evidence_start": 71,
+        "evidence_end": 127
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "on_tool_start",
+        "label": "USES",
+        "evidence": "enforces deterministic governance policies on tool calls using the existing `on_tool_start` / `raise_error` mechanism.",
+        "evidence_start": 71,
+        "evidence_end": 189
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "raise_error",
+        "label": "USES",
+        "evidence": "enforces deterministic governance policies on tool calls using the existing `on_tool_start` / `raise_error` mechanism.",
+        "evidence_start": 71,
+        "evidence_end": 189
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "ToolExecutionDenied",
+        "label": "CAUSES",
+        "evidence": "raises `ToolExecutionDenied` for denied calls",
+        "evidence_start": 608,
+        "evidence_end": 653
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "Authorization Pipeline",
+        "label": "USES",
+        "evidence": "Implements a three-phase authorization pipeline for tool calls",
+        "evidence_start": 235,
+        "evidence_end": 297
+      },
+      {
+        "source": "Authorization Pipeline",
+        "target": "PROPOSE Phase",
+        "label": "RELATED_TO",
+        "evidence": "Implements a three-phase authorization pipeline for tool calls: - **PROPOSE**",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Authorization Pipeline",
+        "target": "DECIDE Phase",
+        "label": "RELATED_TO",
+        "evidence": "Implements a three-phase authorization pipeline for tool calls: - **DECIDE**",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Authorization Pipeline",
+        "target": "PROMOTE Phase",
+        "label": "RELATED_TO",
+        "evidence": "Implements a three-phase authorization pipeline for tool calls: - **PROMOTE**",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "PROPOSE Phase",
+        "target": "on_tool_start",
+        "label": "USES",
+        "evidence": "Converts each `on_tool_start` invocation into a structured intent object",
+        "evidence_start": 315,
+        "evidence_end": 387
+      },
+      {
+        "source": "PROPOSE Phase",
+        "target": "SHA-256",
+        "label": "USES",
+        "evidence": "Converts each `on_tool_start` invocation into a structured intent object with a SHA-256 content hash",
+        "evidence_start": 315,
+        "evidence_end": 415
+      },
+      {
+        "source": "DECIDE Phase",
+        "target": "Policy Rules",
+        "label": "USES",
+        "evidence": "Evaluates the intent against user-defined policy rules",
+        "evidence_start": 430,
+        "evidence_end": 484
+      },
+      {
+        "source": "PROMOTE Phase",
+        "target": "ToolExecutionDenied",
+        "label": "CAUSES",
+        "evidence": "raises `ToolExecutionDenied` for denied calls",
+        "evidence_start": 608,
+        "evidence_end": 653
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "Witness Logging",
+        "label": "USES",
+        "evidence": "Optional hash-chained audit trail (`witness_path` parameter).",
+        "evidence_start": 1240,
+        "evidence_end": 1301
+      },
+      {
+        "source": "Witness Logging",
+        "target": "SHA-256",
+        "label": "USES",
+        "evidence": "Each entry links to the previous via SHA-256, making tampering detectable.",
+        "evidence_start": 1302,
+        "evidence_end": 1376
+      },
+      {
+        "source": "Witness Logging",
+        "target": "verify_witness_log()",
+        "label": "RELATED_TO",
+        "evidence": "Includes `verify_witness_log()` utility for independent chain verification.",
+        "evidence_start": 1377,
+        "evidence_end": 1452
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "Callback Manager",
+        "label": "RELATED_TO",
+        "evidence": "This uses the existing `handle_event` exception propagation, requiring zero changes to the callback manager.",
+        "evidence_start": 1732,
+        "evidence_end": 1840
+      },
+      {
+        "source": "GovernanceCallbackHandler",
+        "target": "Governance-Guard",
+        "label": "RELATED_TO",
+        "evidence": "For a more complete standalone implementation with YAML policy files and adversarial test coverage, see [Governance-Guard]",
+        "evidence_start": 2311,
+        "evidence_end": 2433
+      },
+      {
+        "source": "Governance-Guard",
+        "target": "YAML Policy Files",
+        "label": "USES",
+        "evidence": "For a more complete standalone implementation with YAML policy files",
+        "evidence_start": 2311,
+        "evidence_end": 2379
+      },
+      {
+        "source": "Governance-Guard",
+        "target": "Adversarial Test Coverage",
+        "label": "USES",
+        "evidence": "For a more complete standalone implementation with YAML policy files and adversarial test coverage",
+        "evidence_start": 2311,
+        "evidence_end": 2409
+      },
+      {
+        "source": "Policy Rules",
+        "target": "Search Tool",
+        "label": "AFFECTS",
+        "evidence": "{\"tools\": [\"search\", \"wikipedia\"], \"verdict\": \"approve\"}",
+        "evidence_start": 792,
+        "evidence_end": 848
+      },
+      {
+        "source": "Policy Rules",
+        "target": "Wikipedia Tool",
+        "label": "AFFECTS",
+        "evidence": "{\"tools\": [\"search\", \"wikipedia\"], \"verdict\": \"approve\"}",
+        "evidence_start": 792,
+        "evidence_end": 848
+      },
+      {
+        "source": "Policy Rules",
+        "target": "Shell Tool",
+        "label": "AFFECTS",
+        "evidence": "{\"tools\": [\"shell\"], \"verdict\": \"deny\"}",
+        "evidence_start": 858,
+        "evidence_end": 897
+      },
+      {
+        "source": "Policy Rules",
+        "target": "Python REPL",
+        "label": "AFFECTS",
+        "evidence": "{\"tools\": [\"python_repl\"], \"verdict\": \"approve\", \"constraints\": {\"blocked_patterns\": [\"os.system\", \"subprocess\"]}}",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Policy Rules",
+        "target": "os.system",
+        "label": "CAUSES",
+        "evidence": "{\"tools\": [\"python_repl\"], \"verdict\": \"approve\", \"constraints\": {\"blocked_patterns\": [\"os.system\", \"subprocess\"]}}",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Policy Rules",
+        "target": "subprocess",
+        "label": "CAUSES",
+        "evidence": "{\"tools\": [\"python_repl\"], \"verdict\": \"approve\", \"constraints\": {\"blocked_patterns\": [\"os.system\", \"subprocess\"]}}",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "The issue introduces a `GovernanceCallbackHandler` to enforce deterministic governance policies on tool calls through a three-phase authorization pipeline, including optional hash-chained audit logging."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

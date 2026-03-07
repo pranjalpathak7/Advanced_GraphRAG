@@ -1,0 +1,219 @@
+{
+  "id": 35461,
+  "title": "feat(openrouter): surface `cost` and `cost_details` in `response_metadata`",
+  "status": "closed",
+  "created_at": "2026-02-27T07:56:53Z",
+  "author_name": "untilhamza",
+  "url": "https://github.com/langchain-ai/langchain/pull/35461",
+  "body_text": "## Description\n\nOpenRouter returns `cost` and `cost_details` in its API response `usage` object, providing the actual cost of each API call. Currently, `_create_usage_metadata()` only extracts token counts and drops these cost fields.\n\nThis PR surfaces both `cost` and `cost_details` in `response_metadata` for both non-streaming and streaming paths, allowing users to access actual API costs directly from the response without manual estimation from token counts.\n\n**Example response from OpenRouter:**\n```json\n{\n  \"usage\": {\n    \"prompt_tokens\": 100,\n    \"completion_tokens\": 50,\n    \"cost\": 0.000075,\n    \"cost_details\": {\n      \"upstream_inference_cost\": 0.00007745,\n      \"upstream_inference_prompt_cost\": 0.00000895,\n      \"upstream_inference_completions_cost\": 0.0000685\n    }\n  }\n}\n```\n\n**After this change:**\n```python\nresult = chat.invoke(\"hello\")\nresult.response_metadata[\"cost\"]          # 0.000075\nresult.response_metadata[\"cost_details\"]  # {...}\n```\n\n## Changes\n\n- **`_create_chat_result`**: Surface `cost` and `cost_details` from `token_usage` into `response_metadata` (non-streaming)\n- **`_convert_chunk_to_message_chunk`**: Same for streaming `AIMessageChunk`\n- Added `PLR0912` to `noqa` comments (new branches pushed count over threshold)\n- Added two unit tests: one verifying cost fields are present when returned, one verifying they're absent when not in usage\n\n## Issue\n\nN/A — discovered while integrating OpenRouter in a production pipeline. The cost data is already returned by the API but was being silently dropped.\n\n## Dependencies\n\nNone.\n\n## Twitter handle\n\n@hamza_kyamanywa",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "OpenRouter",
+        "type": "Technology",
+        "description": "An API service that provides cost and usage details in its responses."
+      },
+      {
+        "name": "Cost",
+        "type": "Feature",
+        "description": "A field in OpenRouter's API response `usage` object indicating the actual cost of an API call."
+      },
+      {
+        "name": "Cost Details",
+        "type": "Feature",
+        "description": "A field in OpenRouter's API response `usage` object providing a detailed breakdown of API call costs."
+      },
+      {
+        "name": "Response Metadata",
+        "type": "Feature",
+        "description": "A data structure where `cost` and `cost_details` are now surfaced for user access."
+      },
+      {
+        "name": "Usage Object",
+        "type": "Feature",
+        "description": "A part of OpenRouter's API response that contains `prompt_tokens`, `completion_tokens`, `cost`, and `cost_details`."
+      },
+      {
+        "name": "_create_usage_metadata()",
+        "type": "Technology",
+        "description": "A function that previously only extracted token counts and dropped cost fields from the `usage` object."
+      },
+      {
+        "name": "Non-Streaming Paths",
+        "type": "Feature",
+        "description": "The execution flow for handling non-streaming API responses."
+      },
+      {
+        "name": "Streaming Paths",
+        "type": "Feature",
+        "description": "The execution flow for handling streaming API responses."
+      },
+      {
+        "name": "_create_chat_result",
+        "type": "Technology",
+        "description": "A function modified to surface `cost` and `cost_details` into `response_metadata` for non-streaming calls."
+      },
+      {
+        "name": "_convert_chunk_to_message_chunk",
+        "type": "Technology",
+        "description": "A function modified to surface `cost` and `cost_details` for streaming `AIMessageChunk`."
+      },
+      {
+        "name": "AIMessageChunk",
+        "type": "Technology",
+        "description": "A message chunk type used in streaming API responses."
+      },
+      {
+        "name": "PLR0912",
+        "type": "Problem",
+        "description": "A linter warning that was added to `noqa` comments."
+      },
+      {
+        "name": "Unit Tests",
+        "type": "Feature",
+        "description": "Tests added to verify the presence and absence of cost fields in `response_metadata`."
+      }
+    ],
+    "relations": [
+      {
+        "source": "OpenRouter",
+        "target": "Cost",
+        "label": "USES",
+        "evidence": "OpenRouter returns `cost` and `cost_details` in its API response `usage` object",
+        "evidence_start": 16,
+        "evidence_end": 95
+      },
+      {
+        "source": "OpenRouter",
+        "target": "Cost Details",
+        "label": "USES",
+        "evidence": "OpenRouter returns `cost` and `cost_details` in its API response `usage` object",
+        "evidence_start": 16,
+        "evidence_end": 95
+      },
+      {
+        "source": "Usage Object",
+        "target": "Cost",
+        "label": "USES",
+        "evidence": "OpenRouter returns `cost` and `cost_details` in its API response `usage` object",
+        "evidence_start": 16,
+        "evidence_end": 95
+      },
+      {
+        "source": "Usage Object",
+        "target": "Cost Details",
+        "label": "USES",
+        "evidence": "OpenRouter returns `cost` and `cost_details` in its API response `usage` object",
+        "evidence_start": 16,
+        "evidence_end": 95
+      },
+      {
+        "source": "_create_usage_metadata()",
+        "target": "Cost",
+        "label": "AFFECTS",
+        "evidence": "`_create_usage_metadata()` only extracts token counts and drops these cost fields.",
+        "evidence_start": 152,
+        "evidence_end": 234
+      },
+      {
+        "source": "_create_usage_metadata()",
+        "target": "Cost Details",
+        "label": "AFFECTS",
+        "evidence": "`_create_usage_metadata()` only extracts token counts and drops these cost fields.",
+        "evidence_start": 152,
+        "evidence_end": 234
+      },
+      {
+        "source": "Cost",
+        "target": "Response Metadata",
+        "label": "RELATED_TO",
+        "evidence": "This PR surfaces both `cost` and `cost_details` in `response_metadata`",
+        "evidence_start": 236,
+        "evidence_end": 306
+      },
+      {
+        "source": "Cost Details",
+        "target": "Response Metadata",
+        "label": "RELATED_TO",
+        "evidence": "This PR surfaces both `cost` and `cost_details` in `response_metadata`",
+        "evidence_start": 236,
+        "evidence_end": 306
+      },
+      {
+        "source": "_create_chat_result",
+        "target": "Cost",
+        "label": "USES",
+        "evidence": "`_create_chat_result`\": Surface `cost` and `cost_details` from `token_usage` into `response_metadata` (non-streaming)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_create_chat_result",
+        "target": "Cost Details",
+        "label": "USES",
+        "evidence": "`_create_chat_result`\": Surface `cost` and `cost_details` from `token_usage` into `response_metadata` (non-streaming)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_create_chat_result",
+        "target": "Non-Streaming Paths",
+        "label": "RELATED_TO",
+        "evidence": "`_create_chat_result`\": Surface `cost` and `cost_details` from `token_usage` into `response_metadata` (non-streaming)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_convert_chunk_to_message_chunk",
+        "target": "Cost",
+        "label": "USES",
+        "evidence": "`_convert_chunk_to_message_chunk`\": Same for streaming `AIMessageChunk`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_convert_chunk_to_message_chunk",
+        "target": "Cost Details",
+        "label": "USES",
+        "evidence": "`_convert_chunk_to_message_chunk`\": Same for streaming `AIMessageChunk`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_convert_chunk_to_message_chunk",
+        "target": "Streaming Paths",
+        "label": "RELATED_TO",
+        "evidence": "`_convert_chunk_to_message_chunk`\": Same for streaming `AIMessageChunk`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_convert_chunk_to_message_chunk",
+        "target": "AIMessageChunk",
+        "label": "RELATED_TO",
+        "evidence": "`_convert_chunk_to_message_chunk`\": Same for streaming `AIMessageChunk`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Unit Tests",
+        "target": "Cost",
+        "label": "USES",
+        "evidence": "Added two unit tests: one verifying cost fields are present when returned, one verifying they're absent when not in usage",
+        "evidence_start": 1260,
+        "evidence_end": 1381
+      },
+      {
+        "source": "Unit Tests",
+        "target": "Cost Details",
+        "label": "USES",
+        "evidence": "Added two unit tests: one verifying cost fields are present when returned, one verifying they're absent when not in usage",
+        "evidence_start": 1260,
+        "evidence_end": 1381
+      }
+    ],
+    "summary": "This PR enhances OpenRouter integration by surfacing `cost` and `cost_details` from its API `usage` object into `response_metadata` for both streaming and non-streaming paths, which were previously dropped by `_create_usage_metadata()`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

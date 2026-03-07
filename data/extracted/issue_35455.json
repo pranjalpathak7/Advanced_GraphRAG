@@ -1,0 +1,233 @@
+{
+  "id": 35455,
+  "title": "fix(deepseek): use proper URL parsing for azure endpoint detection",
+  "status": "closed",
+  "created_at": "2026-02-26T19:50:36Z",
+  "author_name": "jkennedyvz",
+  "url": "https://github.com/langchain-ai/langchain/pull/35455",
+  "body_text": "## Summary\n\n- Fixes [CodeQL alert #43](https://github.com/langchain-ai/langchain/security/code-scanning/43) (CWE-20: incomplete URL substring sanitization)\n- Replaces `\"azure.com\" in url` substring check with `urlparse`-based hostname validation to prevent bypass via crafted URLs (e.g., `https://evil-azure.com`, `https://example.com/azure.com`)\n- Adds bypass-attempt test cases to the existing Azure endpoint detection tests\n\n## Why\n\nThe substring check `\"azure.com\" in url` matches URLs where `azure.com` appears anywhere in the string, not just in the hostname. An attacker-controlled endpoint like `https://evil-azure.com` or `https://example.com/azure.com` would incorrectly trigger the Azure code path. Using `urlparse` to extract and validate the hostname is the standard fix per CodeQL guidance.\n\n## Test plan\n\n- [x] Existing Azure endpoint detection tests pass\n- [x] New negative test cases for bypass attempts pass\n- [x] `uv run pytest tests/unit_tests/test_chat_models.py -k azure` — 6/6 passing\n\n> [!NOTE]\n> This PR was authored with assistance from an AI agent (Claude Code).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "CodeQL Alert #43",
+        "type": "Problem",
+        "description": "A security alert identified by CodeQL."
+      },
+      {
+        "name": "CWE-20",
+        "type": "Problem",
+        "description": "A common weakness enumeration for incomplete URL substring sanitization."
+      },
+      {
+        "name": "Incomplete URL Substring Sanitization",
+        "type": "Problem",
+        "description": "A vulnerability where URL substrings are not properly sanitized."
+      },
+      {
+        "name": "Substring Check",
+        "type": "Problem",
+        "description": "The problematic method of checking for 'azure.com' anywhere in a URL string, leading to security vulnerabilities."
+      },
+      {
+        "name": "URLparse",
+        "type": "Technology",
+        "description": "A Python module used for robust URL parsing."
+      },
+      {
+        "name": "Hostname Validation",
+        "type": "Feature",
+        "description": "The process of verifying the hostname part of a URL to ensure security."
+      },
+      {
+        "name": "Crafted URLs",
+        "type": "Problem",
+        "description": "Maliciously constructed URLs designed to bypass security checks."
+      },
+      {
+        "name": "Bypass",
+        "type": "Problem",
+        "description": "The act of circumventing a security mechanism."
+      },
+      {
+        "name": "Azure Code Path",
+        "type": "Technology",
+        "description": "The specific code execution flow related to Azure services."
+      },
+      {
+        "name": "CodeQL Guidance",
+        "type": "Technology",
+        "description": "Recommendations provided by CodeQL for fixing security vulnerabilities."
+      },
+      {
+        "name": "Azure Endpoint Detection",
+        "type": "Feature",
+        "description": "The mechanism for identifying Azure service endpoints."
+      },
+      {
+        "name": "Azure Endpoint Detection Tests",
+        "type": "Feature",
+        "description": "Tests designed to verify the correct identification of Azure endpoints."
+      },
+      {
+        "name": "Bypass Attempt Test Cases",
+        "type": "Feature",
+        "description": "New test cases specifically designed to detect and prevent bypass attempts."
+      },
+      {
+        "name": "Negative Test Cases",
+        "type": "Feature",
+        "description": "Test cases that verify the system behaves correctly under invalid or unexpected input."
+      },
+      {
+        "name": "Pytest",
+        "type": "Technology",
+        "description": "A Python testing framework."
+      },
+      {
+        "name": "Unit Tests",
+        "type": "Feature",
+        "description": "Tests that verify individual units of source code."
+      },
+      {
+        "name": "test_chat_models.py",
+        "type": "Technology",
+        "description": "A specific Python file containing unit tests for chat models."
+      },
+      {
+        "name": "Claude Code",
+        "type": "Technology",
+        "description": "An AI agent that assisted in authoring the PR."
+      },
+      {
+        "name": "jkennedyvz",
+        "type": "Organization",
+        "description": "The author of the GitHub issue."
+      }
+    ],
+    "relations": [
+      {
+        "source": "CodeQL Alert #43",
+        "target": "CWE-20",
+        "label": "RELATED_TO",
+        "evidence": "Fixes CodeQL alert #43 (CWE-20: incomplete URL substring sanitization)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "CodeQL Alert #43",
+        "target": "Incomplete URL Substring Sanitization",
+        "label": "RELATED_TO",
+        "evidence": "Fixes CodeQL alert #43 (CWE-20: incomplete URL substring sanitization)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Substring Check",
+        "target": "Incomplete URL Substring Sanitization",
+        "label": "CAUSES",
+        "evidence": "Replaces \"azure.com\" in url substring check with urlparse-based hostname validation to prevent bypass via crafted URLs (e.g., https://evil-azure.com, https://example.com/azure.com)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "URLparse",
+        "target": "Hostname Validation",
+        "label": "USES",
+        "evidence": "Replaces \"azure.com\" in url substring check with urlparse-based hostname validation",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Hostname Validation",
+        "target": "Bypass",
+        "label": "AFFECTS",
+        "evidence": "urlparse-based hostname validation to prevent bypass via crafted URLs",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Crafted URLs",
+        "target": "Bypass",
+        "label": "CAUSES",
+        "evidence": "prevent bypass via crafted URLs",
+        "evidence_start": 249,
+        "evidence_end": 280
+      },
+      {
+        "source": "Substring Check",
+        "target": "Azure Code Path",
+        "label": "AFFECTS",
+        "evidence": "An attacker-controlled endpoint like https://evil-azure.com or https://example.com/azure.com would incorrectly trigger the Azure code path.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "URLparse",
+        "target": "CodeQL Guidance",
+        "label": "RELATED_TO",
+        "evidence": "Using urlparse to extract and validate the hostname is the standard fix per CodeQL guidance.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Bypass Attempt Test Cases",
+        "target": "Azure Endpoint Detection Tests",
+        "label": "RELATED_TO",
+        "evidence": "Adds bypass-attempt test cases to the existing Azure endpoint detection tests",
+        "evidence_start": 349,
+        "evidence_end": 426
+      },
+      {
+        "source": "Negative Test Cases",
+        "target": "Bypass",
+        "label": "RELATED_TO",
+        "evidence": "New negative test cases for bypass attempts pass",
+        "evidence_start": 877,
+        "evidence_end": 925
+      },
+      {
+        "source": "Pytest",
+        "target": "Unit Tests",
+        "label": "USES",
+        "evidence": "`uv run pytest tests/unit_tests/test_chat_models.py -k azure`",
+        "evidence_start": 932,
+        "evidence_end": 993
+      },
+      {
+        "source": "Unit Tests",
+        "target": "test_chat_models.py",
+        "label": "RELATED_TO",
+        "evidence": "`uv run pytest tests/unit_tests/test_chat_models.py -k azure`",
+        "evidence_start": 932,
+        "evidence_end": 993
+      },
+      {
+        "source": "jkennedyvz",
+        "target": "Claude Code",
+        "label": "USES",
+        "evidence": "This PR was authored with assistance from an AI agent (Claude Code).",
+        "evidence_start": 1021,
+        "evidence_end": 1089
+      },
+      {
+        "source": "Substring Check",
+        "target": "Azure Endpoint Detection",
+        "label": "AFFECTS",
+        "evidence": "Replaces \"azure.com\" in url substring check with urlparse-based hostname validation to prevent bypass via crafted URLs",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "URLparse",
+        "target": "Azure Endpoint Detection",
+        "label": "RELATED_TO",
+        "evidence": "use proper URL parsing for azure endpoint detection",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "The issue fixes a CodeQL alert (CWE-20) by replacing an insecure 'azure.com' substring check with urlparse-based hostname validation to prevent bypasses via crafted URLs in Azure endpoint detection."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

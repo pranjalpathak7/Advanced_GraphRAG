@@ -1,0 +1,12 @@
+{
+  "id": 35503,
+  "title": "fix(core): prevent RunnableRetry.batch output corruption when partial failures occur",
+  "status": "open",
+  "created_at": "2026-03-02T00:37:47Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35503",
+  "body_text": "## Problem\n\n`RunnableRetry.batch`/`abatch` can return corrupted outputs when some items succeed on retry while others fail. Results become misaligned with their original input indices.\n\n## Root Cause\n\nIn `_batch` and `_abatch`, output reconstruction uses `result.pop(0)` to assign results for items not yet in `results_map`. However, `result` contains ALL outputs from the last retry attempt—including successes already stored in `results_map`. When the last attempt has mixed results (e.g., `[success, failure, success]`), `pop(0)` consumes the wrong elements, misaligning outputs.\n\n**Example:** 3 inputs all fail on attempt 1. On attempt 2, inputs 0 and 2 succeed while input 1 fails:\n- `result = [ok_0, err_1, ok_2]`, `results_map = {0: ok_0, 2: ok_2}`\n- Reconstruction: idx 1 is not in results_map →\n\n## Fix\n\nReplace `pop`-based reconstruction with index-mapped dict lookup using `remaining_indices` from the last retry iteration:\n\n```python\n# Before (buggy)\noutputs.append(result.pop(0))\n\n# After (correct)\nlast_results = dict(zip(remaining_indices, result, strict=True))\noutputs.append(last_results[idx])\n```\n\nThis ensures each output is mapped back to its correct original index regardless of which items succeeded or failed in the last attempt.\n\n## Tests Added\n\n7 new tests covering:\n- All succeed / all fail baselines\n- Partial failure with correct index alignment (the core bug)\n- Mixed last-attempt results (specifically triggers the pop corruption)\n- Staggered retries across multiple attempts\n- Async variants of the corruption scenarios\n\nFixes #35475",
+  "extracted_data": null,
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": 35476
+}

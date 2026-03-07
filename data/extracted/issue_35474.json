@@ -1,0 +1,331 @@
+{
+  "id": 35474,
+  "title": "perf(core): optimize callback manager hot paths",
+  "status": "open",
+  "created_at": "2026-02-28T05:39:08Z",
+  "author_name": "jkennedyvz",
+  "url": "https://github.com/langchain-ai/langchain/pull/35474",
+  "body_text": "## Summary\n\nOptimizes the langchain_core callback manager hot paths identified by profiling langgraph's `react_agent` benchmark, where callback overhead accounts for ~35% of runtime.\n\n- **`get_child()`**: pass state directly to constructor instead of calling `set_handlers`/`add_tags`/`add_metadata` sequentially (**-22%**)\n- **`add_tags()`**: use set-based dedup instead of O(n) list scans per tag, early return when tags list is empty (**-70% on duplicate tags**)\n- **`handle_event`/`ahandle_event`**: early return when handlers list is empty\n- **`_configure()`**: skip throwaway `CallbackManager` construction on the common path where `inheritable_callbacks` is provided\n\n### Behavioral note on `add_tags()`\n\nThe old `add_tags()` had \"move to end\" semantics — existing tags were removed and re-appended. The new implementation skips duplicates instead. This is safe because tag order is not meaningful across the codebase: `merge_configs()` sorts, `LangChainTracer._start_trace()` sorts, `BaseCallbackManager.merge()` uses sets, and tests compare with `sorted()`.\n\n## Test plan\n\n- [x] All 1701 `langchain-core` unit tests passing\n- [ ] Run langgraph `react_agent` benchmark to validate end-to-end improvement\n\n> [!NOTE]\n> This PR was developed with AI agent assistance (Claude Code).",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Langchain Core",
+        "type": "Technology",
+        "description": "The core library whose callback manager hot paths are being optimized."
+      },
+      {
+        "name": "Callback Manager",
+        "type": "Technology",
+        "description": "A component within Langchain Core responsible for handling callbacks, identified as a performance bottleneck."
+      },
+      {
+        "name": "Langgraph",
+        "type": "Technology",
+        "description": "A library that uses Langchain Core, whose react_agent benchmark helped identify performance issues."
+      },
+      {
+        "name": "React Agent Benchmark",
+        "type": "Feature",
+        "description": "A specific benchmark within Langgraph used to profile performance and identify hot paths."
+      },
+      {
+        "name": "Callback Overhead",
+        "type": "Problem",
+        "description": "The performance cost associated with callback operations, accounting for a significant portion of runtime."
+      },
+      {
+        "name": "Runtime Optimization",
+        "type": "Feature",
+        "description": "The overall goal of improving the execution speed of the callback manager hot paths."
+      },
+      {
+        "name": "get_child()",
+        "type": "Feature",
+        "description": "A method in the Callback Manager identified as a hot path, optimized by passing state directly to its constructor."
+      },
+      {
+        "name": "add_tags()",
+        "type": "Feature",
+        "description": "A method in the Callback Manager for adding tags, identified as a hot path and optimized for duplicate handling."
+      },
+      {
+        "name": "handle_event()",
+        "type": "Feature",
+        "description": "A method in the Callback Manager for handling events, optimized with an early return."
+      },
+      {
+        "name": "ahandle_event()",
+        "type": "Feature",
+        "description": "An asynchronous method in the Callback Manager for handling events, optimized with an early return."
+      },
+      {
+        "name": "_configure()",
+        "type": "Feature",
+        "description": "A method related to Callback Manager configuration, optimized to skip unnecessary construction."
+      },
+      {
+        "name": "Set-based Dedup",
+        "type": "Technology",
+        "description": "An optimization technique using sets to efficiently remove duplicate tags."
+      },
+      {
+        "name": "O(n) List Scans",
+        "type": "Problem",
+        "description": "An inefficient method for checking duplicates in lists, replaced by set-based dedup."
+      },
+      {
+        "name": "Early Return",
+        "type": "Feature",
+        "description": "An optimization technique to exit a function early when a condition is met, reducing unnecessary processing."
+      },
+      {
+        "name": "CallbackManager Construction",
+        "type": "Feature",
+        "description": "The process of initializing a Callback Manager instance, which was optimized to skip throwaway constructions."
+      },
+      {
+        "name": "inheritable_callbacks",
+        "type": "Feature",
+        "description": "A parameter provided during Callback Manager configuration that allows skipping throwaway construction."
+      },
+      {
+        "name": "Tag Order",
+        "type": "Problem",
+        "description": "A behavioral aspect of tags that was confirmed not to be meaningful across the codebase, allowing for optimization of add_tags()."
+      },
+      {
+        "name": "Langchain-Core Unit Tests",
+        "type": "Feature",
+        "description": "Automated tests for the Langchain Core library, all of which are passing after the changes."
+      },
+      {
+        "name": "End-to-End Improvement",
+        "type": "Feature",
+        "description": "The desired overall performance gain validated by running the Langgraph react_agent benchmark."
+      },
+      {
+        "name": "AI Agent Assistance",
+        "type": "Technology",
+        "description": "The use of an AI agent to help develop the pull request."
+      },
+      {
+        "name": "Claude Code",
+        "type": "Technology",
+        "description": "A specific AI agent used for development assistance."
+      }
+    ],
+    "relations": [
+      {
+        "source": "React Agent Benchmark",
+        "target": "Langgraph",
+        "label": "USES",
+        "evidence": "profiling langgraph's `react_agent` benchmark",
+        "evidence_start": 82,
+        "evidence_end": 127
+      },
+      {
+        "source": "React Agent Benchmark",
+        "target": "Callback Overhead",
+        "label": "RELATED_TO",
+        "evidence": "identified by profiling langgraph's `react_agent` benchmark, where callback overhead accounts for ~35% of runtime.",
+        "evidence_start": 68,
+        "evidence_end": 182
+      },
+      {
+        "source": "Callback Overhead",
+        "target": "Callback Manager",
+        "label": "AFFECTS",
+        "evidence": "callback overhead accounts for ~35% of runtime.",
+        "evidence_start": 135,
+        "evidence_end": 182
+      },
+      {
+        "source": "Runtime Optimization",
+        "target": "Callback Manager",
+        "label": "AFFECTS",
+        "evidence": "Optimizes the langchain_core callback manager hot paths",
+        "evidence_start": 12,
+        "evidence_end": 67
+      },
+      {
+        "source": "Callback Manager",
+        "target": "Langchain Core",
+        "label": "RELATED_TO",
+        "evidence": "Optimizes the langchain_core callback manager hot paths",
+        "evidence_start": 12,
+        "evidence_end": 67
+      },
+      {
+        "source": "get_child()",
+        "target": "Callback Manager",
+        "label": "RELATED_TO",
+        "evidence": "Optimizes the langchain_core callback manager hot paths",
+        "evidence_start": 12,
+        "evidence_end": 67
+      },
+      {
+        "source": "add_tags()",
+        "target": "Callback Manager",
+        "label": "RELATED_TO",
+        "evidence": "Optimizes the langchain_core callback manager hot paths",
+        "evidence_start": 12,
+        "evidence_end": 67
+      },
+      {
+        "source": "handle_event()",
+        "target": "Callback Manager",
+        "label": "RELATED_TO",
+        "evidence": "Optimizes the langchain_core callback manager hot paths",
+        "evidence_start": 12,
+        "evidence_end": 67
+      },
+      {
+        "source": "ahandle_event()",
+        "target": "Callback Manager",
+        "label": "RELATED_TO",
+        "evidence": "Optimizes the langchain_core callback manager hot paths",
+        "evidence_start": 12,
+        "evidence_end": 67
+      },
+      {
+        "source": "_configure()",
+        "target": "Callback Manager",
+        "label": "RELATED_TO",
+        "evidence": "Optimizes the langchain_core callback manager hot paths",
+        "evidence_start": 12,
+        "evidence_end": 67
+      },
+      {
+        "source": "Runtime Optimization",
+        "target": "get_child()",
+        "label": "AFFECTS",
+        "evidence": "`get_child()`: pass state directly to constructor instead of calling `set_handlers`/`add_tags`/`add_metadata` sequentially (**-22%**)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Runtime Optimization",
+        "target": "add_tags()",
+        "label": "AFFECTS",
+        "evidence": "`add_tags()`: use set-based dedup instead of O(n) list scans per tag, early return when tags list is empty (**-70% on duplicate tags**)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "add_tags()",
+        "target": "Set-based Dedup",
+        "label": "USES",
+        "evidence": "`add_tags()`: use set-based dedup",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "add_tags()",
+        "target": "O(n) List Scans",
+        "label": "AFFECTS",
+        "evidence": "use set-based dedup instead of O(n) list scans per tag",
+        "evidence_start": 344,
+        "evidence_end": 398
+      },
+      {
+        "source": "Runtime Optimization",
+        "target": "handle_event()",
+        "label": "AFFECTS",
+        "evidence": "`handle_event`/`ahandle_event`: early return when handlers list is empty",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Runtime Optimization",
+        "target": "ahandle_event()",
+        "label": "AFFECTS",
+        "evidence": "`handle_event`/`ahandle_event`: early return when handlers list is empty",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "handle_event()",
+        "target": "Early Return",
+        "label": "USES",
+        "evidence": "`handle_event`/`ahandle_event`: early return when handlers list is empty",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ahandle_event()",
+        "target": "Early Return",
+        "label": "USES",
+        "evidence": "`handle_event`/`ahandle_event`: early return when handlers list is empty",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Runtime Optimization",
+        "target": "_configure()",
+        "label": "AFFECTS",
+        "evidence": "`_configure()`: skip throwaway `CallbackManager` construction on the common path where `inheritable_callbacks` is provided",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_configure()",
+        "target": "CallbackManager Construction",
+        "label": "AFFECTS",
+        "evidence": "skip throwaway `CallbackManager` construction",
+        "evidence_start": 567,
+        "evidence_end": 612
+      },
+      {
+        "source": "inheritable_callbacks",
+        "target": "_configure()",
+        "label": "RELATED_TO",
+        "evidence": "where `inheritable_callbacks` is provided",
+        "evidence_start": 632,
+        "evidence_end": 673
+      },
+      {
+        "source": "Tag Order",
+        "target": "add_tags()",
+        "label": "RELATED_TO",
+        "evidence": "The old `add_tags()` had \"move to end\" semantics — existing tags were removed and re-appended. The new implementation skips duplicates instead. This is safe because tag order is not meaningful across the codebase",
+        "evidence_start": 712,
+        "evidence_end": 924
+      },
+      {
+        "source": "Langchain-Core Unit Tests",
+        "target": "Langchain Core",
+        "label": "RELATED_TO",
+        "evidence": "All 1701 `langchain-core` unit tests passing",
+        "evidence_start": 1088,
+        "evidence_end": 1132
+      },
+      {
+        "source": "React Agent Benchmark",
+        "target": "End-to-End Improvement",
+        "label": "RELATED_TO",
+        "evidence": "Run langgraph `react_agent` benchmark to validate end-to-end improvement",
+        "evidence_start": 1139,
+        "evidence_end": 1211
+      },
+      {
+        "source": "Runtime Optimization",
+        "target": "AI Agent Assistance",
+        "label": "USES",
+        "evidence": "This PR was developed with AI agent assistance (Claude Code).",
+        "evidence_start": 1225,
+        "evidence_end": 1286
+      },
+      {
+        "source": "AI Agent Assistance",
+        "target": "Claude Code",
+        "label": "USES",
+        "evidence": "AI agent assistance (Claude Code)",
+        "evidence_start": 1252,
+        "evidence_end": 1285
+      }
+    ],
+    "summary": "This PR optimizes Langchain Core's callback manager hot paths, identified by profiling Langgraph's `react_agent` benchmark, by improving `get_child()`, `add_tags()`, `handle_event()`, `ahandle_event()`, and `_configure()` methods to reduce callback overhead."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

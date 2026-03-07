@@ -1,0 +1,309 @@
+{
+  "id": 35498,
+  "title": "fix(openai): handle null choices from model_dump() for vLLM compatibility",
+  "status": "closed",
+  "created_at": "2026-03-01T20:07:36Z",
+  "author_name": "universeplayer",
+  "url": "https://github.com/langchain-ai/langchain/pull/35498",
+  "body_text": "## Description\n\nFixes #32252\n\nWhen using OpenAI-compatible APIs like vLLM, model_dump() can serialize choices as null even though the response object has valid choices accessible via direct attribute access (e.g., response.choices). This causes _create_chat_result to raise a TypeError, even though the data is present and usable.\n\nThis PR adds a fallback in _create_chat_result that, when choices is None in the serialized dict and the response is not already a plain dict, attempts to extract choices directly from the response object's .choices attribute. If valid choices are found, they are serialized individually via model_dump() and used in place of the null value. If the fallback also yields None, the existing improved error message (from #35236) is still raised.\n\n## Changes\n\n- libs/partners/openai/langchain_openai/chat_models/base.py: Added fallback logic between the choices extraction and the null-check error, recovering choices from response.choices when model_dump() returns null.\n- libs/partners/openai/tests/unit_tests/chat_models/test_base.py: Added two regression tests:\n  - test_create_chat_result_null_choices_fallback_to_response_object: verifies the fallback recovers valid choices and produces correct ChatResult.\n  - test_create_chat_result_null_choices_still_raises_when_truly_null: verifies the TypeError is still raised when choices is genuinely null on both the serialized dict and the response object.\n\n## Why this approach\n\n- PR #35236 (merged) improved the error message but did not fix the underlying issue -- users of vLLM still get an error instead of a successful response.\n- PR #34791 (open, stale since Jan 17 with no reviews) takes a similar fallback approach. This PR improves on it with: a not isinstance(response, dict) guard to avoid unnecessary work on dict responses, debug logging when the fallback is triggered, and a second test covering the case where the error should still be raised.\n- The fix is minimal and backward-compatible: it only activates when choices would otherwise be null, and only for non-dict response objects.\n\n## Disclaimer\n\nThis contribution was developed with assistance from an AI agent (Claude).",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "OpenAI-compatible APIs",
+        "type": "Technology",
+        "description": "APIs that adhere to the OpenAI specification."
+      },
+      {
+        "name": "vLLM",
+        "type": "Technology",
+        "description": "An OpenAI-compatible API that can serialize choices as null."
+      },
+      {
+        "name": "model_dump()",
+        "type": "Feature",
+        "description": "A method that serializes model data, sometimes producing null choices."
+      },
+      {
+        "name": "Null Choices",
+        "type": "Problem",
+        "description": "The issue where model_dump() serializes choices as null."
+      },
+      {
+        "name": "Response Object",
+        "type": "Technology",
+        "description": "An object containing the model's response, which might have valid choices."
+      },
+      {
+        "name": "_create_chat_result",
+        "type": "Feature",
+        "description": "A function responsible for creating chat results, which previously raised a TypeError."
+      },
+      {
+        "name": "TypeError",
+        "type": "Problem",
+        "description": "An error raised by _create_chat_result due to null choices."
+      },
+      {
+        "name": "Current PR",
+        "type": "Feature",
+        "description": "The current Pull Request aiming to fix the null choices issue."
+      },
+      {
+        "name": "Fallback Logic",
+        "type": "Feature",
+        "description": "A new mechanism to recover valid choices when model_dump() returns null."
+      },
+      {
+        "name": "ChatResult",
+        "type": "Technology",
+        "description": "The structured result object for chat interactions."
+      },
+      {
+        "name": "PR #35236",
+        "type": "Feature",
+        "description": "A previous Pull Request that improved an error message."
+      },
+      {
+        "name": "Improved Error Message",
+        "type": "Feature",
+        "description": "An enhanced error message for null choice scenarios."
+      },
+      {
+        "name": "Underlying Issue",
+        "type": "Problem",
+        "description": "The core problem of vLLM users encountering errors due to null choices."
+      },
+      {
+        "name": "PR #34791",
+        "type": "Feature",
+        "description": "An existing Pull Request with a similar, but less refined, fallback approach."
+      },
+      {
+        "name": "isinstance(response, dict) Guard",
+        "type": "Feature",
+        "description": "A conditional check to optimize fallback logic for non-dictionary responses."
+      },
+      {
+        "name": "Debug Logging",
+        "type": "Feature",
+        "description": "A feature to log when the fallback mechanism is activated."
+      },
+      {
+        "name": "Regression Tests",
+        "type": "Feature",
+        "description": "Tests added to ensure the fix works and existing error handling is preserved."
+      },
+      {
+        "name": "test_create_chat_result_null_choices_fallback_to_response_object",
+        "type": "Feature",
+        "description": "A specific regression test for the fallback logic."
+      },
+      {
+        "name": "test_create_chat_result_null_choices_still_raises_when_truly_null",
+        "type": "Feature",
+        "description": "A specific regression test for genuinely null choices."
+      },
+      {
+        "name": "langchain_openai/chat_models/base.py",
+        "type": "Technology",
+        "description": "The file where the core fix and fallback logic are implemented."
+      },
+      {
+        "name": "test_base.py",
+        "type": "Technology",
+        "description": "The file containing the unit tests for chat models."
+      },
+      {
+        "name": "AI Agent",
+        "type": "Technology",
+        "description": "A general term for an artificial intelligence assistant."
+      },
+      {
+        "name": "Claude",
+        "type": "Technology",
+        "description": "A specific AI agent that assisted in the development of this contribution."
+      }
+    ],
+    "relations": [
+      {
+        "source": "vLLM",
+        "target": "OpenAI-compatible APIs",
+        "label": "RELATED_TO",
+        "evidence": "When using OpenAI-compatible APIs like vLLM",
+        "evidence_start": 30,
+        "evidence_end": 73
+      },
+      {
+        "source": "model_dump()",
+        "target": "Null Choices",
+        "label": "CAUSES",
+        "evidence": "model_dump() can serialize choices as null",
+        "evidence_start": 75,
+        "evidence_end": 117
+      },
+      {
+        "source": "Null Choices",
+        "target": "TypeError",
+        "label": "CAUSES",
+        "evidence": "This causes _create_chat_result to raise a TypeError",
+        "evidence_start": 233,
+        "evidence_end": 285
+      },
+      {
+        "source": "_create_chat_result",
+        "target": "TypeError",
+        "label": "CAUSES",
+        "evidence": "This causes _create_chat_result to raise a TypeError",
+        "evidence_start": 233,
+        "evidence_end": 285
+      },
+      {
+        "source": "Current PR",
+        "target": "Fallback Logic",
+        "label": "USES",
+        "evidence": "This PR adds a fallback in _create_chat_result",
+        "evidence_start": 332,
+        "evidence_end": 378
+      },
+      {
+        "source": "Fallback Logic",
+        "target": "_create_chat_result",
+        "label": "RELATED_TO",
+        "evidence": "This PR adds a fallback in _create_chat_result",
+        "evidence_start": 332,
+        "evidence_end": 378
+      },
+      {
+        "source": "Fallback Logic",
+        "target": "Response Object",
+        "label": "USES",
+        "evidence": "attempts to extract choices directly from the response object's .choices attribute",
+        "evidence_start": 475,
+        "evidence_end": 557
+      },
+      {
+        "source": "Fallback Logic",
+        "target": "model_dump()",
+        "label": "USES",
+        "evidence": "serialized individually via model_dump()",
+        "evidence_start": 596,
+        "evidence_end": 636
+      },
+      {
+        "source": "Fallback Logic",
+        "target": "ChatResult",
+        "label": "RELATED_TO",
+        "evidence": "verifies the fallback recovers valid choices and produces correct ChatResult.",
+        "evidence_start": 1164,
+        "evidence_end": 1241
+      },
+      {
+        "source": "PR #35236",
+        "target": "Improved Error Message",
+        "label": "RELATED_TO",
+        "evidence": "PR #35236 (merged) improved the error message",
+        "evidence_start": 1461,
+        "evidence_end": 1506
+      },
+      {
+        "source": "PR #35236",
+        "target": "Underlying Issue",
+        "label": "AFFECTS",
+        "evidence": "did not fix the underlying issue",
+        "evidence_start": 1511,
+        "evidence_end": 1543
+      },
+      {
+        "source": "Underlying Issue",
+        "target": "vLLM",
+        "label": "AFFECTS",
+        "evidence": "users of vLLM still get an error instead of a successful response.",
+        "evidence_start": 1547,
+        "evidence_end": 1613
+      },
+      {
+        "source": "Current PR",
+        "target": "PR #34791",
+        "label": "RELATED_TO",
+        "evidence": "This PR improves on it",
+        "evidence_start": 1704,
+        "evidence_end": 1726
+      },
+      {
+        "source": "Current PR",
+        "target": "isinstance(response, dict) Guard",
+        "label": "USES",
+        "evidence": "a not isinstance(response, dict) guard to avoid unnecessary work on dict responses",
+        "evidence_start": 1733,
+        "evidence_end": 1815
+      },
+      {
+        "source": "Current PR",
+        "target": "Debug Logging",
+        "label": "USES",
+        "evidence": "debug logging when the fallback is triggered",
+        "evidence_start": 1817,
+        "evidence_end": 1861
+      },
+      {
+        "source": "Current PR",
+        "target": "Regression Tests",
+        "label": "USES",
+        "evidence": "Added two regression tests",
+        "evidence_start": 1066,
+        "evidence_end": 1092
+      },
+      {
+        "source": "Regression Tests",
+        "target": "test_create_chat_result_null_choices_fallback_to_response_object",
+        "label": "USES",
+        "evidence": "Added two regression tests: - test_create_chat_result_null_choices_fallback_to_response_object",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Regression Tests",
+        "target": "test_create_chat_result_null_choices_still_raises_when_truly_null",
+        "label": "USES",
+        "evidence": "- test_create_chat_result_null_choices_still_raises_when_truly_null",
+        "evidence_start": 1244,
+        "evidence_end": 1311
+      },
+      {
+        "source": "Fallback Logic",
+        "target": "langchain_openai/chat_models/base.py",
+        "label": "RELATED_TO",
+        "evidence": "libs/partners/openai/langchain_openai/chat_models/base.py: Added fallback logic",
+        "evidence_start": 790,
+        "evidence_end": 869
+      },
+      {
+        "source": "Regression Tests",
+        "target": "test_base.py",
+        "label": "RELATED_TO",
+        "evidence": "libs/partners/openai/tests/unit_tests/chat_models/test_base.py: Added two regression tests",
+        "evidence_start": 1002,
+        "evidence_end": 1092
+      },
+      {
+        "source": "Current PR",
+        "target": "AI Agent",
+        "label": "USES",
+        "evidence": "This contribution was developed with assistance from an AI agent (Claude).",
+        "evidence_start": 2097,
+        "evidence_end": 2171
+      },
+      {
+        "source": "Claude",
+        "target": "AI Agent",
+        "label": "RELATED_TO",
+        "evidence": "AI agent (Claude)",
+        "evidence_start": 2153,
+        "evidence_end": 2170
+      }
+    ],
+    "summary": "The issue describes a fix for _create_chat_result in langchain_openai to handle null choices serialized by model_dump() when using OpenAI-compatible APIs like vLLM, preventing a TypeError by implementing a fallback logic to extract choices directly from the response object."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

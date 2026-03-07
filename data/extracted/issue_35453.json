@@ -1,0 +1,200 @@
+{
+  "id": 35453,
+  "title": "fix(core): preserve anthropic input_json_delta args in streaming (#34767)",
+  "status": "closed",
+  "created_at": "2026-02-26T11:26:44Z",
+  "author_name": "ShunyuWu-Shaun",
+  "url": "https://github.com/langchain-ai/langchain/pull/35453",
+  "body_text": "## Problem Background\n- Upstream issue: https://github.com/langchain-ai/langchain/issues/34767\n- Symptom: `input_json_delta.partial_json` can carry valid JSON while `tool_call_chunks.args` is empty, yielding empty tool args during streaming translation.\n\n## Reproduction Evidence\nBefore fix:\n- Construct `AIMessageChunk` with `content=[{\"type\": \"input_json_delta\", \"partial_json\": \"{\\\"search_term\\\":\\\"ai\\\"}\"}]`\n- And `tool_call_chunks=[{\"args\": \"\", \"id\": \"toolu_1\"}]`\n- Observed `content_blocks` had `args: \"\"`.\n\n## Fix Summary\n- In Anthropic block translator, for `input_json_delta` chunk conversion:\n  - preserve existing chunk args when present\n  - otherwise fallback to `block.partial_json`\n- Added regression unit test covering stream shape with a preceding `*_tool_result` block.\n\n## Validation Results\n- `python -m pytest -q tests/unit_tests/messages/block_translators/test_anthropic.py::test_convert_to_v1_from_anthropic_chunk_uses_partial_json_when_chunk_args_empty`\n- `python -m pytest -q tests/unit_tests/messages/block_translators/test_anthropic.py`\n\n## Risk Assessment\n- Narrow scope: only `input_json_delta` handling in Anthropic translator.\n- No behavior change when chunk args are already populated.\n\nCloses #34767\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Issue 34767",
+        "type": "Problem",
+        "description": "The GitHub issue being addressed, concerning empty tool arguments during streaming."
+      },
+      {
+        "name": "Input Json Delta",
+        "type": "Feature",
+        "description": "A type of content block in Anthropic's streaming output."
+      },
+      {
+        "name": "Partial Json",
+        "type": "Feature",
+        "description": "A field within 'Input Json Delta' that carries valid JSON."
+      },
+      {
+        "name": "Tool Call Chunks.Args",
+        "type": "Feature",
+        "description": "A field in 'tool_call_chunks' that should contain tool arguments."
+      },
+      {
+        "name": "Empty Tool Args",
+        "type": "Problem",
+        "description": "The symptom where tool arguments are missing during streaming translation."
+      },
+      {
+        "name": "Streaming Translation",
+        "type": "Feature",
+        "description": "The process of converting streaming chunks, specifically for tool calls."
+      },
+      {
+        "name": "AIMessageChunk",
+        "type": "Technology",
+        "description": "A message chunk object used in the system."
+      },
+      {
+        "name": "Anthropic Block Translator",
+        "type": "Technology",
+        "description": "The component responsible for converting Anthropic's streaming blocks."
+      },
+      {
+        "name": "Regression Unit Test",
+        "type": "Feature",
+        "description": "A test added to prevent recurrence of the bug."
+      },
+      {
+        "name": "Langchain-AI/Langchain",
+        "type": "Organization",
+        "description": "The organization and repository where the issue is located."
+      },
+      {
+        "name": "Pytest",
+        "type": "Technology",
+        "description": "A Python testing framework used for validation."
+      },
+      {
+        "name": "Tool Result Block",
+        "type": "Feature",
+        "description": "A type of block that can precede 'Input Json Delta' in a stream."
+      },
+      {
+        "name": "Chunk Args",
+        "type": "Feature",
+        "description": "Arguments associated with a chunk, which need to be preserved."
+      },
+      {
+        "name": "Stream Shape",
+        "type": "Feature",
+        "description": "The structure or sequence of blocks in a streaming output."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Issue 34767",
+        "target": "Langchain-AI/Langchain",
+        "label": "RELATED_TO",
+        "evidence": "Upstream issue: https://github.com/langchain-ai/langchain/issues/34767",
+        "evidence_start": 24,
+        "evidence_end": 94
+      },
+      {
+        "source": "Partial Json",
+        "target": "Empty Tool Args",
+        "label": "CAUSES",
+        "evidence": "`input_json_delta.partial_json` can carry valid JSON while `tool_call_chunks.args` is empty, yielding empty tool args during streaming translation.",
+        "evidence_start": 106,
+        "evidence_end": 253
+      },
+      {
+        "source": "Tool Call Chunks.Args",
+        "target": "Empty Tool Args",
+        "label": "CAUSES",
+        "evidence": "`input_json_delta.partial_json` can carry valid JSON while `tool_call_chunks.args` is empty, yielding empty tool args during streaming translation.",
+        "evidence_start": 106,
+        "evidence_end": 253
+      },
+      {
+        "source": "Empty Tool Args",
+        "target": "Streaming Translation",
+        "label": "AFFECTS",
+        "evidence": "yielding empty tool args during streaming translation.",
+        "evidence_start": 199,
+        "evidence_end": 253
+      },
+      {
+        "source": "AIMessageChunk",
+        "target": "Input Json Delta",
+        "label": "USES",
+        "evidence": "Construct `AIMessageChunk` with `content=[{\"type\": \"input_json_delta\", \"partial_json\": \"{\\\"search_term\\\":\\\"ai\\\"}\"}]`",
+        "evidence_start": 294,
+        "evidence_end": 410
+      },
+      {
+        "source": "AIMessageChunk",
+        "target": "Tool Call Chunks.Args",
+        "label": "USES",
+        "evidence": "And `tool_call_chunks=[{\"args\": \"\", \"id\": \"toolu_1\"}]`",
+        "evidence_start": 413,
+        "evidence_end": 467
+      },
+      {
+        "source": "Input Json Delta",
+        "target": "Partial Json",
+        "label": "RELATED_TO",
+        "evidence": "`input_json_delta.partial_json`",
+        "evidence_start": 106,
+        "evidence_end": 137
+      },
+      {
+        "source": "Anthropic Block Translator",
+        "target": "Input Json Delta",
+        "label": "RELATED_TO",
+        "evidence": "In Anthropic block translator, for `input_json_delta` chunk conversion:",
+        "evidence_start": 530,
+        "evidence_end": 601
+      },
+      {
+        "source": "Anthropic Block Translator",
+        "target": "Partial Json",
+        "label": "USES",
+        "evidence": "otherwise fallback to `block.partial_json`",
+        "evidence_start": 652,
+        "evidence_end": 694
+      },
+      {
+        "source": "Anthropic Block Translator",
+        "target": "Chunk Args",
+        "label": "USES",
+        "evidence": "preserve existing chunk args when present",
+        "evidence_start": 606,
+        "evidence_end": 647
+      },
+      {
+        "source": "Regression Unit Test",
+        "target": "Anthropic Block Translator",
+        "label": "RELATED_TO",
+        "evidence": "Added regression unit test covering stream shape with a preceding `*_tool_result` block.",
+        "evidence_start": 697,
+        "evidence_end": 785
+      },
+      {
+        "source": "Regression Unit Test",
+        "target": "Stream Shape",
+        "label": "RELATED_TO",
+        "evidence": "Added regression unit test covering stream shape with a preceding `*_tool_result` block.",
+        "evidence_start": 697,
+        "evidence_end": 785
+      },
+      {
+        "source": "Stream Shape",
+        "target": "Tool Result Block",
+        "label": "RELATED_TO",
+        "evidence": "covering stream shape with a preceding `*_tool_result` block.",
+        "evidence_start": 724,
+        "evidence_end": 785
+      },
+      {
+        "source": "Pytest",
+        "target": "Regression Unit Test",
+        "label": "USES",
+        "evidence": "`python -m pytest -q tests/unit_tests/messages/block_translators/test_anthropic.py::test_convert_to_v1_from_anthropic_chunk_uses_partial_json_when_chunk_args_empty`",
+        "evidence_start": 811,
+        "evidence_end": 975
+      }
+    ],
+    "summary": "The issue describes a bug where `tool_call_chunks.args` remains empty during Anthropic streaming translation, even when `input_json_delta.partial_json` contains valid data, leading to missing tool arguments, which is fixed by preserving existing chunk arguments or falling back to `partial_json` in the Anthropic block translator."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

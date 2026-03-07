@@ -1,0 +1,249 @@
+{
+  "id": 35497,
+  "title": "fix(core): make trim_messages respect tool-call group integrity",
+  "status": "closed",
+  "created_at": "2026-03-01T18:08:49Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35497",
+  "body_text": "## Description\n\n`trim_messages` now treats `AIMessage(tool_calls)` + following `ToolMessage(s)` as atomic groups that cannot be split during trimming. This fixes three classes of `BadRequestError` when using providers that validate message ordering (e.g. Anthropic's token counting API).\n\nFixes #29637\n\n## Changes\n\n### 1. Group-aware binary search (`_first_max_tokens`)\nBinary search now operates on **group boundaries** instead of individual message indices. A group is either a single non-tool message or an `AIMessage(tool_calls)` + all following `ToolMessages`. This ensures that `messages[:mid]` never splits a tool-call exchange.\n\n### 2. Rewritten `_last_max_tokens` (no more message reversal)\nThe old implementation reversed messages and delegated to `_first_max_tokens`. Reversed sequences like `[ToolMessage, AIMessage(tool_calls), ...]` are invalid for Anthropic's `count_tokens` API. The new implementation performs a **forward binary search** on group boundaries from the end, preserving natural message ordering in all calls to the token counter.\n\n### 3. Forward bound tools to token counter\nWhen `token_counter` is a bound LLM (via `bind_tools()`), the bound `tools` are automatically extracted from `kwargs` and forwarded to `get_num_tokens_from_messages()` — fixing the _\"tool_use blocks must define tools\"_ error (Example 2 from the issue).\n\n### New helper: `_get_message_group_boundaries()`\nReturns valid split-point indices where `messages[:i]` is always a structurally valid prefix — no orphaned `ToolMessages`, no `AIMessage(tool_calls)` without their replies.\n\n## Tests\n11 new tests covering:\n- Tool groups never split with strategy `first` / `last`\n- Token counter never receives reversed messages\n- Tool groups with `include_system`, `start_on`, `end_on`\n- Multiple tool groups\n- Exact token boundary fit\n- Bound tools forwarded to counter\n- Direct `_get_message_group_boundaries()` unit test\n\nAll 165 tests pass (154 existing + 11 new).",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "trim_messages",
+        "type": "Feature",
+        "description": "A function responsible for trimming messages in a conversation."
+      },
+      {
+        "name": "AIMessage(tool_calls)",
+        "type": "Technology",
+        "description": "A type of AI message that contains instructions for tool execution."
+      },
+      {
+        "name": "ToolMessage",
+        "type": "Technology",
+        "description": "A message type representing the output or result from a tool's execution."
+      },
+      {
+        "name": "BadRequestError",
+        "type": "Problem",
+        "description": "An error indicating an invalid request, often due to message ordering or structural issues."
+      },
+      {
+        "name": "Anthropic's Token Counting API",
+        "type": "Technology",
+        "description": "An API provided by Anthropic that validates message ordering and calculates token counts."
+      },
+      {
+        "name": "Group-aware Binary Search",
+        "type": "Feature",
+        "description": "A binary search algorithm designed to operate on logical message groups rather than individual messages."
+      },
+      {
+        "name": "_first_max_tokens",
+        "type": "Feature",
+        "description": "An internal function used in `trim_messages` to find the first valid message prefix within token limits."
+      },
+      {
+        "name": "_last_max_tokens",
+        "type": "Feature",
+        "description": "An internal function used in `trim_messages` to find the last valid message suffix within token limits."
+      },
+      {
+        "name": "Message Reversal",
+        "type": "Problem",
+        "description": "The issue of messages being processed in reverse order, which can lead to invalid sequences for certain APIs."
+      },
+      {
+        "name": "Forward Binary Search",
+        "type": "Feature",
+        "description": "A binary search algorithm that scans from the end of a message list while preserving natural message order."
+      },
+      {
+        "name": "Token Counter",
+        "type": "Technology",
+        "description": "A component or function responsible for calculating the number of tokens in a sequence of messages."
+      },
+      {
+        "name": "Bound LLM",
+        "type": "Technology",
+        "description": "A Language Model that has been configured or 'bound' with specific tools for interaction."
+      },
+      {
+        "name": "bind_tools()",
+        "type": "Feature",
+        "description": "A function used to associate or 'bind' external tools with a Language Model."
+      },
+      {
+        "name": "get_num_tokens_from_messages()",
+        "type": "Feature",
+        "description": "A function that calculates the number of tokens from a given list of messages."
+      },
+      {
+        "name": "Tool Use Blocks Must Define Tools Error",
+        "type": "Problem",
+        "description": "A specific error indicating that tool-use blocks within messages are missing their required tool definitions."
+      },
+      {
+        "name": "_get_message_group_boundaries()",
+        "type": "Feature",
+        "description": "A helper function that identifies valid split points in a message list to maintain structural integrity of tool-call groups."
+      },
+      {
+        "name": "Orphaned ToolMessages",
+        "type": "Problem",
+        "description": "ToolMessages that appear in a sequence without their corresponding preceding `AIMessage(tool_calls)`."
+      },
+      {
+        "name": "AIMessage(tool_calls) without their replies",
+        "type": "Problem",
+        "description": "An `AIMessage(tool_calls)` that is not followed by its corresponding `ToolMessage(s)`."
+      },
+      {
+        "name": "Tool-Call Group Integrity",
+        "type": "Feature",
+        "description": "The principle of treating `AIMessage(tool_calls)` and subsequent `ToolMessage(s)` as an indivisible, atomic unit."
+      }
+    ],
+    "relations": [
+      {
+        "source": "trim_messages",
+        "target": "Tool-Call Group Integrity",
+        "label": "RELATED_TO",
+        "evidence": "make trim_messages respect tool-call group integrity",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "trim_messages",
+        "target": "AIMessage(tool_calls)",
+        "label": "USES",
+        "evidence": "`trim_messages` now treats `AIMessage(tool_calls)` + following `ToolMessage(s)` as atomic groups",
+        "evidence_start": 16,
+        "evidence_end": 112
+      },
+      {
+        "source": "trim_messages",
+        "target": "ToolMessage",
+        "label": "USES",
+        "evidence": "`trim_messages` now treats `AIMessage(tool_calls)` + following `ToolMessage(s)` as atomic groups",
+        "evidence_start": 16,
+        "evidence_end": 112
+      },
+      {
+        "source": "trim_messages",
+        "target": "BadRequestError",
+        "label": "AFFECTS",
+        "evidence": "This fixes three classes of `BadRequestError`",
+        "evidence_start": 151,
+        "evidence_end": 196
+      },
+      {
+        "source": "Anthropic's Token Counting API",
+        "target": "BadRequestError",
+        "label": "CAUSES",
+        "evidence": "providers that validate message ordering (e.g. Anthropic's token counting API)",
+        "evidence_start": 208,
+        "evidence_end": 286
+      },
+      {
+        "source": "trim_messages",
+        "target": "Group-aware Binary Search",
+        "label": "USES",
+        "evidence": "Binary search now operates on **group boundaries** instead of individual message indices.",
+        "evidence_start": 370,
+        "evidence_end": 459
+      },
+      {
+        "source": "Group-aware Binary Search",
+        "target": "_first_max_tokens",
+        "label": "USES",
+        "evidence": "Group-aware binary search (`_first_max_tokens`)",
+        "evidence_start": 322,
+        "evidence_end": 369
+      },
+      {
+        "source": "_last_max_tokens",
+        "target": "Message Reversal",
+        "label": "AFFECTS",
+        "evidence": "Rewritten `_last_max_tokens` (no more message reversal)",
+        "evidence_start": 644,
+        "evidence_end": 699
+      },
+      {
+        "source": "Message Reversal",
+        "target": "Anthropic's Token Counting API",
+        "label": "CAUSES",
+        "evidence": "Reversed sequences like `[ToolMessage, AIMessage(tool_calls), ...]` are invalid for Anthropic's `count_tokens` API.",
+        "evidence_start": 779,
+        "evidence_end": 894
+      },
+      {
+        "source": "_last_max_tokens",
+        "target": "Forward Binary Search",
+        "label": "USES",
+        "evidence": "The new implementation performs a **forward binary search** on group boundaries from the end",
+        "evidence_start": 895,
+        "evidence_end": 987
+      },
+      {
+        "source": "Token Counter",
+        "target": "Bound LLM",
+        "label": "USES",
+        "evidence": "When `token_counter` is a bound LLM (via `bind_tools()`)",
+        "evidence_start": 1105,
+        "evidence_end": 1161
+      },
+      {
+        "source": "Bound LLM",
+        "target": "bind_tools()",
+        "label": "USES",
+        "evidence": "When `token_counter` is a bound LLM (via `bind_tools()`)",
+        "evidence_start": 1105,
+        "evidence_end": 1161
+      },
+      {
+        "source": "Token Counter",
+        "target": "get_num_tokens_from_messages()",
+        "label": "USES",
+        "evidence": "forwarded to `get_num_tokens_from_messages()`",
+        "evidence_start": 1227,
+        "evidence_end": 1272
+      },
+      {
+        "source": "bind_tools()",
+        "target": "Tool Use Blocks Must Define Tools Error",
+        "label": "CAUSES",
+        "evidence": "fixing the _\"tool_use blocks must define tools\"_ error",
+        "evidence_start": 1275,
+        "evidence_end": 1329
+      },
+      {
+        "source": "trim_messages",
+        "target": "_get_message_group_boundaries()",
+        "label": "USES",
+        "evidence": "Returns valid split-point indices where `messages[:i]` is always a structurally valid prefix",
+        "evidence_start": 1409,
+        "evidence_end": 1501
+      },
+      {
+        "source": "_get_message_group_boundaries()",
+        "target": "Orphaned ToolMessages",
+        "label": "AFFECTS",
+        "evidence": "no orphaned `ToolMessages`",
+        "evidence_start": 1504,
+        "evidence_end": 1530
+      },
+      {
+        "source": "_get_message_group_boundaries()",
+        "target": "AIMessage(tool_calls) without their replies",
+        "label": "AFFECTS",
+        "evidence": "no `AIMessage(tool_calls)` without their replies.",
+        "evidence_start": 1532,
+        "evidence_end": 1581
+      }
+    ],
+    "summary": "The `trim_messages` function has been updated to maintain tool-call group integrity, preventing `BadRequestError` with providers like Anthropic by ensuring `AIMessage(tool_calls)` and subsequent `ToolMessage(s)` are treated as atomic units during trimming and token counting."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

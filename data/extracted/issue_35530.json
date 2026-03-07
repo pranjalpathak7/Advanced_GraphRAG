@@ -1,0 +1,119 @@
+{
+  "id": 35530,
+  "title": "Fix issue #32120: Strip <think> tags in parse_json_markdown to support reasoning models",
+  "status": "open",
+  "created_at": "2026-03-03T02:37:07Z",
+  "author_name": "jackjin1997",
+  "url": "https://github.com/langchain-ai/langchain/pull/35530",
+  "body_text": "This PR fixes issue #32120 where reasoning models (like DeepSeek-R1 or Claude 3.7 Thinking) output including `<think>...</think>` tags caused `JsonOutputParser` to fail. \n\nThe `parse_json_markdown` utility now strips these tags both before and after markdown extraction to ensure robust parsing of structured output from reasoning-capable models.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "issue #32120",
+        "type": "Problem",
+        "description": "A specific GitHub issue concerning the failure of JsonOutputParser due to unexpected tags."
+      },
+      {
+        "name": "parse_json_markdown",
+        "type": "Technology",
+        "description": "A utility function designed to parse JSON from markdown, which has been updated to strip specific tags."
+      },
+      {
+        "name": "reasoning models",
+        "type": "Technology",
+        "description": "A category of AI models that output reasoning steps, sometimes including specific XML-like tags."
+      },
+      {
+        "name": "DeepSeek-R1",
+        "type": "Technology",
+        "description": "A specific reasoning model mentioned as an example."
+      },
+      {
+        "name": "Claude 3.7 Thinking",
+        "type": "Technology",
+        "description": "A specific reasoning model mentioned as an example."
+      },
+      {
+        "name": "<think> tags",
+        "type": "Technology",
+        "description": "Specific XML-like tags used by some reasoning models to denote internal thought processes."
+      },
+      {
+        "name": "JsonOutputParser",
+        "type": "Technology",
+        "description": "A component responsible for parsing JSON output, which was failing due to unexpected tags."
+      },
+      {
+        "name": "robust parsing",
+        "type": "Feature",
+        "description": "The ability to reliably parse structured output despite the presence of unexpected elements."
+      },
+      {
+        "name": "structured output",
+        "type": "Feature",
+        "description": "Data formatted in a consistent, machine-readable way, typically JSON."
+      }
+    ],
+    "relations": [
+      {
+        "source": "issue #32120",
+        "target": "JsonOutputParser",
+        "label": "RELATED_TO",
+        "evidence": "This PR fixes issue #32120 where reasoning models (like DeepSeek-R1 or Claude 3.7 Thinking) output including `<think>...</think>` tags caused `JsonOutputParser` to fail.",
+        "evidence_start": 0,
+        "evidence_end": 169
+      },
+      {
+        "source": "<think> tags",
+        "target": "JsonOutputParser",
+        "label": "CAUSES",
+        "evidence": "output including `<think>...</think>` tags caused `JsonOutputParser` to fail.",
+        "evidence_start": 92,
+        "evidence_end": 169
+      },
+      {
+        "source": "parse_json_markdown",
+        "target": "<think> tags",
+        "label": "USES",
+        "evidence": "The `parse_json_markdown` utility now strips these tags",
+        "evidence_start": 172,
+        "evidence_end": 227
+      },
+      {
+        "source": "parse_json_markdown",
+        "target": "reasoning models",
+        "label": "RELATED_TO",
+        "evidence": "Strip <think> tags in parse_json_markdown to support reasoning models",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "DeepSeek-R1",
+        "target": "reasoning models",
+        "label": "RELATED_TO",
+        "evidence": "reasoning models (like DeepSeek-R1 or Claude 3.7 Thinking)",
+        "evidence_start": 33,
+        "evidence_end": 91
+      },
+      {
+        "source": "Claude 3.7 Thinking",
+        "target": "reasoning models",
+        "label": "RELATED_TO",
+        "evidence": "reasoning models (like DeepSeek-R1 or Claude 3.7 Thinking)",
+        "evidence_start": 33,
+        "evidence_end": 91
+      },
+      {
+        "source": "robust parsing",
+        "target": "structured output",
+        "label": "RELATED_TO",
+        "evidence": "to ensure robust parsing of structured output",
+        "evidence_start": 270,
+        "evidence_end": 315
+      }
+    ],
+    "summary": "The `parse_json_markdown` utility was updated to strip `<think>` tags, resolving an issue where reasoning models' output caused `JsonOutputParser` to fail."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

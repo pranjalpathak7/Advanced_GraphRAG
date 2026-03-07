@@ -1,0 +1,216 @@
+{
+  "id": 35471,
+  "title": "perf(text-splitters): use deque for line consumption in markdown splitter",
+  "status": "closed",
+  "created_at": "2026-02-28T04:27:56Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35471",
+  "body_text": "## Problem\n\n`ExperimentalMarkdownSyntaxTextSplitter.split_text()` and `_resolve_code_chunk()` use `list.pop(0)` to consume lines from the front of a list while parsing markdown.\n\n`list.pop(0)` is **O(n)** because CPython must shift every remaining element left by one slot. On large markdown documents with thousands of lines, this accumulates to **O(n²)** total work.\n\n## Solution\n\nConvert `raw_lines` to a `collections.deque` at the start of `split_text()` and replace all `.pop(0)` calls with `.popleft()`, which is **O(1)** amortised.\n\n`deque` supports the same boolean truthiness check and iteration used by both methods. The `_resolve_code_chunk` type annotation is updated to `deque[str]` to match.\n\n## Testing\n\nAll 9 markdown-related tests in `tests/unit_tests/test_text_splitters.py` pass (2 consecutive clean runs).\n\nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ExperimentalMarkdownSyntaxTextSplitter",
+        "type": "Technology",
+        "description": "A specific text splitter implementation designed for Markdown syntax."
+      },
+      {
+        "name": "ExperimentalMarkdownSyntaxTextSplitter.split_text()",
+        "type": "Feature",
+        "description": "A method within ExperimentalMarkdownSyntaxTextSplitter responsible for splitting text."
+      },
+      {
+        "name": "_resolve_code_chunk()",
+        "type": "Feature",
+        "description": "A helper method used in the context of Markdown parsing, likely within the text splitter."
+      },
+      {
+        "name": "list.pop(0)",
+        "type": "Technology",
+        "description": "A Python list method that removes and returns the element at index 0, which is inefficient for large lists."
+      },
+      {
+        "name": "collections.deque",
+        "type": "Technology",
+        "description": "A Python data structure (double-ended queue) optimized for efficient appends and pops from both ends."
+      },
+      {
+        "name": "deque.popleft()",
+        "type": "Technology",
+        "description": "A method of collections.deque for efficiently removing and returning an element from the left side."
+      },
+      {
+        "name": "O(n)",
+        "type": "Problem",
+        "description": "Linear time complexity, indicating that the execution time grows linearly with the input size."
+      },
+      {
+        "name": "O(n^2)",
+        "type": "Problem",
+        "description": "Quadratic time complexity, indicating a significant performance bottleneck where execution time grows quadratically with input size."
+      },
+      {
+        "name": "O(1)",
+        "type": "Feature",
+        "description": "Constant time complexity, indicating optimal efficiency where execution time remains constant regardless of input size."
+      },
+      {
+        "name": "CPython",
+        "type": "Technology",
+        "description": "The default and most common implementation of the Python programming language."
+      },
+      {
+        "name": "Markdown",
+        "type": "Technology",
+        "description": "A lightweight markup language."
+      },
+      {
+        "name": "Performance Issue",
+        "type": "Problem",
+        "description": "A problem related to the speed or efficiency of a system's operation."
+      },
+      {
+        "name": "Text Splitters",
+        "type": "Technology",
+        "description": "A general component or module responsible for splitting text into smaller chunks."
+      },
+      {
+        "name": "Copilot",
+        "type": "Organization",
+        "description": "An AI assistant that co-authored the solution."
+      }
+    ],
+    "relations": [
+      {
+        "source": "ExperimentalMarkdownSyntaxTextSplitter.split_text()",
+        "target": "list.pop(0)",
+        "label": "USES",
+        "evidence": "`ExperimentalMarkdownSyntaxTextSplitter.split_text()` and `_resolve_code_chunk()` use `list.pop(0)` to consume lines from the front of a list while parsing markdown.",
+        "evidence_start": 12,
+        "evidence_end": 177
+      },
+      {
+        "source": "_resolve_code_chunk()",
+        "target": "list.pop(0)",
+        "label": "USES",
+        "evidence": "`ExperimentalMarkdownSyntaxTextSplitter.split_text()` and `_resolve_code_chunk()` use `list.pop(0)` to consume lines from the front of a list while parsing markdown.",
+        "evidence_start": 12,
+        "evidence_end": 177
+      },
+      {
+        "source": "list.pop(0)",
+        "target": "O(n)",
+        "label": "CAUSES",
+        "evidence": "`list.pop(0)` is **O(n)** because CPython must shift every remaining element left by one slot.",
+        "evidence_start": 179,
+        "evidence_end": 273
+      },
+      {
+        "source": "O(n)",
+        "target": "O(n^2)",
+        "label": "CAUSES",
+        "evidence": "On large markdown documents with thousands of lines, this accumulates to **O(n²)** total work.",
+        "evidence_start": 274,
+        "evidence_end": 368
+      },
+      {
+        "source": "O(n^2)",
+        "target": "Performance Issue",
+        "label": "RELATED_TO",
+        "evidence": "On large markdown documents with thousands of lines, this accumulates to **O(n²)** total work.",
+        "evidence_start": 274,
+        "evidence_end": 368
+      },
+      {
+        "source": "ExperimentalMarkdownSyntaxTextSplitter.split_text()",
+        "target": "Performance Issue",
+        "label": "AFFECTS",
+        "evidence": "`ExperimentalMarkdownSyntaxTextSplitter.split_text()` and `_resolve_code_chunk()` use `list.pop(0)` to consume lines from the front of a list while parsing markdown. `list.pop(0)` is **O(n)** because CPython must shift every remaining element left by one slot. On large markdown documents with thousands of lines, this accumulates to **O(n²)** total work.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_resolve_code_chunk()",
+        "target": "Performance Issue",
+        "label": "AFFECTS",
+        "evidence": "`ExperimentalMarkdownSyntaxTextSplitter.split_text()` and `_resolve_code_chunk()` use `list.pop(0)` to consume lines from the front of a list while parsing markdown. `list.pop(0)` is **O(n)** because CPython must shift every remaining element left by one slot. On large markdown documents with thousands of lines, this accumulates to **O(n²)** total work.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Markdown",
+        "target": "ExperimentalMarkdownSyntaxTextSplitter",
+        "label": "RELATED_TO",
+        "evidence": "`ExperimentalMarkdownSyntaxTextSplitter.split_text()` and `_resolve_code_chunk()` use `list.pop(0)` to consume lines from the front of a list while parsing markdown.",
+        "evidence_start": 12,
+        "evidence_end": 177
+      },
+      {
+        "source": "CPython",
+        "target": "list.pop(0)",
+        "label": "RELATED_TO",
+        "evidence": "`list.pop(0)` is **O(n)** because CPython must shift every remaining element left by one slot.",
+        "evidence_start": 179,
+        "evidence_end": 273
+      },
+      {
+        "source": "ExperimentalMarkdownSyntaxTextSplitter.split_text()",
+        "target": "collections.deque",
+        "label": "USES",
+        "evidence": "Convert `raw_lines` to a `collections.deque` at the start of `split_text()` and replace all `.pop(0)` calls with `.popleft()`, which is **O(1)** amortised.",
+        "evidence_start": 383,
+        "evidence_end": 538
+      },
+      {
+        "source": "_resolve_code_chunk()",
+        "target": "collections.deque",
+        "label": "USES",
+        "evidence": "The `_resolve_code_chunk` type annotation is updated to `deque[str]` to match.",
+        "evidence_start": 627,
+        "evidence_end": 705
+      },
+      {
+        "source": "deque.popleft()",
+        "target": "collections.deque",
+        "label": "RELATED_TO",
+        "evidence": "replace all `.pop(0)` calls with `.popleft()`",
+        "evidence_start": 463,
+        "evidence_end": 508
+      },
+      {
+        "source": "deque.popleft()",
+        "target": "O(1)",
+        "label": "CAUSES",
+        "evidence": "replace all `.pop(0)` calls with `.popleft()`, which is **O(1)** amortised.",
+        "evidence_start": 463,
+        "evidence_end": 538
+      },
+      {
+        "source": "collections.deque",
+        "target": "Performance Issue",
+        "label": "AFFECTS",
+        "evidence": "Convert `raw_lines` to a `collections.deque` at the start of `split_text()` and replace all `.pop(0)` calls with `.popleft()`, which is **O(1)** amortised.",
+        "evidence_start": 383,
+        "evidence_end": 538
+      },
+      {
+        "source": "ExperimentalMarkdownSyntaxTextSplitter",
+        "target": "Text Splitters",
+        "label": "RELATED_TO",
+        "evidence": "perf(text-splitters): use deque for line consumption in markdown splitter",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Copilot",
+        "target": "Performance Issue",
+        "label": "RELATED_TO",
+        "evidence": "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>",
+        "evidence_start": 827,
+        "evidence_end": 895
+      }
+    ],
+    "summary": "The ExperimentalMarkdownSyntaxTextSplitter suffers from an O(n^2) performance issue due to inefficient list.pop(0) calls, which is resolved by switching to collections.deque and deque.popleft() for O(1) line consumption."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

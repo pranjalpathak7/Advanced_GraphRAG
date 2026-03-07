@@ -1,0 +1,348 @@
+{
+  "id": 35447,
+  "title": "chore: bump langgraph-checkpoint from 3.0.0 to 4.0.0 in /libs/partners/huggingface",
+  "status": "closed",
+  "created_at": "2026-02-25T23:13:46Z",
+  "author_name": "dependabot[bot]",
+  "url": "https://github.com/langchain-ai/langchain/pull/35447",
+  "body_text": "Bumps [langgraph-checkpoint](https://github.com/langchain-ai/langgraph) from 3.0.0 to 4.0.0.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/langchain-ai/langgraph/releases\">langgraph-checkpoint's releases</a>.</em></p>\n<blockquote>\n<h2>langgraph-checkpoint==4.0.0</h2>\n<p>Changes since checkpoint==3.0.1</p>\n<ul>\n<li>fix: flip default on base cache (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6677\">#6677</a>)</li>\n<li>fix(checkpoint): InMemorySaver context managers should return self in… (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6529\">#6529</a>)</li>\n<li>fix: docstring for serializer protocol (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6525\">#6525</a>)</li>\n<li>chore: clean up some refs (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6487\">#6487</a>)</li>\n<li>chore: add <code>pyproject.toml</code> links (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6364\">#6364</a>)</li>\n</ul>\n<h2>langgraph-checkpoint-postgres==3.0.4</h2>\n<p>Changes since checkpointpostgres==3.0.3</p>\n<ul>\n<li>chore: Omit lock when using connection pool (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6734\">#6734</a>)</li>\n<li>chore(deps): upgrade dependencies with <code>uv lock --upgrade</code> (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6671\">#6671</a>)</li>\n<li>chore: update twitter URLs (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6683\">#6683</a>)</li>\n</ul>\n<h2>langgraph-checkpoint-postgres==3.0.3</h2>\n<p>Changes since checkpointpostgres==3.0.2</p>\n<ul>\n<li>fix: flip default on base cache (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6677\">#6677</a>)</li>\n<li>docs: storage nits (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6651\">#6651</a>)</li>\n</ul>\n<h2>langgraph-checkpoint-sqlite==3.0.3</h2>\n<p>Changes since checkpointsqlite==3.0.2</p>\n<ul>\n<li>fix: aiosqlite's breaking change (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6699\">#6699</a>)</li>\n<li>chore(deps): upgrade dependencies with <code>uv lock --upgrade</code> (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6671\">#6671</a>)</li>\n<li>chore: update twitter URLs (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6683\">#6683</a>)</li>\n</ul>\n<h2>langgraph-checkpoint-postgres==3.0.2</h2>\n<p>Changes since checkpointpostgres==3.0.1</p>\n<ul>\n<li>release(checkpoint-postgres): 3.0.1 (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6568\">#6568</a>)</li>\n<li>chore: pgqs (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6567\">#6567</a>)</li>\n<li>fix(checkpoint-postgres): ensure vector extension is created only if not exists (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6154\">#6154</a>)</li>\n<li>fix(checkpoint-postgres): Replace f-string SQL formatting with parameterized queries in migration statements (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6328\">#6328</a>)</li>\n<li>chore: add <code>pyproject.toml</code> links (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6364\">#6364</a>)</li>\n<li>docs: add license files for checkpoint-sqlite and checkpoint-postgres (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6392\">#6392</a>)</li>\n</ul>\n<h2>langgraph-checkpoint-sqlite==3.0.2</h2>\n<p>Changes since checkpointsqlite==3.0.1</p>\n<ul>\n<li>fix: flip default on base cache (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6677\">#6677</a>)</li>\n<li>docs: storage nits (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6651\">#6651</a>)</li>\n</ul>\n<h2>checkpoint==3.0.1</h2>\n<p>Changes since checkpoint==3.0.0</p>\n<ul>\n<li>chore: update ormsgpack minbound and add OPT_REPLACE_SURROGATES (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6395\">#6395</a>)</li>\n<li>fix(checkpoint): update checkpoint interface specification in README (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6386\">#6386</a>)</li>\n</ul>\n<!-- raw HTML omitted -->\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/f91d79d0c86932ded6e3b9f195d5a0bbd5aef99c\"><code>f91d79d</code></a> fix: flip default on base cache (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6677\">#6677</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/cb2faa7dda0f2ea49d2729361e1802fb233feaa5\"><code>cb2faa7</code></a> fix(prebuilt): support generic type arguments for ToolRuntime injection (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6509\">#6509</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/a5827c5c6193669d3063897e1845a45cfb90d732\"><code>a5827c5</code></a> fix: change default recursion limit (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6676\">#6676</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/5212369bd0791806083f183cb19ccce024db8790\"><code>5212369</code></a> feat(sdk-py): add end-time to crons client (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6674\">#6674</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/7045a23148bfb7c7de825776531d163f22241aaa\"><code>7045a23</code></a> fix: add <code>state</code> attribute to <code>ToolCallRequest</code> overrides (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6668\">#6668</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/728db10b1f38c9c56f097d2847f0330977d5eba2\"><code>728db10</code></a> fix: suppress unintended deprecation warning (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6669\">#6669</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/454af218968b2962b4beeb9a28b9d421f0610694\"><code>454af21</code></a> feat(sdk-py): cron.on_run_completed support (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6662\">#6662</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/b4630d84520e5f8b6c6580f15cd7dada214ef657\"><code>b4630d8</code></a> chore: delete docs (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6488\">#6488</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/311465bbf7751829942b92bc28c5a79e0666710f\"><code>311465b</code></a> fix: sanitize namespace for deeply nested graph jumps (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6665\">#6665</a>)</li>\n<li><a href=\"https://github.com/langchain-ai/langgraph/commit/8ccead9560f6cd76537f632d7a310ba41e38f28b\"><code>8ccead9</code></a> docs: x-refs and explainer in tool node docs (<a href=\"https://redirect.github.com/langchain-ai/langgraph/issues/6653\">#6653</a>)</li>\n<li>Additional commits viewable in <a href=\"https://github.com/langchain-ai/langgraph/compare/checkpoint==3.0.0...checkpoint==4.0.0\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=langgraph-checkpoint&package-manager=uv&previous-version=3.0.0&new-version=4.0.0)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\nYou can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/langchain-ai/langchain/network/alerts).\n\n</details>",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Dependabot",
+        "type": "Technology",
+        "description": "An automated bot that manages dependency updates for GitHub repositories."
+      },
+      {
+        "name": "Langgraph-Checkpoint",
+        "type": "Technology",
+        "description": "A library for managing checkpoints in LangGraph, updated from version 3.0.0 to 4.0.0."
+      },
+      {
+        "name": "Langgraph",
+        "type": "Technology",
+        "description": "The main project or repository that contains the Langgraph-Checkpoint library and its related components."
+      },
+      {
+        "name": "Huggingface",
+        "type": "Organization",
+        "description": "A partner context or directory within the project where the Langgraph-Checkpoint update is applied."
+      },
+      {
+        "name": "Base Cache",
+        "type": "Feature",
+        "description": "A caching mechanism within Langgraph-Checkpoint whose default behavior was modified."
+      },
+      {
+        "name": "InMemorySaver",
+        "type": "Technology",
+        "description": "A component within Langgraph-Checkpoint related to context managers."
+      },
+      {
+        "name": "Serializer Protocol",
+        "type": "Feature",
+        "description": "A protocol for serialization within Langgraph-Checkpoint, for which the docstring was fixed."
+      },
+      {
+        "name": "Langgraph-Checkpoint-Postgres",
+        "type": "Technology",
+        "description": "A PostgreSQL-specific checkpoint library related to Langgraph, updated to version 3.0.4."
+      },
+      {
+        "name": "Connection Pool",
+        "type": "Feature",
+        "description": "A feature in Langgraph-Checkpoint-Postgres where a lock is omitted."
+      },
+      {
+        "name": "uv lock --upgrade",
+        "type": "Technology",
+        "description": "A command used to upgrade dependencies."
+      },
+      {
+        "name": "Langgraph-Checkpoint-Sqlite",
+        "type": "Technology",
+        "description": "A SQLite-specific checkpoint library related to Langgraph, updated to version 3.0.3."
+      },
+      {
+        "name": "aiosqlite",
+        "type": "Technology",
+        "description": "A library that introduced a breaking change affecting Langgraph-Checkpoint-Sqlite."
+      },
+      {
+        "name": "ORMsgpack",
+        "type": "Technology",
+        "description": "A library whose minimum bound was updated in Langgraph-Checkpoint."
+      },
+      {
+        "name": "OPT_REPLACE_SURROGATES",
+        "type": "Feature",
+        "description": "An option added to ORMsgpack."
+      },
+      {
+        "name": "Checkpoint Interface Specification",
+        "type": "Feature",
+        "description": "Documentation related to the checkpoint interface in Langgraph-Checkpoint."
+      },
+      {
+        "name": "ToolRuntime Injection",
+        "type": "Feature",
+        "description": "A feature in Langgraph that supports generic type arguments."
+      },
+      {
+        "name": "Recursion Limit",
+        "type": "Problem",
+        "description": "A default setting in Langgraph that was changed."
+      },
+      {
+        "name": "Crons Client",
+        "type": "Feature",
+        "description": "A client component in Langgraph to which an end-time was added."
+      },
+      {
+        "name": "ToolCallRequest",
+        "type": "Technology",
+        "description": "An object in Langgraph where a 'state' attribute was added to overrides."
+      },
+      {
+        "name": "Deprecation Warning",
+        "type": "Problem",
+        "description": "An unintended warning in Langgraph that was suppressed."
+      },
+      {
+        "name": "Cron.on_run_completed",
+        "type": "Feature",
+        "description": "A feature in Langgraph for cron run completion support."
+      },
+      {
+        "name": "Graph Jumps",
+        "type": "Feature",
+        "description": "A concept in Langgraph related to deeply nested graphs, where namespace sanitization was fixed."
+      },
+      {
+        "name": "Tool Node Docs",
+        "type": "Feature",
+        "description": "Documentation for tool nodes in Langgraph."
+      },
+      {
+        "name": "Vector Extension",
+        "type": "Feature",
+        "description": "A feature in Langgraph-Checkpoint-Postgres that is ensured to be created only if it does not exist."
+      },
+      {
+        "name": "Parameterized Queries",
+        "type": "Feature",
+        "description": "A security feature used in Langgraph-Checkpoint-Postgres migration statements to prevent SQL injection."
+      },
+      {
+        "name": "Migration Statements",
+        "type": "Feature",
+        "description": "SQL statements in Langgraph-Checkpoint-Postgres that were updated to use parameterized queries."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Dependabot",
+        "target": "Langgraph-Checkpoint",
+        "label": "RELATED_TO",
+        "evidence": "Bumps [langgraph-checkpoint](https://github.com/langchain-ai/langgraph) from 3.0.0 to 4.0.0.",
+        "evidence_start": 0,
+        "evidence_end": 92
+      },
+      {
+        "source": "Langgraph-Checkpoint",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "Bumps [langgraph-checkpoint](https://github.com/langchain-ai/langgraph) from 3.0.0 to 4.0.0.",
+        "evidence_start": 0,
+        "evidence_end": 92
+      },
+      {
+        "source": "Langgraph-Checkpoint",
+        "target": "Huggingface",
+        "label": "RELATED_TO",
+        "evidence": "chore: bump langgraph-checkpoint from 3.0.0 to 4.0.0 in /libs/partners/huggingface",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Base Cache",
+        "target": "Langgraph-Checkpoint",
+        "label": "RELATED_TO",
+        "evidence": "fix: flip default on base cache",
+        "evidence_start": 361,
+        "evidence_end": 392
+      },
+      {
+        "source": "InMemorySaver",
+        "target": "Langgraph-Checkpoint",
+        "label": "RELATED_TO",
+        "evidence": "fix(checkpoint): InMemorySaver context managers should return self in…",
+        "evidence_start": 487,
+        "evidence_end": 557
+      },
+      {
+        "source": "Serializer Protocol",
+        "target": "Langgraph-Checkpoint",
+        "label": "RELATED_TO",
+        "evidence": "fix: docstring for serializer protocol",
+        "evidence_start": 652,
+        "evidence_end": 690
+      },
+      {
+        "source": "Langgraph-Checkpoint-Postgres",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "langgraph-checkpoint-postgres==3.0.4",
+        "evidence_start": 1050,
+        "evidence_end": 1086
+      },
+      {
+        "source": "Connection Pool",
+        "target": "Langgraph-Checkpoint-Postgres",
+        "label": "RELATED_TO",
+        "evidence": "chore: Omit lock when using connection pool",
+        "evidence_start": 1148,
+        "evidence_end": 1191
+      },
+      {
+        "source": "uv lock --upgrade",
+        "target": "Langgraph-Checkpoint-Postgres",
+        "label": "USES",
+        "evidence": "chore(deps): upgrade dependencies with `uv lock --upgrade`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Langgraph-Checkpoint-Sqlite",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "langgraph-checkpoint-sqlite==3.0.3",
+        "evidence_start": 1920,
+        "evidence_end": 1954
+      },
+      {
+        "source": "aiosqlite",
+        "target": "Langgraph-Checkpoint-Sqlite",
+        "label": "CAUSES",
+        "evidence": "fix: aiosqlite's breaking change",
+        "evidence_start": 2014,
+        "evidence_end": 2046
+      },
+      {
+        "source": "ORMsgpack",
+        "target": "Langgraph-Checkpoint",
+        "label": "RELATED_TO",
+        "evidence": "chore: update ormsgpack minbound and add OPT_REPLACE_SURROGATES",
+        "evidence_start": 3862,
+        "evidence_end": 3925
+      },
+      {
+        "source": "OPT_REPLACE_SURROGATES",
+        "target": "ORMsgpack",
+        "label": "RELATED_TO",
+        "evidence": "add OPT_REPLACE_SURROGATES",
+        "evidence_start": 3899,
+        "evidence_end": 3925
+      },
+      {
+        "source": "Checkpoint Interface Specification",
+        "target": "Langgraph-Checkpoint",
+        "label": "RELATED_TO",
+        "evidence": "fix(checkpoint): update checkpoint interface specification in README",
+        "evidence_start": 4020,
+        "evidence_end": 4088
+      },
+      {
+        "source": "ToolRuntime Injection",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "fix(prebuilt): support generic type arguments for ToolRuntime injection",
+        "evidence_start": 4681,
+        "evidence_end": 4752
+      },
+      {
+        "source": "Recursion Limit",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "fix: change default recursion limit",
+        "evidence_start": 4972,
+        "evidence_end": 5007
+      },
+      {
+        "source": "Crons Client",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "feat(sdk-py): add end-time to crons client",
+        "evidence_start": 5227,
+        "evidence_end": 5269
+      },
+      {
+        "source": "ToolCallRequest",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "fix: add `state` attribute to `ToolCallRequest` overrides",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Deprecation Warning",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "fix: suppress unintended deprecation warning",
+        "evidence_start": 5788,
+        "evidence_end": 5832
+      },
+      {
+        "source": "Cron.on_run_completed",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "feat(sdk-py): cron.on_run_completed support",
+        "evidence_start": 6052,
+        "evidence_end": 6095
+      },
+      {
+        "source": "Graph Jumps",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "fix: sanitize namespace for deeply nested graph jumps",
+        "evidence_start": 6553,
+        "evidence_end": 6606
+      },
+      {
+        "source": "Tool Node Docs",
+        "target": "Langgraph",
+        "label": "RELATED_TO",
+        "evidence": "docs: x-refs and explainer in tool node docs",
+        "evidence_start": 6826,
+        "evidence_end": 6870
+      },
+      {
+        "source": "Vector Extension",
+        "target": "Langgraph-Checkpoint-Postgres",
+        "label": "RELATED_TO",
+        "evidence": "ensure vector extension is created only if not exists",
+        "evidence_start": 2792,
+        "evidence_end": 2845
+      },
+      {
+        "source": "Parameterized Queries",
+        "target": "Migration Statements",
+        "label": "USES",
+        "evidence": "Replace f-string SQL formatting with parameterized queries in migration statements",
+        "evidence_start": 2966,
+        "evidence_end": 3048
+      },
+      {
+        "source": "Migration Statements",
+        "target": "Langgraph-Checkpoint-Postgres",
+        "label": "RELATED_TO",
+        "evidence": "Replace f-string SQL formatting with parameterized queries in migration statements",
+        "evidence_start": 2966,
+        "evidence_end": 3048
+      }
+    ],
+    "summary": "Dependabot updated the Langgraph-Checkpoint library from version 3.0.0 to 4.0.0, introducing various fixes and features across Langgraph-Checkpoint, Langgraph-Checkpoint-Postgres, and Langgraph-Checkpoint-Sqlite."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

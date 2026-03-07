@@ -1,0 +1,121 @@
+{
+  "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35547",
+  "repository_url": "https://api.github.com/repos/langchain-ai/langchain",
+  "labels_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35547/labels{/name}",
+  "comments_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35547/comments",
+  "events_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35547/events",
+  "html_url": "https://github.com/langchain-ai/langchain/issues/35547",
+  "id": 4020235130,
+  "node_id": "I_kwDOIPDwls7vn-t6",
+  "number": 35547,
+  "title": "Args with default_factory in a tool's args_schema should not be required",
+  "user": {
+    "login": "liaowang11",
+    "id": 255802,
+    "node_id": "MDQ6VXNlcjI1NTgwMg==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/255802?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/liaowang11",
+    "html_url": "https://github.com/liaowang11",
+    "followers_url": "https://api.github.com/users/liaowang11/followers",
+    "following_url": "https://api.github.com/users/liaowang11/following{/other_user}",
+    "gists_url": "https://api.github.com/users/liaowang11/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/liaowang11/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/liaowang11/subscriptions",
+    "organizations_url": "https://api.github.com/users/liaowang11/orgs",
+    "repos_url": "https://api.github.com/users/liaowang11/repos",
+    "events_url": "https://api.github.com/users/liaowang11/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/liaowang11/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 9019018962,
+      "node_id": "LA_kwDOIPDwls8AAAACGZNO0g",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/core",
+      "name": "core",
+      "color": "f9d0c4",
+      "default": false,
+      "description": "`langchain-core` package issues & PRs"
+    },
+    {
+      "id": 9019019264,
+      "node_id": "LA_kwDOIPDwls8AAAACGZNQAA",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/langchain",
+      "name": "langchain",
+      "color": "f9d0c4",
+      "default": false,
+      "description": "`langchain` package issues & PRs"
+    },
+    {
+      "id": 9260554836,
+      "node_id": "LA_kwDOIPDwls8AAAACJ_jaVA",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/feature%20request",
+      "name": "feature request",
+      "color": "058a42",
+      "default": false,
+      "description": "Request for an enhancement / additional functionality"
+    },
+    {
+      "id": 10037429975,
+      "node_id": "LA_kwDOIPDwls8AAAACVkcG1w",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/external",
+      "name": "external",
+      "color": "d32751",
+      "default": false,
+      "description": ""
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [],
+  "milestone": null,
+  "comments": 0,
+  "created_at": "2026-03-04T05:52:11Z",
+  "updated_at": "2026-03-04T05:52:22Z",
+  "closed_at": null,
+  "assignee": null,
+  "author_association": "NONE",
+  "type": {
+    "id": 18879553,
+    "node_id": "IT_kwDOB43M6c4BIBRB",
+    "name": "Feature",
+    "description": "A request, idea, or new functionality",
+    "color": "blue",
+    "created_at": "2024-02-16T01:43:34Z",
+    "updated_at": "2024-10-08T21:10:19Z",
+    "is_enabled": true
+  },
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "### Checked other resources\n\n- [x] This is a feature request, not a bug report or usage question.\n- [x] I added a clear and descriptive title that summarizes the feature request.\n- [x] I used the GitHub search to find a similar feature request and didn't find it.\n- [x] I checked the LangChain documentation and API reference to see if this feature already exists.\n- [x] This is not related to the langchain-community package.\n\n### Package (Required)\n\n- [x] langchain\n- [ ] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [x] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Feature Description\n\nWhen a tool is defined to have a Pydantic-based args_schema with default_factory, the tool schema generated should not put that arg are \"required\"\n\n\n### Use Case\n\nAs in https://github.com/langchain-ai/langchain/issues/34384, langchain currently will populate args with `default` and `default_factory`. But the tool schema generated still put theses fields in \"required\", forcing the LLM to generate these fields. \n\nHere is an example snippet:\n```python\nimport json\n\nfrom langchain_core.tools import tool\nfrom langchain_core.utils.function_calling import convert_to_openai_tool\nfrom pydantic import BaseModel, Field\n\n\nclass Args(BaseModel):\n    \"\"\"Hello\"\"\"\n    names: list[str] = Field(default_factory=list, description=\"Some names\")\n\n@tool(args_schema=Args)\ndef some_func(name: list[str] = None):\n    pass\n\n\nprint(json.dumps(convert_to_openai_tool(some_func), indent=2))\n\n```\n\nOutputs(note `names` in `required`):\n```json\n{\n  \"type\": \"function\",\n  \"function\": {\n    \"name\": \"some_func\",\n    \"description\": \"Hello\",\n    \"parameters\": {\n      \"properties\": {\n        \"names\": {\n          \"description\": \"Some names\",\n          \"items\": {\n            \"type\": \"string\"\n          },\n          \"type\": \"array\"\n        }\n      },\n      \"required\": [\n        \"names\"\n      ],\n      \"type\": \"object\"\n    }\n  }\n}\n```\n\n### Proposed Solution\n\nLangchain dynamically create a new model when generating tool schema in `tool_call_schema`, currently it only copies `field.default` not `field.default_factory` thus making the generated schema incorrect.\nhttps://github.com/langchain-ai/langchain/blob/e50625e7c3cac04be68ae095bee030e0c321ef34/libs/core/langchain_core/utils/pydantic.py#L245\n\n### Alternatives Considered\n\nUsing `Field(default=[])` works, but it maybe a little misleading.\n\n### Additional Context\n\n_No response_",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35547/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35547/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}

@@ -1,0 +1,379 @@
+{
+  "id": 35540,
+  "title": "Community integration: Fía Signals crypto intelligence tools (x402 pay-per-call + MCP server)",
+  "status": "closed",
+  "created_at": "2026-03-03T21:34:15Z",
+  "author_name": "Odds7",
+  "url": "https://github.com/langchain-ai/langchain/issues/35540",
+  "body_text": "## Fía Signals — Crypto Intelligence for LangChain Agents\n\nA production-ready crypto market intelligence API designed for AI agents.\n\n**Endpoints:** https://fiasignals.com\n**MCP server:** https://fiasignals.com/.well-known/mcp.json\n**x402 discovery:** https://x402.fiasignals.com/.well-known/x402.json\n**OpenAPI:** https://fiasignals.com/openapi.json\n\n### Available as\n1. **REST API** — free tier, no auth required\n2. **MCP server** — 8 tools for Claude/Cursor/Windsurf\n3. **x402 micropayments** — USDC per call on Solana ($0.001-$0.50)\n4. **Virtuals ACP** — agent-to-agent hiring with escrow\n\n### Tools / Endpoints\n- Market regime detection (trending/ranging/volatile)\n- Technical signals (RSI, MACD, EMA, ADX) for 100+ tokens\n- Smart contract quick audit\n- MEV bot detection and sandwich attack risk\n- Wallet risk scoring\n- DeFi yield comparison (Aave, Compound, Curve, Lido)\n- Solana token intelligence\n\nWould love to be included in any community integrations page, cookbook, or documentation. Happy to write an example notebook!",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Fía Signals",
+        "type": "Technology",
+        "description": "A production-ready crypto market intelligence API."
+      },
+      {
+        "name": "Crypto Intelligence",
+        "type": "Feature",
+        "description": "The core capability provided by Fía Signals, offering insights into crypto markets."
+      },
+      {
+        "name": "LangChain Agents",
+        "type": "Technology",
+        "description": "AI agents for which Fía Signals is designed to provide market intelligence."
+      },
+      {
+        "name": "REST API",
+        "type": "Feature",
+        "description": "A free-tier access method for Fía Signals, requiring no authentication."
+      },
+      {
+        "name": "MCP Server",
+        "type": "Technology",
+        "description": "A server providing 8 tools from Fía Signals for specific AI platforms."
+      },
+      {
+        "name": "x402 Micropayments",
+        "type": "Technology",
+        "description": "A payment system allowing per-call transactions using USDC on Solana for Fía Signals."
+      },
+      {
+        "name": "Virtuals ACP",
+        "type": "Technology",
+        "description": "A system for agent-to-agent hiring with escrow, offered by Fía Signals."
+      },
+      {
+        "name": "Claude",
+        "type": "Technology",
+        "description": "An AI agent/platform supported by the Fía Signals MCP server."
+      },
+      {
+        "name": "Cursor",
+        "type": "Technology",
+        "description": "An AI agent/platform supported by the Fía Signals MCP server."
+      },
+      {
+        "name": "Windsurf",
+        "type": "Technology",
+        "description": "An AI agent/platform supported by the Fía Signals MCP server."
+      },
+      {
+        "name": "USDC",
+        "type": "Technology",
+        "description": "A cryptocurrency used for micropayments with x402."
+      },
+      {
+        "name": "Solana",
+        "type": "Technology",
+        "description": "A blockchain platform used for USDC micropayments with x402."
+      },
+      {
+        "name": "Market Regime Detection",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals for identifying market trends (trending/ranging/volatile)."
+      },
+      {
+        "name": "Technical Signals",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals providing indicators like RSI, MACD, EMA, ADX for 100+ tokens."
+      },
+      {
+        "name": "Smart Contract Quick Audit",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals for quickly auditing smart contracts."
+      },
+      {
+        "name": "MEV Bot Detection",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals for detecting MEV bots."
+      },
+      {
+        "name": "Sandwich Attack Risk",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals for assessing the risk of sandwich attacks."
+      },
+      {
+        "name": "Wallet Risk Scoring",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals for scoring the risk associated with crypto wallets."
+      },
+      {
+        "name": "DeFi Yield Comparison",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals for comparing DeFi yields across various protocols."
+      },
+      {
+        "name": "Aave",
+        "type": "Technology",
+        "description": "A DeFi protocol whose yield can be compared using Fía Signals."
+      },
+      {
+        "name": "Compound",
+        "type": "Technology",
+        "description": "A DeFi protocol whose yield can be compared using Fía Signals."
+      },
+      {
+        "name": "Curve",
+        "type": "Technology",
+        "description": "A DeFi protocol whose yield can be compared using Fía Signals."
+      },
+      {
+        "name": "Lido",
+        "type": "Technology",
+        "description": "A DeFi protocol whose yield can be compared using Fía Signals."
+      },
+      {
+        "name": "Solana Token Intelligence",
+        "type": "Feature",
+        "description": "A tool/endpoint of Fía Signals providing intelligence specific to Solana tokens."
+      },
+      {
+        "name": "Community Integrations Page",
+        "type": "Feature",
+        "description": "A page where Fía Signals seeks to be included."
+      },
+      {
+        "name": "Cookbook",
+        "type": "Feature",
+        "description": "A collection of examples or guides where Fía Signals seeks to be included."
+      },
+      {
+        "name": "Documentation",
+        "type": "Feature",
+        "description": "Official guides or references where Fía Signals seeks to be included."
+      },
+      {
+        "name": "Example Notebook",
+        "type": "Feature",
+        "description": "A demonstration notebook that the author is willing to write for Fía Signals."
+      },
+      {
+        "name": "Odds7",
+        "type": "Organization",
+        "description": "The author of the issue, proposing the integration of Fía Signals."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Fía Signals",
+        "target": "Crypto Intelligence",
+        "label": "RELATED_TO",
+        "evidence": "Fía Signals — Crypto Intelligence for LangChain Agents",
+        "evidence_start": 3,
+        "evidence_end": 57
+      },
+      {
+        "source": "Crypto Intelligence",
+        "target": "LangChain Agents",
+        "label": "RELATED_TO",
+        "evidence": "Crypto Intelligence for LangChain Agents",
+        "evidence_start": 17,
+        "evidence_end": 57
+      },
+      {
+        "source": "Fía Signals",
+        "target": "REST API",
+        "label": "USES",
+        "evidence": "Available as 1. REST API — free tier, no auth required",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Fía Signals",
+        "target": "MCP Server",
+        "label": "USES",
+        "evidence": "Available as 2. MCP server — 8 tools for Claude/Cursor/Windsurf",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Fía Signals",
+        "target": "x402 Micropayments",
+        "label": "USES",
+        "evidence": "Available as 3. x402 micropayments — USDC per call on Solana ($0.001-$0.50)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Fía Signals",
+        "target": "Virtuals ACP",
+        "label": "USES",
+        "evidence": "Available as 4. Virtuals ACP — agent-to-agent hiring with escrow",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "MCP Server",
+        "target": "Claude",
+        "label": "USES",
+        "evidence": "MCP server — 8 tools for Claude/Cursor/Windsurf",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "MCP Server",
+        "target": "Cursor",
+        "label": "USES",
+        "evidence": "MCP server — 8 tools for Claude/Cursor/Windsurf",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "MCP Server",
+        "target": "Windsurf",
+        "label": "USES",
+        "evidence": "MCP server — 8 tools for Claude/Cursor/Windsurf",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "x402 Micropayments",
+        "target": "USDC",
+        "label": "USES",
+        "evidence": "x402 micropayments — USDC per call on Solana ($0.001-$0.50)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "x402 Micropayments",
+        "target": "Solana",
+        "label": "USES",
+        "evidence": "x402 micropayments — USDC per call on Solana ($0.001-$0.50)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Fía Signals",
+        "target": "Market Regime Detection",
+        "label": "RELATED_TO",
+        "evidence": "Market regime detection (trending/ranging/volatile)",
+        "evidence_start": 618,
+        "evidence_end": 669
+      },
+      {
+        "source": "Fía Signals",
+        "target": "Technical Signals",
+        "label": "RELATED_TO",
+        "evidence": "Technical signals (RSI, MACD, EMA, ADX) for 100+ tokens",
+        "evidence_start": 672,
+        "evidence_end": 727
+      },
+      {
+        "source": "Fía Signals",
+        "target": "Smart Contract Quick Audit",
+        "label": "RELATED_TO",
+        "evidence": "Smart contract quick audit",
+        "evidence_start": 730,
+        "evidence_end": 756
+      },
+      {
+        "source": "Fía Signals",
+        "target": "MEV Bot Detection",
+        "label": "RELATED_TO",
+        "evidence": "MEV bot detection and sandwich attack risk",
+        "evidence_start": 759,
+        "evidence_end": 801
+      },
+      {
+        "source": "Fía Signals",
+        "target": "Sandwich Attack Risk",
+        "label": "RELATED_TO",
+        "evidence": "MEV bot detection and sandwich attack risk",
+        "evidence_start": 759,
+        "evidence_end": 801
+      },
+      {
+        "source": "Fía Signals",
+        "target": "Wallet Risk Scoring",
+        "label": "RELATED_TO",
+        "evidence": "Wallet risk scoring",
+        "evidence_start": 804,
+        "evidence_end": 823
+      },
+      {
+        "source": "Fía Signals",
+        "target": "DeFi Yield Comparison",
+        "label": "RELATED_TO",
+        "evidence": "DeFi yield comparison (Aave, Compound, Curve, Lido)",
+        "evidence_start": 826,
+        "evidence_end": 877
+      },
+      {
+        "source": "DeFi Yield Comparison",
+        "target": "Aave",
+        "label": "USES",
+        "evidence": "DeFi yield comparison (Aave, Compound, Curve, Lido)",
+        "evidence_start": 826,
+        "evidence_end": 877
+      },
+      {
+        "source": "DeFi Yield Comparison",
+        "target": "Compound",
+        "label": "USES",
+        "evidence": "DeFi yield comparison (Aave, Compound, Curve, Lido)",
+        "evidence_start": 826,
+        "evidence_end": 877
+      },
+      {
+        "source": "DeFi Yield Comparison",
+        "target": "Curve",
+        "label": "USES",
+        "evidence": "DeFi yield comparison (Aave, Compound, Curve, Lido)",
+        "evidence_start": 826,
+        "evidence_end": 877
+      },
+      {
+        "source": "DeFi Yield Comparison",
+        "target": "Lido",
+        "label": "USES",
+        "evidence": "DeFi yield comparison (Aave, Compound, Curve, Lido)",
+        "evidence_start": 826,
+        "evidence_end": 877
+      },
+      {
+        "source": "Fía Signals",
+        "target": "Solana Token Intelligence",
+        "label": "RELATED_TO",
+        "evidence": "Solana token intelligence",
+        "evidence_start": 880,
+        "evidence_end": 905
+      },
+      {
+        "source": "Odds7",
+        "target": "Community Integrations Page",
+        "label": "RELATED_TO",
+        "evidence": "Would love to be included in any community integrations page, cookbook, or documentation.",
+        "evidence_start": 907,
+        "evidence_end": 996
+      },
+      {
+        "source": "Odds7",
+        "target": "Cookbook",
+        "label": "RELATED_TO",
+        "evidence": "Would love to be included in any community integrations page, cookbook, or documentation.",
+        "evidence_start": 907,
+        "evidence_end": 996
+      },
+      {
+        "source": "Odds7",
+        "target": "Documentation",
+        "label": "RELATED_TO",
+        "evidence": "Would love to be included in any community integrations page, cookbook, or documentation.",
+        "evidence_start": 907,
+        "evidence_end": 996
+      },
+      {
+        "source": "Odds7",
+        "target": "Example Notebook",
+        "label": "RELATED_TO",
+        "evidence": "Happy to write an example notebook!",
+        "evidence_start": 997,
+        "evidence_end": 1032
+      }
+    ],
+    "summary": "Odds7 proposes integrating Fía Signals, a crypto market intelligence API designed for LangChain Agents, which offers various tools and access methods including a REST API, MCP server, x402 micropayments, and Virtuals ACP."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,132 @@
+{
+  "id": 35508,
+  "title": "fix: preserve correct index mapping in RunnableRetry.batch - Fixes #35475",
+  "status": "open",
+  "created_at": "2026-03-02T06:55:13Z",
+  "author_name": "rookweb1",
+  "url": "https://github.com/langchain-ai/langchain/pull/35508",
+  "body_text": "## Summary\n\nFixes issue #35475 - RunnableRetry.batch can return corrupted outputs when some items succeed on retry and others still fail.\n\n## Problem\n\nWhen using `batch()` with retry and `return_exceptions=True`, if some items succeed on retry while others still fail, the output indices could get mixed up. This was because `result.pop(0)` was being used without proper tracking of which results belong to which indices.\n\n## Solution\n\nChanged the output construction to properly track remaining results:\n\n```python\n# Before (buggy):\noutputs.append(result.pop(0))\n\n# After (fixed):\nremaining_results = list(result) if result != not_set else []\nfor idx in range(len(inputs)):\n    if idx in results_map:\n        outputs.append(results_map[idx])\n    elif remaining_results:\n        outputs.append(remaining_results.pop(0))\n```\n\nThis ensures exceptions are mapped to their correct original indices.\n\n## Changes\n\n- `libs/core/langchain_core/runnables/retry.py`: Fixed both sync `_batch` and async `_abatch` methods\n\n---\n\nAI-assisted contribution (built with assistance)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "RunnableRetry.batch",
+        "type": "Technology",
+        "description": "A method within the RunnableRetry component responsible for batch processing with retry logic."
+      },
+      {
+        "name": "Corrupted Outputs",
+        "type": "Problem",
+        "description": "Incorrect or mixed-up results returned by a batch operation."
+      },
+      {
+        "name": "Mixed Up Output Indices",
+        "type": "Problem",
+        "description": "The issue where the mapping of results to their original input positions is incorrect."
+      },
+      {
+        "name": "Issue #35475",
+        "type": "Problem",
+        "description": "The specific GitHub issue describing the problem with RunnableRetry.batch."
+      },
+      {
+        "name": "batch()",
+        "type": "Feature",
+        "description": "A method for processing multiple items concurrently."
+      },
+      {
+        "name": "retry",
+        "type": "Feature",
+        "description": "A mechanism to re-attempt failed operations."
+      },
+      {
+        "name": "return_exceptions=True",
+        "type": "Feature",
+        "description": "A parameter that causes exceptions to be returned as part of the output."
+      },
+      {
+        "name": "libs/core/langchain_core/runnables/retry.py",
+        "type": "Technology",
+        "description": "The file containing the implementation of RunnableRetry."
+      },
+      {
+        "name": "Sync _batch method",
+        "type": "Technology",
+        "description": "The synchronous internal batch processing method within RunnableRetry."
+      },
+      {
+        "name": "Async _abatch method",
+        "type": "Technology",
+        "description": "The asynchronous internal batch processing method within RunnableRetry."
+      }
+    ],
+    "relations": [
+      {
+        "source": "RunnableRetry.batch",
+        "target": "Corrupted Outputs",
+        "label": "AFFECTS",
+        "evidence": "RunnableRetry.batch can return corrupted outputs",
+        "evidence_start": 33,
+        "evidence_end": 81
+      },
+      {
+        "source": "Mixed Up Output Indices",
+        "target": "Corrupted Outputs",
+        "label": "CAUSES",
+        "evidence": "the output indices could get mixed up. This was because `result.pop(0)` was being used without proper tracking of which results belong to which indices.",
+        "evidence_start": 269,
+        "evidence_end": 421
+      },
+      {
+        "source": "Issue #35475",
+        "target": "Corrupted Outputs",
+        "label": "RELATED_TO",
+        "evidence": "Fixes issue #35475 - RunnableRetry.batch can return corrupted outputs",
+        "evidence_start": 12,
+        "evidence_end": 81
+      },
+      {
+        "source": "RunnableRetry.batch",
+        "target": "batch()",
+        "label": "USES",
+        "evidence": "When using `batch()` with retry",
+        "evidence_start": 151,
+        "evidence_end": 182
+      },
+      {
+        "source": "RunnableRetry.batch",
+        "target": "retry",
+        "label": "USES",
+        "evidence": "When using `batch()` with retry",
+        "evidence_start": 151,
+        "evidence_end": 182
+      },
+      {
+        "source": "RunnableRetry.batch",
+        "target": "return_exceptions=True",
+        "label": "USES",
+        "evidence": "with retry and `return_exceptions=True`",
+        "evidence_start": 172,
+        "evidence_end": 211
+      },
+      {
+        "source": "libs/core/langchain_core/runnables/retry.py",
+        "target": "Sync _batch method",
+        "label": "RELATED_TO",
+        "evidence": "Fixed both sync `_batch` and async `_abatch` methods",
+        "evidence_start": 957,
+        "evidence_end": 1009
+      },
+      {
+        "source": "libs/core/langchain_core/runnables/retry.py",
+        "target": "Async _abatch method",
+        "label": "RELATED_TO",
+        "evidence": "Fixed both sync `_batch` and async `_abatch` methods",
+        "evidence_start": 957,
+        "evidence_end": 1009
+      }
+    ],
+    "summary": "The `RunnableRetry.batch` method was returning corrupted outputs due to mixed-up output indices when used with `retry` and `return_exceptions=True`, which has been fixed by correctly tracking results in `libs/core/langchain_core/runnables/retry.py`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

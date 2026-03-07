@@ -1,0 +1,213 @@
+{
+  "id": 35531,
+  "title": "fix(langchain): propagate RunnableConfig in create_agent model execution",
+  "status": "open",
+  "created_at": "2026-03-03T05:12:58Z",
+  "author_name": "muenyz",
+  "url": "https://github.com/langchain-ai/langchain/pull/35531",
+  "body_text": "This PR fixes an issue where `astream_events` failed to capture `on_chat_model_stream` events when using `create_agent`.\r\n\r\nPreviously, the `RunnableConfig` was dropped during the model execution step in `_execute_model_sync` and `_execute_model_async`, causing the underlying chat model to run without the parent callback context. This resulted in streaming responses appearing as \"all-at-once\" chunks because the token-level events were lost.\r\n\r\n**Changes:**\r\n- Updated `ModelRequest` in `langchain/agents/middleware/types.py` to accept and store an optional `config: RunnableConfig`.\r\n- Updated `model_node` and `amodel_node` in `langchain/agents/factory.py` to capture the runtime `config` and pass it to `ModelRequest`.\r\n- Updated `_execute_model_sync` and `_execute_model_async` to pass `request.config` when calling `model.invoke()` / `model.ainvoke()`.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "astream_events",
+        "type": "Feature",
+        "description": "A function designed to capture and stream events."
+      },
+      {
+        "name": "on_chat_model_stream events",
+        "type": "Feature",
+        "description": "Specific events generated during chat model streaming."
+      },
+      {
+        "name": "create_agent",
+        "type": "Technology",
+        "description": "A function or factory responsible for creating agents."
+      },
+      {
+        "name": "RunnableConfig",
+        "type": "Technology",
+        "description": "A configuration object used to pass runtime settings in LangChain."
+      },
+      {
+        "name": "_execute_model_sync",
+        "type": "Technology",
+        "description": "A synchronous internal function for executing a model."
+      },
+      {
+        "name": "_execute_model_async",
+        "type": "Technology",
+        "description": "An asynchronous internal function for executing a model."
+      },
+      {
+        "name": "Chat Model",
+        "type": "Technology",
+        "description": "The underlying language model used for chat interactions."
+      },
+      {
+        "name": "ModelRequest",
+        "type": "Technology",
+        "description": "A data structure used to encapsulate model execution requests."
+      },
+      {
+        "name": "model_node",
+        "type": "Technology",
+        "description": "A component within the agent factory responsible for model processing."
+      },
+      {
+        "name": "amodel_node",
+        "type": "Technology",
+        "description": "An asynchronous component within the agent factory responsible for model processing."
+      },
+      {
+        "name": "model.invoke()",
+        "type": "Technology",
+        "description": "A synchronous method to call or execute a model."
+      },
+      {
+        "name": "model.ainvoke()",
+        "type": "Technology",
+        "description": "An asynchronous method to call or execute a model."
+      },
+      {
+        "name": "Lost Token-level Events",
+        "type": "Problem",
+        "description": "The issue where individual token generation events are not captured during streaming."
+      },
+      {
+        "name": "All-at-once Chunks",
+        "type": "Problem",
+        "description": "Streaming responses that appear as complete messages rather than incremental tokens."
+      },
+      {
+        "name": "Parent Callback Context",
+        "type": "Feature",
+        "description": "The necessary context for callback functions to correctly process events."
+      }
+    ],
+    "relations": [
+      {
+        "source": "create_agent",
+        "target": "astream_events",
+        "label": "AFFECTS",
+        "evidence": "astream_events failed to capture on_chat_model_stream events when using create_agent.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "astream_events",
+        "target": "on_chat_model_stream events",
+        "label": "RELATED_TO",
+        "evidence": "astream_events failed to capture on_chat_model_stream events",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "RunnableConfig",
+        "target": "Chat Model",
+        "label": "CAUSES",
+        "evidence": "the RunnableConfig was dropped during the model execution step in _execute_model_sync and _execute_model_async, causing the underlying chat model to run without the parent callback context.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Chat Model",
+        "target": "Lost Token-level Events",
+        "label": "CAUSES",
+        "evidence": "This resulted in streaming responses appearing as \"all-at-once\" chunks because the token-level events were lost.",
+        "evidence_start": 332,
+        "evidence_end": 444
+      },
+      {
+        "source": "Chat Model",
+        "target": "All-at-once Chunks",
+        "label": "CAUSES",
+        "evidence": "This resulted in streaming responses appearing as \"all-at-once\" chunks because the token-level events were lost.",
+        "evidence_start": 332,
+        "evidence_end": 444
+      },
+      {
+        "source": "_execute_model_sync",
+        "target": "RunnableConfig",
+        "label": "AFFECTS",
+        "evidence": "the RunnableConfig was dropped during the model execution step in _execute_model_sync",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_execute_model_async",
+        "target": "RunnableConfig",
+        "label": "AFFECTS",
+        "evidence": "the RunnableConfig was dropped during the model execution step in _execute_model_async",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Chat Model",
+        "target": "Parent Callback Context",
+        "label": "USES",
+        "evidence": "causing the underlying chat model to run without the parent callback context.",
+        "evidence_start": 254,
+        "evidence_end": 331
+      },
+      {
+        "source": "ModelRequest",
+        "target": "RunnableConfig",
+        "label": "USES",
+        "evidence": "Updated ModelRequest in langchain/agents/middleware/types.py to accept and store an optional config: RunnableConfig.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "model_node",
+        "target": "RunnableConfig",
+        "label": "USES",
+        "evidence": "Updated model_node and amodel_node in langchain/agents/factory.py to capture the runtime config and pass it to ModelRequest.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "amodel_node",
+        "target": "RunnableConfig",
+        "label": "USES",
+        "evidence": "Updated model_node and amodel_node in langchain/agents/factory.py to capture the runtime config and pass it to ModelRequest.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_execute_model_sync",
+        "target": "RunnableConfig",
+        "label": "USES",
+        "evidence": "Updated _execute_model_sync and _execute_model_async to pass request.config when calling model.invoke() / model.ainvoke().",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_execute_model_async",
+        "target": "RunnableConfig",
+        "label": "USES",
+        "evidence": "Updated _execute_model_sync and _execute_model_async to pass request.config when calling model.invoke() / model.ainvoke().",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_execute_model_sync",
+        "target": "model.invoke()",
+        "label": "USES",
+        "evidence": "calling model.invoke()",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_execute_model_async",
+        "target": "model.ainvoke()",
+        "label": "USES",
+        "evidence": "calling model.ainvoke()",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "This PR fixes an issue where astream_events failed to capture on_chat_model_stream events when using create_agent due to RunnableConfig not being propagated during model execution, leading to lost token-level events and 'all-at-once' streaming responses."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

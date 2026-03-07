@@ -1,0 +1,173 @@
+{
+  "id": 35491,
+  "title": "fix(core): add bind_tools to RunnableSequence for post-structured-out…",
+  "status": "open",
+  "created_at": "2026-03-01T06:24:55Z",
+  "author_name": "senguttuvan",
+  "url": "https://github.com/langchain-ai/langchain/pull/35491",
+  "body_text": "…put chaining\r\n\r\nFixes #28848. `with_structured_output` returns a `RunnableSequence` that previously had no `bind_tools` method, making it impossible to add tools to a structured-output chain without reconstructing the pipeline manually.\r\n\r\nAdd `RunnableSequence.bind_tools` that:\r\n- delegates to `self.first.bind_tools(tools, **kwargs)` when the first step is a `BaseChatModel` directly\r\n- handles the common `with_structured_output` case where the LLM is already wrapped in a `RunnableBinding` (e.g. carrying `response_format`, `tool_choice`, or existing tools) by calling `bind_tools` on the underlying model and merging the resulting kwargs with the existing binding so previously set parameters are preserved\r\n- raises a descriptive `AttributeError` for sequences whose first step is neither a `BaseChatModel` nor a `RunnableBinding` wrapping one\r\n\r\nAlso adds unit tests in `langchain-core` and an integration-style unit test in `langchain-openai` that covers the real `with_structured_output` → `bind_tools` flow without network calls.\r\n\r\nDisclaimer: Claude.ai was used to assist with this PR\r\n\r\n## Social handles\r\nLinkedIn: https://linkedin.com/in/navin-senguttuvan\r\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "RunnableSequence",
+        "type": "Technology",
+        "description": "A component in LangChain that represents a sequence of runnables."
+      },
+      {
+        "name": "bind_tools",
+        "type": "Feature",
+        "description": "A method added to `RunnableSequence` to attach tools to a chain."
+      },
+      {
+        "name": "with_structured_output",
+        "type": "Feature",
+        "description": "A function that returns a `RunnableSequence` configured for structured output."
+      },
+      {
+        "name": "structured-output chain",
+        "type": "Feature",
+        "description": "A pipeline for processing and chaining structured outputs."
+      },
+      {
+        "name": "BaseChatModel",
+        "type": "Technology",
+        "description": "A base class for chat models in LangChain."
+      },
+      {
+        "name": "RunnableBinding",
+        "type": "Technology",
+        "description": "A wrapper class for runnables, often used to carry parameters like `response_format` or `tool_choice`."
+      },
+      {
+        "name": "AttributeError",
+        "type": "Problem",
+        "description": "A Python error raised when an attribute reference or assignment fails."
+      },
+      {
+        "name": "langchain-core",
+        "type": "Technology",
+        "description": "The core library of LangChain."
+      },
+      {
+        "name": "langchain-openai",
+        "type": "Technology",
+        "description": "The LangChain integration library for OpenAI models."
+      },
+      {
+        "name": "Unit Tests",
+        "type": "Feature",
+        "description": "Automated tests for individual units of source code."
+      },
+      {
+        "name": "Integration-style Unit Test",
+        "type": "Feature",
+        "description": "A type of unit test that covers the interaction between multiple components without network calls."
+      },
+      {
+        "name": "Claude.ai",
+        "type": "Technology",
+        "description": "An AI assistant used to help with the Pull Request."
+      },
+      {
+        "name": "Missing bind_tools method",
+        "type": "Problem",
+        "description": "The absence of a `bind_tools` method on `RunnableSequence` when returned by `with_structured_output`."
+      },
+      {
+        "name": "Impossibility to add tools",
+        "type": "Problem",
+        "description": "The inability to add tools to a structured-output chain due to the missing `bind_tools` method."
+      },
+      {
+        "name": "PR",
+        "type": "Feature",
+        "description": "A Pull Request, a proposed change to a codebase."
+      }
+    ],
+    "relations": [
+      {
+        "source": "with_structured_output",
+        "target": "RunnableSequence",
+        "label": "RELATED_TO",
+        "evidence": "`with_structured_output` returns a `RunnableSequence`",
+        "evidence_start": 31,
+        "evidence_end": 84
+      },
+      {
+        "source": "RunnableSequence",
+        "target": "Missing bind_tools method",
+        "label": "AFFECTS",
+        "evidence": "`RunnableSequence` that previously had no `bind_tools` method",
+        "evidence_start": 66,
+        "evidence_end": 127
+      },
+      {
+        "source": "Missing bind_tools method",
+        "target": "Impossibility to add tools",
+        "label": "CAUSES",
+        "evidence": "making it impossible to add tools to a structured-output chain",
+        "evidence_start": 129,
+        "evidence_end": 191
+      },
+      {
+        "source": "bind_tools",
+        "target": "RunnableSequence",
+        "label": "RELATED_TO",
+        "evidence": "Add `RunnableSequence.bind_tools`",
+        "evidence_start": 241,
+        "evidence_end": 274
+      },
+      {
+        "source": "bind_tools",
+        "target": "BaseChatModel",
+        "label": "USES",
+        "evidence": "delegates to `self.first.bind_tools(tools, **kwargs)` when the first step is a `BaseChatModel` directly",
+        "evidence_start": 284,
+        "evidence_end": 387
+      },
+      {
+        "source": "bind_tools",
+        "target": "RunnableBinding",
+        "label": "USES",
+        "evidence": "handles the common `with_structured_output` case where the LLM is already wrapped in a `RunnableBinding`",
+        "evidence_start": 391,
+        "evidence_end": 495
+      },
+      {
+        "source": "bind_tools",
+        "target": "AttributeError",
+        "label": "CAUSES",
+        "evidence": "raises a descriptive `AttributeError` for sequences whose first step is neither a `BaseChatModel` nor a `RunnableBinding` wrapping one",
+        "evidence_start": 717,
+        "evidence_end": 851
+      },
+      {
+        "source": "langchain-core",
+        "target": "Unit Tests",
+        "label": "USES",
+        "evidence": "adds unit tests in `langchain-core`",
+        "evidence_start": 860,
+        "evidence_end": 895
+      },
+      {
+        "source": "langchain-openai",
+        "target": "Integration-style Unit Test",
+        "label": "USES",
+        "evidence": "an integration-style unit test in `langchain-openai`",
+        "evidence_start": 900,
+        "evidence_end": 952
+      },
+      {
+        "source": "Claude.ai",
+        "target": "PR",
+        "label": "USES",
+        "evidence": "Claude.ai was used to assist with this PR",
+        "evidence_start": 1057,
+        "evidence_end": 1098
+      }
+    ],
+    "summary": "The issue addresses the absence of a `bind_tools` method on `RunnableSequence` when returned by `with_structured_output`, which prevented adding tools to structured-output chains, by implementing `RunnableSequence.bind_tools` with specific delegation logic and adding relevant unit tests."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

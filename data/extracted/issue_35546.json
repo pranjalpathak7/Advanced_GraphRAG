@@ -1,0 +1,106 @@
+{
+  "id": 35546,
+  "title": "docs: add Indonesian Getting Started guide",
+  "status": "open",
+  "created_at": "2026-03-04T03:22:44Z",
+  "author_name": "aqilwahid",
+  "url": "https://github.com/langchain-ai/langchain/pull/35546",
+  "body_text": "### Description\r\nThis PR introduces a draft for an Indonesian \"Getting Started\" guide ([PANDUAN_MULA_CEPAT.md](cci:7://file:///d:/Test%20Gemini%20CLI/langchain/PANDUAN_MULA_CEPAT.md:0:0-0:0)). \r\n\r\nAs LangChain's adoption continues to grow globally, having entry-level documentation in local languages can significantly lower the barrier to entry for new developers. This initial guide covers the basic setup, initializing Chat Models, Prompt Templates, creating simple LCEL chains, and using Output Parsers.\r\n\r\nI am open to feedback on whether this should be placed in a specific localized-docs directory or if there are other areas I should expand on for Indonesian users!\r\n\r\n### Contribution Checklist\r\n- [x] I have read the [Contributing Guide](https://docs.langchain.com/oss/python/contributing/overview).\r\n- [x] This is a documentation addition (no code/tests needed).\r\n- [x] My changes generate no new warnings.\r\n- [x] I have added tests that prove my fix is effective or that my feature works (Not Applicable).",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Indonesian Getting Started Guide",
+        "type": "Feature",
+        "description": "A draft documentation guide in Indonesian aimed at lowering the barrier to entry for new developers."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "A framework whose global adoption is growing, benefiting from localized documentation."
+      },
+      {
+        "name": "PANDUAN_MULA_CEPAT.md",
+        "type": "Feature",
+        "description": "The specific markdown file containing the Indonesian Getting Started guide."
+      },
+      {
+        "name": "Chat Models",
+        "type": "Technology",
+        "description": "A component of LangChain covered in the Indonesian Getting Started guide."
+      },
+      {
+        "name": "Prompt Templates",
+        "type": "Technology",
+        "description": "A component of LangChain covered in the Indonesian Getting Started guide."
+      },
+      {
+        "name": "LCEL Chains",
+        "type": "Technology",
+        "description": "A component of LangChain covered in the Indonesian Getting Started guide."
+      },
+      {
+        "name": "Output Parsers",
+        "type": "Technology",
+        "description": "A component of LangChain covered in the Indonesian Getting Started guide."
+      },
+      {
+        "name": "Contributing Guide",
+        "type": "Feature",
+        "description": "Documentation providing guidelines for contributing to LangChain."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Indonesian Getting Started Guide",
+        "target": "LangChain",
+        "label": "RELATED_TO",
+        "evidence": "As LangChain's adoption continues to grow globally, having entry-level documentation in local languages can significantly lower the barrier to entry for new developers.",
+        "evidence_start": 197,
+        "evidence_end": 365
+      },
+      {
+        "source": "PANDUAN_MULA_CEPAT.md",
+        "target": "Indonesian Getting Started Guide",
+        "label": "RELATED_TO",
+        "evidence": "This PR introduces a draft for an Indonesian \"Getting Started\" guide ([PANDUAN_MULA_CEPAT.md](cci:7://file:///d:/Test%20Gemini%20CLI/langchain/PANDUAN_MULA_CEPAT.md:0:0-0:0)).",
+        "evidence_start": 17,
+        "evidence_end": 192
+      },
+      {
+        "source": "Indonesian Getting Started Guide",
+        "target": "Chat Models",
+        "label": "USES",
+        "evidence": "This initial guide covers the basic setup, initializing Chat Models",
+        "evidence_start": 366,
+        "evidence_end": 433
+      },
+      {
+        "source": "Indonesian Getting Started Guide",
+        "target": "Prompt Templates",
+        "label": "USES",
+        "evidence": "Prompt Templates",
+        "evidence_start": 435,
+        "evidence_end": 451
+      },
+      {
+        "source": "Indonesian Getting Started Guide",
+        "target": "LCEL Chains",
+        "label": "USES",
+        "evidence": "creating simple LCEL chains",
+        "evidence_start": 453,
+        "evidence_end": 480
+      },
+      {
+        "source": "Indonesian Getting Started Guide",
+        "target": "Output Parsers",
+        "label": "USES",
+        "evidence": "and using Output Parsers.",
+        "evidence_start": 482,
+        "evidence_end": 507
+      }
+    ],
+    "summary": "This pull request introduces a draft for an Indonesian 'Getting Started' guide (PANDUAN_MULA_CEPAT.md) to enhance LangChain's global adoption by providing entry-level documentation covering basic setup, Chat Models, Prompt Templates, LCEL chains, and Output Parsers."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

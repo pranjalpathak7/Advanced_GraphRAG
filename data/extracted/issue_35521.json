@@ -1,0 +1,156 @@
+{
+  "id": 35521,
+  "title": "AzureChatOpenAI initialization is not backwards compatible - forcing User-Agent header override",
+  "status": "open",
+  "created_at": "2026-03-02T15:16:16Z",
+  "author_name": "appliraz",
+  "url": "https://github.com/langchain-ai/langchain/issues/35521",
+  "body_text": "https://github.com/langchain-ai/langchain/blob/11270174aa857c517ea755b4f50a7b23e018e995/libs/partners/openai/langchain_openai/chat_models/azure.py#L676\n\nUpgrading `langchain_openai` from v0.2.2 to v1.1.9 caused our previously working calls to a custom `azure_endpoint` to start returning 403. Debugging the package showed that it forcibly overrides the `User-Agent` header to `\"langchain-partner-python-azure-openai\"`, which some endpoints (including our custom one) do not accept.\n\nIn order to move past this issue - one will have to pass an http_client to AzureChatOpenAI, so it would be used to override the override:\n\n```python\ndef _inject_user_agent(_request: httpx.Request) -> None:\n    _request.headers[\"User-Agent\"] = HTTP_USER_AGENT\n\n\n_azure_http_client_cached: httpx.Client | None = None\n\n\ndef _get_azure_http_client() -> httpx.Client | None:\n    global _azure_http_client_cached\n\n    if _azure_http_client_cached is None:\n        _azure_http_client_cached = httpx.Client(event_hooks={\"request\": [_inject_user_agent]})\n    return _azure_http_client_cached\n```\n\nThis change is not backwards compatible in this sense and it seems like the author desire was to set this header as default, and not override the existing default. Otherwise there should've been at least a note added in the constructor's attribute of 'default_headers' regarding the fact that passing user-agent header won't have effect. \nAlso, it was done specifically for the client_params, where if one would inspect the azure instance's default_headers, he will see the user-agent header he set himself, and not the actual one that is used in the http client.\n\nPossible fix would be to check for existence of this header and set it according to the author's request if not set:\n\n```python\n              # before line 662\n              client_headers = self.default_headers or {}\n              client_headers =  {k.lower(): v for k, v in client_headers.items()}\n              if 'user-agent' not in client_headers:\n                   client_headers['user-agent'] = \"langchain-partner-python-azure-openai\"\n             # line 667\n             'default_headers': client_headers\n```\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "AzureChatOpenAI",
+        "type": "Technology",
+        "description": "A class within `langchain_openai` for interacting with Azure OpenAI chat models."
+      },
+      {
+        "name": "Langchain_openai",
+        "type": "Technology",
+        "description": "A Python library for integrating with OpenAI services."
+      },
+      {
+        "name": "User-Agent Header",
+        "type": "Technology",
+        "description": "An HTTP header used to identify the client making a request."
+      },
+      {
+        "name": "Custom Azure Endpoint",
+        "type": "Technology",
+        "description": "A user-defined Azure OpenAI service endpoint."
+      },
+      {
+        "name": "HTTP 403 Error",
+        "type": "Problem",
+        "description": "An HTTP status code indicating that the server understood the request but refuses to authorize it."
+      },
+      {
+        "name": "HTTP Client",
+        "type": "Technology",
+        "description": "A client library (specifically `httpx.Client`) used for making HTTP requests."
+      },
+      {
+        "name": "Backwards Compatibility Issue",
+        "type": "Problem",
+        "description": "A problem where a new version of software breaks functionality that worked in previous versions."
+      },
+      {
+        "name": "Langchain_openai V0.2.2",
+        "type": "Technology",
+        "description": "A specific version of the `langchain_openai` library."
+      },
+      {
+        "name": "Langchain_openai V1.1.9",
+        "type": "Technology",
+        "description": "A specific version of the `langchain_openai` library."
+      },
+      {
+        "name": "HTTP_USER_AGENT",
+        "type": "Technology",
+        "description": "A constant representing the desired User-Agent string used in the workaround."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Langchain_openai V1.1.9",
+        "target": "HTTP 403 Error",
+        "label": "CAUSES",
+        "evidence": "Upgrading `langchain_openai` from v0.2.2 to v1.1.9 caused our previously working calls to a custom `azure_endpoint` to start returning 403.",
+        "evidence_start": 153,
+        "evidence_end": 292
+      },
+      {
+        "source": "Langchain_openai V1.1.9",
+        "target": "User-Agent Header",
+        "label": "CAUSES",
+        "evidence": "it forcibly overrides the `User-Agent` header to \"langchain-partner-python-azure-openai\"",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "User-Agent Header",
+        "target": "Custom Azure Endpoint",
+        "label": "AFFECTS",
+        "evidence": "which some endpoints (including our custom one) do not accept.",
+        "evidence_start": 419,
+        "evidence_end": 481
+      },
+      {
+        "source": "AzureChatOpenAI",
+        "target": "User-Agent Header",
+        "label": "USES",
+        "evidence": "it forcibly overrides the `User-Agent` header",
+        "evidence_start": 327,
+        "evidence_end": 372
+      },
+      {
+        "source": "AzureChatOpenAI",
+        "target": "HTTP Client",
+        "label": "USES",
+        "evidence": "one will have to pass an http_client to AzureChatOpenAI",
+        "evidence_start": 518,
+        "evidence_end": 573
+      },
+      {
+        "source": "HTTP Client",
+        "target": "User-Agent Header",
+        "label": "USES",
+        "evidence": "`_request.headers[\"User-Agent\"] = HTTP_USER_AGENT`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "HTTP Client",
+        "target": "HTTP_USER_AGENT",
+        "label": "USES",
+        "evidence": "`_request.headers[\"User-Agent\"] = HTTP_USER_AGENT`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Langchain_openai V1.1.9",
+        "target": "Backwards Compatibility Issue",
+        "label": "CAUSES",
+        "evidence": "This change is not backwards compatible in this sense",
+        "evidence_start": 1071,
+        "evidence_end": 1124
+      },
+      {
+        "source": "AzureChatOpenAI",
+        "target": "Backwards Compatibility Issue",
+        "label": "RELATED_TO",
+        "evidence": "AzureChatOpenAI initialization is not backwards compatible",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Langchain_openai V0.2.2",
+        "target": "Langchain_openai",
+        "label": "RELATED_TO",
+        "evidence": "Upgrading `langchain_openai` from v0.2.2",
+        "evidence_start": 153,
+        "evidence_end": 193
+      },
+      {
+        "source": "Langchain_openai V1.1.9",
+        "target": "Langchain_openai",
+        "label": "RELATED_TO",
+        "evidence": "to v1.1.9",
+        "evidence_start": 194,
+        "evidence_end": 203
+      }
+    ],
+    "summary": "Upgrading `langchain_openai` to v1.1.9 causes `AzureChatOpenAI` to forcibly override the `User-Agent` header, leading to `HTTP 403 Errors` with custom Azure endpoints due to a backwards compatibility issue."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

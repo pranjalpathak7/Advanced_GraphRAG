@@ -1,0 +1,101 @@
+{
+  "id": 35538,
+  "title": "PydanticSerializationUnexpectedValue warning when using structured output",
+  "status": "open",
+  "created_at": "2026-03-03T16:41:01Z",
+  "author_name": "johnayoub-wtw",
+  "url": "https://github.com/langchain-ai/langchain/issues/35538",
+  "body_text": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [x] langchain\n- [x] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n_No response_\n\n### Reproduction Steps / Example Code (Python)\n\n```python\nfrom langchain_openai import ChatOpenAI\nfrom pydantic.main import BaseModel\n\nllm = ChatOpenAI(...) # not using responses API\n\nclass ModelOutput(BaseModel):\n    output: str\n\n\noutput = llm.with_structured_output(ModelOutput).invoke(\"What is the capital of France?\")\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\nPydanticSerializationUnexpectedValue(Expected `none` - serialized value may not be as expected [field_name='parsed', input_value=ModelOutput(output='The c...al of France is Paris.'), input_type=ModelOutput])\n  return self.__pydantic_serializer__.to_python(\n```\n\n### Description\n\nusing structured output produces a serializer warning. This behavior seems to have been introduced with one the recent langchain releases.\n\n### System Info\n\n\nSystem Information\n------------------\n> OS:  Linux\n> OS Version:  #1 SMP Tue Nov 5 00:21:55 UTC 2024\n> Python Version:  3.14.3 (main, Feb  3 2026, 22:52:18) [Clang 21.1.4 ]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.17\n> langchain: 1.2.10\n> langchain_community: 0.4.1\n> langsmith: 0.7.10\n> langchain_classic: 1.0.1\n> langchain_openai: 1.1.10\n> langchain_text_splitters: 1.1.1\n> langgraph_sdk: 0.3.9\n\nOptional packages not installed\n-------------------------------\n> deepagents\n> deepagents-cli\n\nOther Dependencies\n------------------\n> aiohttp: 3.13.3\n> dataclasses-json: 0.6.7\n> httpx: 0.28.1\n> httpx-sse: 0.4.3\n> jsonpatch: 1.33\n> langgraph: 1.0.10\n> numpy: 2.4.2\n> openai: 2.24.0\n> opentelemetry-api: 1.39.0\n> opentelemetry-exporter-otlp-proto-http: 1.39.0\n> opentelemetry-sdk: 1.39.0\n> orjson: 3.11.7\n> packaging: 26.0\n> pydantic: 2.12.5\n> pydantic-settings: 2.13.1\n> pytest: 9.0.2\n> pyyaml: 6.0.3\n> PyYAML: 6.0.3\n> requests: 2.32.5\n> requests-toolbelt: 1.0.0\n> rich: 14.3.3\n> SQLAlchemy: 2.0.48\n> sqlalchemy: 2.0.48\n> tenacity: 9.1.4\n> tiktoken: 0.12.0\n> typing-extensions: 4.15.0\n> uuid-utils: 0.14.1\n> wrapt: 1.17.3\n> xxhash: 3.6.0\n> zstandard: 0.25.0",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "PydanticSerializationUnexpectedValue Warning",
+        "type": "Problem",
+        "description": "A specific warning message indicating an unexpected value during Pydantic serialization."
+      },
+      {
+        "name": "Structured Output",
+        "type": "Feature",
+        "description": "A LangChain feature that enforces a specific Pydantic schema for the output of a language model."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "The main framework where the bug is reported, specifically concerning recent releases."
+      },
+      {
+        "name": "langchain-openai",
+        "type": "Technology",
+        "description": "A specific LangChain package that provides integration with OpenAI models."
+      },
+      {
+        "name": "ChatOpenAI",
+        "type": "Technology",
+        "description": "A class from langchain-openai used to interact with OpenAI chat models."
+      },
+      {
+        "name": "Pydantic",
+        "type": "Technology",
+        "description": "A Python library for data validation and settings management, which issues the serialization warning."
+      },
+      {
+        "name": "ModelOutput",
+        "type": "Technology",
+        "description": "A custom Pydantic BaseModel used to define the schema for structured output."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Structured Output",
+        "target": "PydanticSerializationUnexpectedValue Warning",
+        "label": "CAUSES",
+        "evidence": "PydanticSerializationUnexpectedValue warning when using structured output",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "LangChain",
+        "target": "PydanticSerializationUnexpectedValue Warning",
+        "label": "CAUSES",
+        "evidence": "This behavior seems to have been introduced with one the recent langchain releases.",
+        "evidence_start": 1909,
+        "evidence_end": 1992
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "Structured Output",
+        "label": "USES",
+        "evidence": "output = llm.with_structured_output(ModelOutput).invoke(\"What is the capital of France?\")",
+        "evidence_start": 1420,
+        "evidence_end": 1509
+      },
+      {
+        "source": "Structured Output",
+        "target": "ModelOutput",
+        "label": "USES",
+        "evidence": "output = llm.with_structured_output(ModelOutput).invoke(\"What is the capital of France?\")",
+        "evidence_start": 1420,
+        "evidence_end": 1509
+      },
+      {
+        "source": "Pydantic",
+        "target": "PydanticSerializationUnexpectedValue Warning",
+        "label": "CAUSES",
+        "evidence": "PydanticSerializationUnexpectedValue(Expected `none` - serialized value may not be as expected [field_name='parsed', input_value=ModelOutput(output='The c...al of France is Paris.'), input_type=ModelOutput])",
+        "evidence_start": 1575,
+        "evidence_end": 1782
+      },
+      {
+        "source": "langchain-openai",
+        "target": "ChatOpenAI",
+        "label": "RELATED_TO",
+        "evidence": "from langchain_openai import ChatOpenAI",
+        "evidence_start": 1246,
+        "evidence_end": 1285
+      }
+    ],
+    "summary": "Using LangChain's `with_structured_output` feature with `ChatOpenAI` and a Pydantic `BaseModel` results in a `PydanticSerializationUnexpectedValue` warning, a behavior introduced in recent LangChain releases."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

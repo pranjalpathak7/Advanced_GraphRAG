@@ -1,0 +1,78 @@
+{
+  "id": 35501,
+  "title": "Fix nested subgraph rendering for 3+ levels in draw_mermaid with xray=True",
+  "status": "open",
+  "created_at": "2026-03-01T23:13:58Z",
+  "author_name": "infektyd",
+  "url": "https://github.com/langchain-ai/langchain/pull/35501",
+  "body_text": "Addresses #35492",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "draw_mermaid",
+        "type": "Technology",
+        "description": "A function or tool responsible for drawing Mermaid diagrams."
+      },
+      {
+        "name": "Nested Subgraph Rendering",
+        "type": "Feature",
+        "description": "The capability of rendering subgraphs that are contained within other subgraphs."
+      },
+      {
+        "name": "Xray Mode",
+        "type": "Feature",
+        "description": "A specific operational mode or parameter (`xray=True`) for the `draw_mermaid` function."
+      },
+      {
+        "name": "Rendering Bug",
+        "type": "Problem",
+        "description": "An issue causing incorrect display of nested subgraphs, specifically for 3 or more levels."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Rendering Bug",
+        "target": "Nested Subgraph Rendering",
+        "label": "AFFECTS",
+        "evidence": "Fix nested subgraph rendering",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Rendering Bug",
+        "target": "draw_mermaid",
+        "label": "AFFECTS",
+        "evidence": "Fix nested subgraph rendering for 3+ levels in draw_mermaid",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Rendering Bug",
+        "target": "Xray Mode",
+        "label": "AFFECTS",
+        "evidence": "in draw_mermaid with xray=True",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Nested Subgraph Rendering",
+        "target": "draw_mermaid",
+        "label": "RELATED_TO",
+        "evidence": "nested subgraph rendering ... in draw_mermaid",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Xray Mode",
+        "target": "draw_mermaid",
+        "label": "RELATED_TO",
+        "evidence": "in draw_mermaid with xray=True",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "This issue addresses a rendering bug in the `draw_mermaid` function that affects nested subgraphs with 3 or more levels when `xray=True` is enabled."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

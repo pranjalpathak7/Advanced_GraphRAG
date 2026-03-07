@@ -1,0 +1,121 @@
+{
+  "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35514",
+  "repository_url": "https://api.github.com/repos/langchain-ai/langchain",
+  "labels_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35514/labels{/name}",
+  "comments_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35514/comments",
+  "events_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35514/events",
+  "html_url": "https://github.com/langchain-ai/langchain/issues/35514",
+  "id": 4010573484,
+  "node_id": "I_kwDOIPDwls7vDH6s",
+  "number": 35514,
+  "title": "Streaming tool call executed with empty args {} due to SSE fragmentation of tool call arguments",
+  "user": {
+    "login": "backer-and",
+    "id": 1785732,
+    "node_id": "MDQ6VXNlcjE3ODU3MzI=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1785732?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/backer-and",
+    "html_url": "https://github.com/backer-and",
+    "followers_url": "https://api.github.com/users/backer-and/followers",
+    "following_url": "https://api.github.com/users/backer-and/following{/other_user}",
+    "gists_url": "https://api.github.com/users/backer-and/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/backer-and/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/backer-and/subscriptions",
+    "organizations_url": "https://api.github.com/users/backer-and/orgs",
+    "repos_url": "https://api.github.com/users/backer-and/repos",
+    "events_url": "https://api.github.com/users/backer-and/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/backer-and/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 5680700839,
+      "node_id": "LA_kwDOIPDwls8AAAABUpidpw",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/bug",
+      "name": "bug",
+      "color": "b60205",
+      "default": true,
+      "description": "Related to a bug, vulnerability, unexpected error with an existing feature"
+    },
+    {
+      "id": 9019018962,
+      "node_id": "LA_kwDOIPDwls8AAAACGZNO0g",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/core",
+      "name": "core",
+      "color": "f9d0c4",
+      "default": false,
+      "description": "`langchain-core` package issues & PRs"
+    },
+    {
+      "id": 9605600086,
+      "node_id": "LA_kwDOIPDwls8AAAACPInTVg",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/openai",
+      "name": "openai",
+      "color": "e1b975",
+      "default": false,
+      "description": "`langchain-openai` package issues & PRs"
+    },
+    {
+      "id": 10037429975,
+      "node_id": "LA_kwDOIPDwls8AAAACVkcG1w",
+      "url": "https://api.github.com/repos/langchain-ai/langchain/labels/external",
+      "name": "external",
+      "color": "d32751",
+      "default": false,
+      "description": ""
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [],
+  "milestone": null,
+  "comments": 3,
+  "created_at": "2026-03-02T10:47:21Z",
+  "updated_at": "2026-03-02T23:28:17Z",
+  "closed_at": null,
+  "assignee": null,
+  "author_association": "NONE",
+  "type": {
+    "id": 18879550,
+    "node_id": "IT_kwDOB43M6c4BIBQ-",
+    "name": "Bug",
+    "description": "An unexpected problem or behavior",
+    "color": "red",
+    "created_at": "2024-02-16T01:43:33Z",
+    "updated_at": "2024-07-26T15:00:33Z",
+    "is_enabled": true
+  },
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [ ] langchain\n- [x] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [x] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n#32562, #30563, #32016, langchain-ai/langchainjs#8394\n\n\n### Reproduction Steps / Example Code (Python)\n\n```python\nimport os\nfrom langchain.agents import create_agent\nfrom langchain_openai import ChatOpenAI\nfrom langchain.tools import tool\n\n@tool\ndef my_tool(url: str) -> str:\n    \"\"\"Fetch data from the given URL.\"\"\"\n    return f\"Fetched: {url}\"\n\nllm = ChatOpenAI(\n    model=\"deepseek/deepseek-v3.2\",\n    api_key=os.environ.get(\"OPENROUTER_API_KEY\"),\n    base_url=\"https://openrouter.ai/api/v1\",\n)\n\nagent = create_agent(\n    model=llm,\n    tools=[my_tool],\n    system_prompt=\"You are a helpful assistant.\",\n)\n\nimport asyncio\n\nasync def main():\n    async for stream_mode, data in agent.astream(\n        {\"messages\": [{\"role\": \"user\", \"content\": 'Use my_tool with \"http://mywebsite.com\"'}]},\n        stream_mode=[\"messages\", \"updates\"],\n    ):\n        if stream_mode == \"messages\":\n            token, metadata = data\n            if hasattr(token, 'tool_call_chunks') and token.tool_call_chunks:\n                for tc in token.tool_call_chunks:\n                    print(f\"[TOOL_CHUNK] name={tc.get('name')} args={tc.get('args')!r} id={tc.get('id')}\")\n            if hasattr(token, 'tool_calls') and token.tool_calls:\n                for tc in token.tool_calls:\n                    print(f\"[TOOL_CALL_PARSED] name={tc.get('name')} args={tc.get('args')}\")\n\nasyncio.run(main())\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\nToolException: Error executing tool my_tool: 1 validation error for my_toolArguments\nurl\n  Field required [type=missing, input_value={}, input_type=dict]\n    at langgraph/prebuilt/tool_node.py\n    at langchain_core/tools/base.py\n```\n\n### Description\n\nWhen streaming tool calls via OpenRouter (tested with `deepseek/deepseek-v3.2`), the agent executes tools with empty args `{}`, causing `Field required` validation errors. The root cause is that OpenRouter's upstream providers fragment tool call arguments across multiple SSE chunks, and langchain parses the first empty chunk as a valid tool call.\n\n**Instrumented streaming output showing the problem:**\n\n```\n[TOOL_CHUNK] name=my_tool args='' id=call_34db6a0a9d314d71a8a74b3d\n[TOOL_CALL_PARSED] name=my_tool args={}           \u2190 parsed as valid, tool executed with empty args\n[TOOL_CHUNK] name= args='{' id=\n[TOOL_CHUNK] name= args='\"url\": \"http://mywebsite.com\"' id=\n[TOOL_CHUNK] name= args='}' id=\n```\n\nThe first chunk arrives with `name=\"my_tool\"` and `args=\"\"`. `parse_partial_json(\"\")` returns `{}` \u2014 a valid but empty dict. The ToolNode executes the tool immediately with these empty args. The subsequent chunks containing the actual arguments arrive too late.\n\n**This fragmentation is common across providers.** I tested all 8 upstream providers available for this model on OpenRouter. Most exhibit this pattern, with varying frequency. The failure rate in production depends on which provider OpenRouter routes to and timing conditions.\n\nWhen the agent encounters the error, it often retries the tool call in a loop, generating the same fragmented pattern repeatedly until hitting the recursion limit.\n\n**JS-side fix exists:** This is the same root cause reported and fixed on the JS side in langchain-ai/langchainjs#8394 (PR langchain-ai/langchainjs#8419). The fix concatenates all `tool_call_chunks` belonging to the same tool call before parsing. As far as I can tell, this hasn't been ported to the Python side.\n\n**Workaround:** Setting `streaming=False` on `ChatOpenAI` reliably resolves the issue.\n\n\n### System Info\n\nSystem Information\n------------------\n> OS:  Linux\n> OS Version:  Ubuntu 22.04\n> Python Version:  3.12.3\n\nPackage Information\n-------------------\n> langchain_core: 1.2.14\n> langchain: 1.2.10\n> langchain_openai: 1.1.10\n> langgraph: 1.0.9\n\nOther Dependencies\n------------------\n> openai: 2.21.0\n> pydantic: 2.12.5\n> httpx: 0.28.1",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/langchain-ai/langchain/issues/35514/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/langchain-ai/langchain/issues/35514/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}

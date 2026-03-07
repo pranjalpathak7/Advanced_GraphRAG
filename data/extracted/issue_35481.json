@@ -1,0 +1,122 @@
+{
+  "id": 35481,
+  "title": "fix(core): guard merge_lists against non-dict elements when matching by index",
+  "status": "open",
+  "created_at": "2026-02-28T09:54:49Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35481",
+  "body_text": "## Problem\n\n`merge_lists` crashes with `TypeError: string indices must be integers, not 'str'` when the merged list contains a mix of strings and dicts with `\"index\"` keys.\n\nThis happens with Mistral streaming responses that include inline citations — the content array alternates between text strings and reference dicts:\n\n```python\nmerged = [\n    \"start answer...\",\n    {\"type\": \"reference\", \"index\": 0, \"reference_ids\": [\"iKcb2CAQ7\"]},\n    \"other answer...\"\n]\nother = [{\"type\": \"reference\", \"index\": 0, \"reference_ids\": [\"DGqzzmqc3\"]}]\n\nmerge_lists(merged, other)  # TypeError!\n```\n\n## Root Cause\n\nThe index-matching list comprehension iterates over all elements in `merged` and checks `\"index\" in e_left`. For string elements, Python's `in` operator checks for substring containment (which works), but then `e_left[\"index\"]` tries to index a string with a string key, which raises `TypeError`.\n\n## Fix\n\nAdd `isinstance(e_left, dict)` guard before accessing dict-specific attributes.\n\n## Tests\n\nAdded regression test with mixed strings and dicts (the exact pattern from the Mistral streaming scenario). 81 tests pass.\n\nFixes #35259",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "merge_lists",
+        "type": "Technology",
+        "description": "A core utility function designed to merge lists."
+      },
+      {
+        "name": "TypeError: string indices must be integers, not 'str'",
+        "type": "Problem",
+        "description": "A Python runtime error occurring when attempting to access a string using a string key as an index."
+      },
+      {
+        "name": "Mistral Streaming Responses",
+        "type": "Technology",
+        "description": "Responses from the Mistral AI model that are streamed and can include inline citations."
+      },
+      {
+        "name": "Inline Citations",
+        "type": "Feature",
+        "description": "References embedded within the content of Mistral streaming responses."
+      },
+      {
+        "name": "Content Array",
+        "type": "Technology",
+        "description": "A data structure within Mistral streaming responses that can contain a mix of text strings and reference dictionaries."
+      },
+      {
+        "name": "Index-Matching List Comprehension",
+        "type": "Technology",
+        "description": "A specific code pattern within the `merge_lists` function that attempts to access elements by an 'index' key."
+      },
+      {
+        "name": "isinstance(e_left, dict) Guard",
+        "type": "Feature",
+        "description": "A conditional check added to `merge_lists` to ensure an element is a dictionary before attempting to access dictionary-specific attributes."
+      },
+      {
+        "name": "#35259",
+        "type": "Problem",
+        "description": "A GitHub issue ID that is resolved by this fix."
+      }
+    ],
+    "relations": [
+      {
+        "source": "merge_lists",
+        "target": "TypeError: string indices must be integers, not 'str'",
+        "label": "CAUSES",
+        "evidence": "`merge_lists` crashes with `TypeError: string indices must be integers, not 'str'`",
+        "evidence_start": 12,
+        "evidence_end": 94
+      },
+      {
+        "source": "Mistral Streaming Responses",
+        "target": "Inline Citations",
+        "label": "USES",
+        "evidence": "Mistral streaming responses that include inline citations",
+        "evidence_start": 192,
+        "evidence_end": 249
+      },
+      {
+        "source": "Mistral Streaming Responses",
+        "target": "Content Array",
+        "label": "RELATED_TO",
+        "evidence": "the content array alternates between text strings and reference dicts",
+        "evidence_start": 252,
+        "evidence_end": 321
+      },
+      {
+        "source": "Content Array",
+        "target": "TypeError: string indices must be integers, not 'str'",
+        "label": "CAUSES",
+        "evidence": "when the merged list contains a mix of strings and dicts with `",
+        "evidence_start": 95,
+        "evidence_end": 158
+      },
+      {
+        "source": "Index-Matching List Comprehension",
+        "target": "TypeError: string indices must be integers, not 'str'",
+        "label": "CAUSES",
+        "evidence": "The index-matching list comprehension iterates over all elements in `merged` and checks `",
+        "evidence_start": 601,
+        "evidence_end": 690
+      },
+      {
+        "source": "isinstance(e_left, dict) Guard",
+        "target": "merge_lists",
+        "label": "RELATED_TO",
+        "evidence": "Add `isinstance(e_left, dict)` guard before accessing dict-specific attributes.",
+        "evidence_start": 907,
+        "evidence_end": 986
+      },
+      {
+        "source": "isinstance(e_left, dict) Guard",
+        "target": "TypeError: string indices must be integers, not 'str'",
+        "label": "AFFECTS",
+        "evidence": "Add `isinstance(e_left, dict)` guard before accessing dict-specific attributes.",
+        "evidence_start": 907,
+        "evidence_end": 986
+      },
+      {
+        "source": "merge_lists",
+        "target": "#35259",
+        "label": "RELATED_TO",
+        "evidence": "Fixes #35259",
+        "evidence_start": 1122,
+        "evidence_end": 1134
+      }
+    ],
+    "summary": "The `merge_lists` function crashes with a `TypeError` when processing mixed content arrays from Mistral streaming responses due to an index-matching list comprehension, which is fixed by adding an `isinstance(e_left, dict)` guard."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

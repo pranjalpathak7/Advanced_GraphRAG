@@ -1,0 +1,88 @@
+{
+  "id": 35463,
+  "title": "fix: return original value in get_from_dict_or_env instead of casting to str",
+  "status": "open",
+  "created_at": "2026-02-27T08:43:22Z",
+  "author_name": "iCanDoAllThingszz",
+  "url": "https://github.com/langchain-ai/langchain/pull/35463",
+  "body_text": "Fixes #35285\n\nThe function was forcing str() conversion on return values, which broke when using enum values or other non-string types in the dict. Now returns the original value with return type changed from str to Any.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Get From Dict Or Env",
+        "type": "Technology",
+        "description": "A function that retrieves values from a dictionary or environment variables."
+      },
+      {
+        "name": "Forced String Conversion",
+        "type": "Problem",
+        "description": "The problematic behavior of a function converting return values to strings."
+      },
+      {
+        "name": "Enum Values",
+        "type": "Technology",
+        "description": "Enumeration values that were incorrectly converted to strings by the function."
+      },
+      {
+        "name": "Non-String Types",
+        "type": "Technology",
+        "description": "Data types other than strings that were incorrectly converted by the function."
+      },
+      {
+        "name": "Original Value",
+        "type": "Feature",
+        "description": "The value as it was originally, without any forced string conversion."
+      },
+      {
+        "name": "Return Type Any",
+        "type": "Feature",
+        "description": "The updated return type of the function, allowing it to return any data type."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Get From Dict Or Env",
+        "target": "Forced String Conversion",
+        "label": "CAUSES",
+        "evidence": "The function was forcing str() conversion on return values",
+        "evidence_start": 14,
+        "evidence_end": 72
+      },
+      {
+        "source": "Forced String Conversion",
+        "target": "Enum Values",
+        "label": "AFFECTS",
+        "evidence": "which broke when using enum values",
+        "evidence_start": 74,
+        "evidence_end": 108
+      },
+      {
+        "source": "Forced String Conversion",
+        "target": "Non-String Types",
+        "label": "AFFECTS",
+        "evidence": "or other non-string types in the dict",
+        "evidence_start": 109,
+        "evidence_end": 146
+      },
+      {
+        "source": "Get From Dict Or Env",
+        "target": "Original Value",
+        "label": "USES",
+        "evidence": "Now returns the original value",
+        "evidence_start": 148,
+        "evidence_end": 178
+      },
+      {
+        "source": "Get From Dict Or Env",
+        "target": "Return Type Any",
+        "label": "RELATED_TO",
+        "evidence": "with return type changed from str to Any",
+        "evidence_start": 179,
+        "evidence_end": 219
+      }
+    ],
+    "summary": "A fix for the `get_from_dict_or_env` function prevents forced string conversion of return values, which previously broke enum and other non-string types, by returning the original value and changing the return type to `Any`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

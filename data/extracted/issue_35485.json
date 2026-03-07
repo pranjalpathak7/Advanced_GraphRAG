@@ -1,0 +1,137 @@
+{
+  "id": 35485,
+  "title": "fix(core): fix RunnableRetry.batch position corruption with return_exceptions",
+  "status": "closed",
+  "created_at": "2026-02-28T16:23:04Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35485",
+  "body_text": "## Summary\n\nFixes #35475\n\nWhen `batch()` is called with `return_exceptions=True` and some items succeed on retry while others permanently fail, the output positions get corrupted. A retry-successful item can overwrite the exception position of a permanently-failed item.\n\n## Root Cause\n\nThe reconstruction loop at lines 282-287 used `result.pop(0)` to fill positions not in `results_map`, but `result` contained the **full** last-attempt output — including items that succeeded on retry and were already placed into `results_map`. Popping sequentially skipped those successes and pulled the wrong element for each remaining position.\n\n### Example\n\nGiven inputs `[\"ok\", \"retry_then_ok\", \"always_fail\"]` with `stop_after_attempt=2`:\n\n1. **Attempt 1**: `ok` succeeds → `results_map[0]`; `retry_then_ok` and `always_fail` fail\n2. **Attempt 2**: `retry_then_ok` succeeds → `results_map[1]`; `always_fail` still fails\n3. **Reconstruction**: Position 2 is not in `results_map`, so `result.pop(0)` is called — but `result = [\"retry-result\", ValueError]`. The pop returns `\"retry-result\"` instead of the `ValueError`, corrupting position 2.\n\n## Fix\n\nMap the last-attempt results back to their original indices using `remaining_indices`, which correctly tracks the 1-to-1 correspondence between result offsets and original input positions. Both sync and async paths are fixed.\n\n## Tests\n\nAdded `test_retry_batch_return_exceptions_position_integrity` and its async variant, reproducing the exact scenario from the issue.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "RunnableRetry.batch",
+        "type": "Technology",
+        "description": "A method within `RunnableRetry` that processes items in batches, handling retries."
+      },
+      {
+        "name": "Return Exceptions",
+        "type": "Feature",
+        "description": "A parameter for `batch()` that dictates whether exceptions should be returned in the output."
+      },
+      {
+        "name": "Output Positions Corruption",
+        "type": "Problem",
+        "description": "A bug where the order or content of results in the output array is incorrect after retries, specifically when `return_exceptions=True`."
+      },
+      {
+        "name": "Issue #35475",
+        "type": "Problem",
+        "description": "The GitHub issue that this fix addresses, detailing the output positions corruption."
+      },
+      {
+        "name": "Reconstruction Loop",
+        "type": "Technology",
+        "description": "A specific section of code (lines 282-287) responsible for reconstructing the final output after retries."
+      },
+      {
+        "name": "result.pop(0)",
+        "type": "Technology",
+        "description": "A method call used in the `Reconstruction Loop` that incorrectly removes elements from the `result` list, leading to corruption."
+      },
+      {
+        "name": "results_map",
+        "type": "Technology",
+        "description": "A data structure used to store successfully processed items during batch execution."
+      },
+      {
+        "name": "remaining_indices",
+        "type": "Technology",
+        "description": "A mechanism used to correctly track the original input positions for last-attempt results, implemented as part of the fix."
+      },
+      {
+        "name": "Sync Paths",
+        "type": "Technology",
+        "description": "The synchronous execution flow of the `RunnableRetry.batch` method."
+      },
+      {
+        "name": "Async Paths",
+        "type": "Technology",
+        "description": "The asynchronous execution flow of the `RunnableRetry.batch` method."
+      },
+      {
+        "name": "test_retry_batch_return_exceptions_position_integrity",
+        "type": "Feature",
+        "description": "A test case added to verify the correct handling of output positions with `return_exceptions`."
+      }
+    ],
+    "relations": [
+      {
+        "source": "RunnableRetry.batch",
+        "target": "Output Positions Corruption",
+        "label": "AFFECTS",
+        "evidence": "When `batch()` is called with `return_exceptions=True` and some items succeed on retry while others permanently fail, the output positions get corrupted.",
+        "evidence_start": 26,
+        "evidence_end": 179
+      },
+      {
+        "source": "Return Exceptions",
+        "target": "RunnableRetry.batch",
+        "label": "RELATED_TO",
+        "evidence": "When `batch()` is called with `return_exceptions=True`",
+        "evidence_start": 26,
+        "evidence_end": 80
+      },
+      {
+        "source": "Issue #35475",
+        "target": "Output Positions Corruption",
+        "label": "RELATED_TO",
+        "evidence": "Fixes #35475",
+        "evidence_start": 12,
+        "evidence_end": 24
+      },
+      {
+        "source": "Reconstruction Loop",
+        "target": "Output Positions Corruption",
+        "label": "CAUSES",
+        "evidence": "The reconstruction loop at lines 282-287 used `result.pop(0)` to fill positions not in `results_map`, but `result` contained the **full** last-attempt output — including items that succeeded on retry and were already placed into `results_map`. Popping sequentially skipped those successes and pulled the wrong element for each remaining position.",
+        "evidence_start": 287,
+        "evidence_end": 633
+      },
+      {
+        "source": "result.pop(0)",
+        "target": "Output Positions Corruption",
+        "label": "CAUSES",
+        "evidence": "The reconstruction loop at lines 282-287 used `result.pop(0)` to fill positions not in `results_map`, but `result` contained the **full** last-attempt output — including items that succeeded on retry and were already placed into `results_map`. Popping sequentially skipped those successes and pulled the wrong element for each remaining position.",
+        "evidence_start": 287,
+        "evidence_end": 633
+      },
+      {
+        "source": "remaining_indices",
+        "target": "Sync Paths",
+        "label": "USES",
+        "evidence": "Map the last-attempt results back to their original indices using `remaining_indices`, which correctly tracks the 1-to-1 correspondence between result offsets and original input positions. Both sync and async paths are fixed.",
+        "evidence_start": 1141,
+        "evidence_end": 1366
+      },
+      {
+        "source": "remaining_indices",
+        "target": "Async Paths",
+        "label": "USES",
+        "evidence": "Map the last-attempt results back to their original indices using `remaining_indices`, which correctly tracks the 1-to-1 correspondence between result offsets and original input positions. Both sync and async paths are fixed.",
+        "evidence_start": 1141,
+        "evidence_end": 1366
+      },
+      {
+        "source": "test_retry_batch_return_exceptions_position_integrity",
+        "target": "Output Positions Corruption",
+        "label": "RELATED_TO",
+        "evidence": "Added `test_retry_batch_return_exceptions_position_integrity` and its async variant, reproducing the exact scenario from the issue.",
+        "evidence_start": 1378,
+        "evidence_end": 1509
+      }
+    ],
+    "summary": "The `RunnableRetry.batch` method, when used with `return_exceptions=True`, suffers from output position corruption due to an incorrect reconstruction loop using `result.pop(0)`, which is fixed by mapping results back to original indices using `remaining_indices` in both synchronous and asynchronous paths."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

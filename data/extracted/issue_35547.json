@@ -1,0 +1,174 @@
+{
+  "id": 35547,
+  "title": "Args with default_factory in a tool's args_schema should not be required",
+  "status": "open",
+  "created_at": "2026-03-04T05:52:11Z",
+  "author_name": "liaowang11",
+  "url": "https://github.com/langchain-ai/langchain/issues/35547",
+  "body_text": "### Checked other resources\n\n- [x] This is a feature request, not a bug report or usage question.\n- [x] I added a clear and descriptive title that summarizes the feature request.\n- [x] I used the GitHub search to find a similar feature request and didn't find it.\n- [x] I checked the LangChain documentation and API reference to see if this feature already exists.\n- [x] This is not related to the langchain-community package.\n\n### Package (Required)\n\n- [x] langchain\n- [ ] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [x] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Feature Description\n\nWhen a tool is defined to have a Pydantic-based args_schema with default_factory, the tool schema generated should not put that arg are \"required\"\n\n\n### Use Case\n\nAs in https://github.com/langchain-ai/langchain/issues/34384, langchain currently will populate args with `default` and `default_factory`. But the tool schema generated still put theses fields in \"required\", forcing the LLM to generate these fields. \n\nHere is an example snippet:\n```python\nimport json\n\nfrom langchain_core.tools import tool\nfrom langchain_core.utils.function_calling import convert_to_openai_tool\nfrom pydantic import BaseModel, Field\n\n\nclass Args(BaseModel):\n    \"\"\"Hello\"\"\"\n    names: list[str] = Field(default_factory=list, description=\"Some names\")\n\n@tool(args_schema=Args)\ndef some_func(name: list[str] = None):\n    pass\n\n\nprint(json.dumps(convert_to_openai_tool(some_func), indent=2))\n\n```\n\nOutputs(note `names` in `required`):\n```json\n{\n  \"type\": \"function\",\n  \"function\": {\n    \"name\": \"some_func\",\n    \"description\": \"Hello\",\n    \"parameters\": {\n      \"properties\": {\n        \"names\": {\n          \"description\": \"Some names\",\n          \"items\": {\n            \"type\": \"string\"\n          },\n          \"type\": \"array\"\n        }\n      },\n      \"required\": [\n        \"names\"\n      ],\n      \"type\": \"object\"\n    }\n  }\n}\n```\n\n### Proposed Solution\n\nLangchain dynamically create a new model when generating tool schema in `tool_call_schema`, currently it only copies `field.default` not `field.default_factory` thus making the generated schema incorrect.\nhttps://github.com/langchain-ai/langchain/blob/e50625e7c3cac04be68ae095bee030e0c321ef34/libs/core/langchain_core/utils/pydantic.py#L245\n\n### Alternatives Considered\n\nUsing `Field(default=[])` works, but it maybe a little misleading.\n\n### Additional Context\n\n_No response_",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Tool Args Schema",
+        "type": "Feature",
+        "description": "The schema defining arguments for a tool, often based on Pydantic."
+      },
+      {
+        "name": "Default Factory",
+        "type": "Feature",
+        "description": "A Pydantic feature that provides a function to generate a default value for a field."
+      },
+      {
+        "name": "Pydantic",
+        "type": "Technology",
+        "description": "A Python library used for data validation and settings management, forming the basis for tool argument schemas."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "A framework for developing applications powered by language models, which is the subject of this feature request."
+      },
+      {
+        "name": "LLM",
+        "type": "Technology",
+        "description": "Large Language Model, which is forced to generate fields due to incorrect tool schema generation."
+      },
+      {
+        "name": "Incorrect Required Field",
+        "type": "Problem",
+        "description": "An argument that is incorrectly marked as mandatory ('required') in the generated tool schema, despite having a default_factory."
+      },
+      {
+        "name": "Tool Schema Generation",
+        "type": "Feature",
+        "description": "The process within LangChain responsible for creating the schema for a tool, often for use with LLMs."
+      },
+      {
+        "name": "tool_call_schema",
+        "type": "Feature",
+        "description": "A specific function or method in LangChain Core responsible for generating tool schemas."
+      },
+      {
+        "name": "OpenAI Tool Format",
+        "type": "Technology",
+        "description": "A specific JSON format for defining tools, compatible with OpenAI models."
+      },
+      {
+        "name": "Pydantic Field",
+        "type": "Feature",
+        "description": "A construct within Pydantic used to define fields in a BaseModel, including specifying default values or default factories."
+      },
+      {
+        "name": "Default",
+        "type": "Feature",
+        "description": "A Pydantic feature for specifying a static default value for a field."
+      },
+      {
+        "name": "Issue 34384",
+        "type": "Problem",
+        "description": "A related GitHub issue discussing the same problem regarding default_factory fields being marked as required."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Tool Args Schema",
+        "target": "Pydantic",
+        "label": "USES",
+        "evidence": "When a tool is defined to have a Pydantic-based args_schema",
+        "evidence_start": 1016,
+        "evidence_end": 1075
+      },
+      {
+        "source": "Tool Args Schema",
+        "target": "Default Factory",
+        "label": "USES",
+        "evidence": "args_schema with default_factory",
+        "evidence_start": 1064,
+        "evidence_end": 1096
+      },
+      {
+        "source": "Incorrect Required Field",
+        "target": "Tool Args Schema",
+        "label": "AFFECTS",
+        "evidence": "the tool schema generated should not put that arg are \"required\"",
+        "evidence_start": 1098,
+        "evidence_end": 1162
+      },
+      {
+        "source": "LangChain",
+        "target": "Incorrect Required Field",
+        "label": "CAUSES",
+        "evidence": "langchain currently will populate args with `default` and `default_factory`. But the tool schema generated still put theses fields in \"required\"",
+        "evidence_start": 1241,
+        "evidence_end": 1385
+      },
+      {
+        "source": "Incorrect Required Field",
+        "target": "LLM",
+        "label": "AFFECTS",
+        "evidence": "forcing the LLM to generate these fields",
+        "evidence_start": 1387,
+        "evidence_end": 1427
+      },
+      {
+        "source": "Tool Schema Generation",
+        "target": "OpenAI Tool Format",
+        "label": "RELATED_TO",
+        "evidence": "convert_to_openai_tool(some_func)",
+        "evidence_start": 1841,
+        "evidence_end": 1874
+      },
+      {
+        "source": "LangChain",
+        "target": "tool_call_schema",
+        "label": "USES",
+        "evidence": "Langchain dynamically create a new model when generating tool schema in `tool_call_schema`",
+        "evidence_start": 2347,
+        "evidence_end": 2437
+      },
+      {
+        "source": "tool_call_schema",
+        "target": "Incorrect Required Field",
+        "label": "CAUSES",
+        "evidence": "it only copies `field.default` not `field.default_factory` thus making the generated schema incorrect.",
+        "evidence_start": 2449,
+        "evidence_end": 2551
+      },
+      {
+        "source": "tool_call_schema",
+        "target": "Default Factory",
+        "label": "RELATED_TO",
+        "evidence": "it only copies `field.default` not `field.default_factory`",
+        "evidence_start": 2449,
+        "evidence_end": 2507
+      },
+      {
+        "source": "Pydantic Field",
+        "target": "Default Factory",
+        "label": "USES",
+        "evidence": "names: list[str] = Field(default_factory=list, description=\"Some names\")",
+        "evidence_start": 1676,
+        "evidence_end": 1748
+      },
+      {
+        "source": "Pydantic Field",
+        "target": "Default",
+        "label": "USES",
+        "evidence": "Using `Field(default=[])` works",
+        "evidence_start": 2718,
+        "evidence_end": 2749
+      },
+      {
+        "source": "Issue 34384",
+        "target": "Incorrect Required Field",
+        "label": "RELATED_TO",
+        "evidence": "As in https://github.com/langchain-ai/langchain/issues/34384, langchain currently will populate args with `default` and `default_factory`. But the tool schema generated still put theses fields in \"required\", forcing the LLM to generate these fields.",
+        "evidence_start": 1179,
+        "evidence_end": 1428
+      }
+    ],
+    "summary": "LangChain's tool schema generation incorrectly marks arguments with `default_factory` as required, forcing LLMs to generate these fields, due to `tool_call_schema` not copying `field.default_factory`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

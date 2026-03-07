@@ -1,0 +1,229 @@
+{
+  "id": 35466,
+  "title": "fix(core): lazy loading transformers, numpy, simsimd",
+  "status": "open",
+  "created_at": "2026-02-27T16:52:23Z",
+  "author_name": "wkpark",
+  "url": "https://github.com/langchain-ai/langchain/pull/35466",
+  "body_text": "fix(core): lazy loading transformers, numpy, simsimd\r\n\r\n## Summary\r\nOptimized the initial import speed of langchain_core by converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.\r\n\r\n## Details\r\nConfirmed with python -X importtime that these dependencies are no longer loaded on initial import, and verified functionality through make format/lint and est.\r\n\r\n## Disclaimer\r\nI used the Gemini CLI to help with the specific implementation details and to ensure compliance with linting and type checking and drafting this PR description.\r\n\r\n**before**\r\nwithout transformers / torch env.\r\n```bash\r\n$ time uv run python -c \"from langchain_core.prompts import BasePromptTemplate\"\r\nreal    0m0.600s\r\nuser    0m0.509s\r\nsys     0m0.074s\r\n```\r\n\r\nwith transformers / torch installed env.\r\n\r\n```bash\r\n$ uv pip install transformers\r\n...\r\n$ uv pip install numpy\r\n...\r\n\r\n$ time uv run python -c \"from langchain_core.prompts import BasePromptTemplate\"\r\nreal    0m9.664s\r\nuser    0m4.268s\r\nsys     0m0.752s\r\n\r\n$ time uv run python -c \"from langchain_core.prompts import BasePromptTemplate\" # one more time\r\n\r\nreal    0m4.030s\r\nuser    0m3.877s\r\nsys     0m0.468s\r\n```\r\n\r\n**after PR applied**\r\n```bash\r\n\r\n$ time uv run python -c \"from langchain_core.prompts import BasePromptTemplate\"\r\nreal    0m0.797s\r\nuser    0m0.662s\r\nsys     0m0.110s\r\n\r\n$ uv pip show transformers\r\nName: transformers\r\nVersion: 4.55.0\r\nLocation: /home/future/repo/linkBrain-server/.venv/lib/python3.13/site-packages\r\nRequires: filelock, huggingface-hub, numpy, packaging, pyyaml, regex, requests, safetensors, tokenizers, tqdm\r\nRequired-by: docling-ibm-models, optimum, sentence-transformers\r\n```\r\n\r\nSee also #35469",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "langchain_core",
+        "type": "Technology",
+        "description": "The core library whose initial import speed is being optimized."
+      },
+      {
+        "name": "transformers",
+        "type": "Technology",
+        "description": "A Python library dependency that was causing slow initial import speed and is now lazy loaded."
+      },
+      {
+        "name": "numpy",
+        "type": "Technology",
+        "description": "A Python library dependency that was causing slow initial import speed and is now lazy loaded."
+      },
+      {
+        "name": "simsimd",
+        "type": "Technology",
+        "description": "A Python library dependency that was causing slow initial import speed and is now lazy loaded."
+      },
+      {
+        "name": "Lazy Loading",
+        "type": "Feature",
+        "description": "An optimization technique implemented to improve initial import speed by deferring dependency loading."
+      },
+      {
+        "name": "Initial Import Speed",
+        "type": "Problem",
+        "description": "The performance metric of `langchain_core`'s initial import, which was slow and is now optimized."
+      },
+      {
+        "name": "BasePromptTemplate",
+        "type": "Technology",
+        "description": "A component of `langchain_core` used to demonstrate the import speed improvement."
+      },
+      {
+        "name": "Gemini CLI",
+        "type": "Technology",
+        "description": "A command-line interface tool used by the author for assistance with implementation details and documentation."
+      },
+      {
+        "name": "python -X importtime",
+        "type": "Technology",
+        "description": "A Python profiling tool used to confirm that dependencies are no longer loaded on initial import."
+      },
+      {
+        "name": "make format/lint",
+        "type": "Technology",
+        "description": "Development commands used to verify functionality and compliance with code standards."
+      },
+      {
+        "name": "est",
+        "type": "Technology",
+        "description": "A testing tool or command used to verify functionality."
+      },
+      {
+        "name": "wkpark",
+        "type": "Technology",
+        "description": "The author of the GitHub issue and the implementer of the fix."
+      },
+      {
+        "name": "uv",
+        "type": "Technology",
+        "description": "A Python package manager and runner used for testing import times."
+      },
+      {
+        "name": "torch",
+        "type": "Technology",
+        "description": "A deep learning framework that is often installed alongside `transformers` and contributes to the initial import time."
+      },
+      {
+        "name": "Issue #35469",
+        "type": "Feature",
+        "description": "A related GitHub issue referenced in the PR."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Lazy Loading",
+        "target": "Initial Import Speed",
+        "label": "AFFECTS",
+        "evidence": "Optimized the initial import speed of langchain_core by converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.",
+        "evidence_start": 68,
+        "evidence_end": 214
+      },
+      {
+        "source": "Initial Import Speed",
+        "target": "langchain_core",
+        "label": "AFFECTS",
+        "evidence": "Optimized the initial import speed of langchain_core",
+        "evidence_start": 68,
+        "evidence_end": 120
+      },
+      {
+        "source": "Lazy Loading",
+        "target": "transformers",
+        "label": "RELATED_TO",
+        "evidence": "converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.",
+        "evidence_start": 124,
+        "evidence_end": 214
+      },
+      {
+        "source": "Lazy Loading",
+        "target": "numpy",
+        "label": "RELATED_TO",
+        "evidence": "converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.",
+        "evidence_start": 124,
+        "evidence_end": 214
+      },
+      {
+        "source": "Lazy Loading",
+        "target": "simsimd",
+        "label": "RELATED_TO",
+        "evidence": "converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.",
+        "evidence_start": 124,
+        "evidence_end": 214
+      },
+      {
+        "source": "transformers",
+        "target": "Initial Import Speed",
+        "label": "CAUSES",
+        "evidence": "Optimized the initial import speed of langchain_core by converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.",
+        "evidence_start": 68,
+        "evidence_end": 214
+      },
+      {
+        "source": "numpy",
+        "target": "Initial Import Speed",
+        "label": "CAUSES",
+        "evidence": "Optimized the initial import speed of langchain_core by converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.",
+        "evidence_start": 68,
+        "evidence_end": 214
+      },
+      {
+        "source": "simsimd",
+        "target": "Initial Import Speed",
+        "label": "CAUSES",
+        "evidence": "Optimized the initial import speed of langchain_core by converting top-level imports of transformers, numpy, and simsimd into lazy, local imports.",
+        "evidence_start": 68,
+        "evidence_end": 214
+      },
+      {
+        "source": "wkpark",
+        "target": "Gemini CLI",
+        "label": "USES",
+        "evidence": "I used the Gemini CLI to help with the specific implementation details and to ensure compliance with linting and type checking and drafting this PR description.",
+        "evidence_start": 409,
+        "evidence_end": 569
+      },
+      {
+        "source": "wkpark",
+        "target": "python -X importtime",
+        "label": "USES",
+        "evidence": "Confirmed with python -X importtime that these dependencies are no longer loaded on initial import",
+        "evidence_start": 230,
+        "evidence_end": 328
+      },
+      {
+        "source": "wkpark",
+        "target": "make format/lint",
+        "label": "USES",
+        "evidence": "verified functionality through make format/lint",
+        "evidence_start": 334,
+        "evidence_end": 381
+      },
+      {
+        "source": "wkpark",
+        "target": "est",
+        "label": "USES",
+        "evidence": "verified functionality through make format/lint and est.",
+        "evidence_start": 334,
+        "evidence_end": 390
+      },
+      {
+        "source": "wkpark",
+        "target": "uv",
+        "label": "USES",
+        "evidence": "$ time uv run python -c \"from langchain_core.prompts import BasePromptTemplate\"",
+        "evidence_start": 629,
+        "evidence_end": 708
+      },
+      {
+        "source": "BasePromptTemplate",
+        "target": "langchain_core",
+        "label": "RELATED_TO",
+        "evidence": "from langchain_core.prompts import BasePromptTemplate",
+        "evidence_start": 654,
+        "evidence_end": 707
+      },
+      {
+        "source": "transformers",
+        "target": "numpy",
+        "label": "USES",
+        "evidence": "Requires: filelock, huggingface-hub, numpy, packaging, pyyaml, regex, requests, safetensors, tokenizers, tqdm",
+        "evidence_start": 1504,
+        "evidence_end": 1613
+      },
+      {
+        "source": "transformers",
+        "target": "torch",
+        "label": "USES",
+        "evidence": "with transformers / torch installed env.",
+        "evidence_start": 771,
+        "evidence_end": 811
+      },
+      {
+        "source": "Lazy Loading",
+        "target": "Issue #35469",
+        "label": "RELATED_TO",
+        "evidence": "See also #35469",
+        "evidence_start": 1687,
+        "evidence_end": 1702
+      }
+    ],
+    "summary": "This PR optimizes the initial import speed of `langchain_core` by implementing lazy loading for its `transformers`, `numpy`, and `simsimd` dependencies."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

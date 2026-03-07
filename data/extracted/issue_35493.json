@@ -1,0 +1,132 @@
+{
+  "id": 35493,
+  "title": "fix(core): fix nested subgraph rendering for 3+ level nesting in draw_mermaid",
+  "status": "open",
+  "created_at": "2026-03-01T09:29:37Z",
+  "author_name": "taehan79-kim",
+  "url": "https://github.com/langchain-ai/langchain/pull/35493",
+  "body_text": "Fixes #35492\r\n\r\nThe \"empty subgraphs\" section in `draw_mermaid()` skips multi-level prefixes (e.g., `parent:child`) due to the `if \":\" not in prefix` check, causing 3+ level nested subgraph boxes to not render at all. This fix splits the prefix on `:` and opens subgraph blocks for each nesting level.\r\n\r\n**Before:** `if \":\" not in prefix` → skips multi-level prefixes entirely\r\n**After:** `prefix.split(\":\")` → iterates each level, opens subgraph blocks per level\r\n\r\n### How did you verify your code works?\r\n\r\n- All 22 tests in `test_graph.py` pass (18 snapshots passed) (17 snapshots passed, no updates needed)\r\n- Added `test_nested_empty_subgraph_mermaid` regression test\r\n- `make format` and `make lint` pass\r\n- Manually verified correct rendering for 3-level, 4-level nesting with `draw_mermaid_png()`\r\n\r\n### Screenshots\r\n**Before (bug):**\r\n<img width=\"273\" height=\"234\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a00aed75-143e-4bb0-a7d7-cc0053412605\" />\r\n\r\n**After (fix):**\r\n<img width=\"230\" height=\"334\" alt=\"image\" src=\"https://github.com/user-attachments/assets/fb1223fe-397f-4bb2-844b-b56e08b2a439\" />\r\n ",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "draw_mermaid()",
+        "type": "Technology",
+        "description": "A function responsible for rendering Mermaid diagrams."
+      },
+      {
+        "name": "3+ Level Nested Subgraph Rendering Issue",
+        "type": "Problem",
+        "description": "A bug where nested subgraphs with 3 or more levels do not render correctly in `draw_mermaid()`."
+      },
+      {
+        "name": "Empty Subgraphs Section",
+        "type": "Technology",
+        "description": "A specific part of the `draw_mermaid()` function's logic."
+      },
+      {
+        "name": "Multi-Level Prefixes",
+        "type": "Technology",
+        "description": "A concept representing hierarchical identifiers used in subgraph rendering, like 'parent:child'."
+      },
+      {
+        "name": "if \":\" not in prefix Check",
+        "type": "Technology",
+        "description": "A conditional check in `draw_mermaid()` that incorrectly skips multi-level prefixes."
+      },
+      {
+        "name": "prefix.split(\":\")",
+        "type": "Technology",
+        "description": "A code modification that correctly processes multi-level prefixes by splitting them."
+      },
+      {
+        "name": "Subgraph Blocks",
+        "type": "Technology",
+        "description": "Structural elements in Mermaid diagrams that define subgraphs."
+      },
+      {
+        "name": "test_graph.py",
+        "type": "Technology",
+        "description": "A test suite containing graph-related tests."
+      },
+      {
+        "name": "test_nested_empty_subgraph_mermaid",
+        "type": "Feature",
+        "description": "A regression test added to verify the fix for nested empty subgraphs."
+      },
+      {
+        "name": "draw_mermaid_png()",
+        "type": "Technology",
+        "description": "A function used for manually verifying Mermaid diagram rendering."
+      }
+    ],
+    "relations": [
+      {
+        "source": "3+ Level Nested Subgraph Rendering Issue",
+        "target": "draw_mermaid()",
+        "label": "AFFECTS",
+        "evidence": "fix nested subgraph rendering for 3+ level nesting in draw_mermaid",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Empty Subgraphs Section",
+        "target": "draw_mermaid()",
+        "label": "RELATED_TO",
+        "evidence": "The \"empty subgraphs\" section in `draw_mermaid()`",
+        "evidence_start": 16,
+        "evidence_end": 65
+      },
+      {
+        "source": "if \":\" not in prefix Check",
+        "target": "3+ Level Nested Subgraph Rendering Issue",
+        "label": "CAUSES",
+        "evidence": "due to the `if \":\" not in prefix` check, causing 3+ level nested subgraph boxes to not render at all.",
+        "evidence_start": 116,
+        "evidence_end": 217
+      },
+      {
+        "source": "if \":\" not in prefix Check",
+        "target": "Multi-Level Prefixes",
+        "label": "AFFECTS",
+        "evidence": "skips multi-level prefixes (e.g., `parent:child`) due to the `if \":\" not in prefix` check",
+        "evidence_start": 66,
+        "evidence_end": 155
+      },
+      {
+        "source": "prefix.split(\":\")",
+        "target": "Multi-Level Prefixes",
+        "label": "RELATED_TO",
+        "evidence": "`prefix.split(\":\")` → iterates each level, opens subgraph blocks per level",
+        "evidence_start": 390,
+        "evidence_end": 464
+      },
+      {
+        "source": "prefix.split(\":\")",
+        "target": "Subgraph Blocks",
+        "label": "CAUSES",
+        "evidence": "`prefix.split(\":\")` → iterates each level, opens subgraph blocks per level",
+        "evidence_start": 390,
+        "evidence_end": 464
+      },
+      {
+        "source": "test_nested_empty_subgraph_mermaid",
+        "target": "test_graph.py",
+        "label": "RELATED_TO",
+        "evidence": "Added `test_nested_empty_subgraph_mermaid` regression test",
+        "evidence_start": 616,
+        "evidence_end": 674
+      },
+      {
+        "source": "draw_mermaid_png()",
+        "target": "3+ Level Nested Subgraph Rendering Issue",
+        "label": "RELATED_TO",
+        "evidence": "Manually verified correct rendering for 3-level, 4-level nesting with `draw_mermaid_png()`",
+        "evidence_start": 716,
+        "evidence_end": 806
+      }
+    ],
+    "summary": "The `draw_mermaid()` function failed to render 3+ level nested subgraphs due to an incorrect check in its \"empty subgraphs\" section, which is fixed by splitting multi-level prefixes to open subgraph blocks for each nesting level."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,171 @@
+{
+  "id": 35457,
+  "title": "fix(openai): force stream=False in _generate/_agenerate when disable_streaming is active",
+  "status": "open",
+  "created_at": "2026-02-26T21:57:10Z",
+  "author_name": "Anandesh-Sharma",
+  "url": "https://github.com/langchain-ai/langchain/pull/35457",
+  "body_text": "## Summary\n\n- **Bug**: When `streaming=True` and `disable_streaming=\"tool_calling\"` with tools bound, `_should_stream()` correctly routes to `_generate`/`_agenerate`. But `_default_params` still sets `stream=True` from `self.streaming`, so the OpenAI API returns a Stream object. `_create_chat_result` then crashes calling `.model_dump()` on it.\n- **Fix**: Explicitly set `payload[\"stream\"] = False` in both `BaseChatOpenAI._generate` and `BaseChatOpenAI._agenerate` after building the payload, since these are non-streaming code paths.\n- **Docs**: Clarify in the `disable_streaming` field docstring and `_should_stream` comments that `\"tool_calling\"` disables streaming for all turns when tools are bound (not just tool-call turns), since the response content is unknown before the API call.\n\nCloses #35436\n\n## Areas requiring careful review\n\n- The `payload[\"stream\"] = False` override in `_generate`/`_agenerate` is unconditional. This is intentional -- these methods are the non-streaming code paths and should never send `stream=True`. The existing `response_format` branch already pops `stream` entirely, so this is consistent.\n\n## Test plan\n\n- [x] New sync test: `test_disable_streaming_tool_calling_forces_stream_false` -- verifies `stream=False` in the API payload when `streaming=True` + `disable_streaming=\"tool_calling\"` + tools bound\n- [x] New async test: `test_disable_streaming_tool_calling_forces_stream_false_async` -- same for async path\n- [x] All 183 existing tests in `tests/unit_tests/chat_models/test_base.py` pass\n- [x] All 12 core `disable_streaming` tests pass\n\n---\n\n> [!NOTE]\n> This contribution was developed with assistance from an AI agent (Claude).\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Streaming Enabled",
+        "type": "Feature",
+        "description": "A configuration setting where streaming is active (streaming=True)."
+      },
+      {
+        "name": "Tool Calling Streaming Disabled",
+        "type": "Feature",
+        "description": "A configuration setting to disable streaming specifically for tool calling (disable_streaming=\"tool_calling\")."
+      },
+      {
+        "name": "BaseChatOpenAI",
+        "type": "Technology",
+        "description": "A base class or component related to OpenAI chat models."
+      },
+      {
+        "name": "_generate Method",
+        "type": "Technology",
+        "description": "A non-streaming method within BaseChatOpenAI for generating chat responses."
+      },
+      {
+        "name": "_agenerate Method",
+        "type": "Technology",
+        "description": "An asynchronous non-streaming method within BaseChatOpenAI for generating chat responses."
+      },
+      {
+        "name": "OpenAI API",
+        "type": "Technology",
+        "description": "The application programming interface provided by OpenAI."
+      },
+      {
+        "name": "Stream Object",
+        "type": "Technology",
+        "description": "A streaming response object returned by the OpenAI API."
+      },
+      {
+        "name": "_create_chat_result Method",
+        "type": "Technology",
+        "description": "A method responsible for processing chat results."
+      },
+      {
+        "name": "Streaming Bug",
+        "type": "Problem",
+        "description": "A bug where _create_chat_result crashes due to an unexpected Stream object being returned."
+      },
+      {
+        "name": "_default_params Component",
+        "type": "Technology",
+        "description": "A component responsible for setting default parameters, which incorrectly sets stream=True."
+      },
+      {
+        "name": "Stream Parameter Override",
+        "type": "Feature",
+        "description": "The explicit setting of payload[\"stream\"] = False to disable streaming in the API request payload."
+      },
+      {
+        "name": "Anandesh-Sharma",
+        "type": "Organization",
+        "description": "The author of the issue and contributor of the fix."
+      },
+      {
+        "name": "Claude Code",
+        "type": "Technology",
+        "description": "An AI agent used to assist with the contribution."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Streaming Enabled",
+        "target": "Streaming Bug",
+        "label": "CAUSES",
+        "evidence": "When streaming=True and disable_streaming=\"tool_calling\" with tools bound, _should_stream() correctly routes to _generate/_agenerate. But _default_params still sets stream=True from self.streaming, so the OpenAI API returns a Stream object. _create_chat_result then crashes calling .model_dump() on it.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Tool Calling Streaming Disabled",
+        "target": "Streaming Bug",
+        "label": "CAUSES",
+        "evidence": "When streaming=True and disable_streaming=\"tool_calling\" with tools bound, _should_stream() correctly routes to _generate/_agenerate. But _default_params still sets stream=True from self.streaming, so the OpenAI API returns a Stream object. _create_chat_result then crashes calling .model_dump() on it.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "_default_params Component",
+        "target": "Streaming Bug",
+        "label": "CAUSES",
+        "evidence": "But _default_params still sets stream=True from self.streaming, so the OpenAI API returns a Stream object.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Streaming Bug",
+        "target": "_create_chat_result Method",
+        "label": "AFFECTS",
+        "evidence": "_create_chat_result then crashes calling .model_dump() on it.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "OpenAI API",
+        "target": "Stream Object",
+        "label": "RELATED_TO",
+        "evidence": "so the OpenAI API returns a Stream object.",
+        "evidence_start": 237,
+        "evidence_end": 279
+      },
+      {
+        "source": "Stream Object",
+        "target": "_create_chat_result Method",
+        "label": "CAUSES",
+        "evidence": "_create_chat_result then crashes calling .model_dump() on it.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Stream Parameter Override",
+        "target": "_generate Method",
+        "label": "RELATED_TO",
+        "evidence": "Explicitly set payload[\"stream\"] = False in both BaseChatOpenAI._generate",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Stream Parameter Override",
+        "target": "_agenerate Method",
+        "label": "RELATED_TO",
+        "evidence": "and BaseChatOpenAI._agenerate",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "BaseChatOpenAI",
+        "target": "_generate Method",
+        "label": "USES",
+        "evidence": "in both BaseChatOpenAI._generate",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "BaseChatOpenAI",
+        "target": "_agenerate Method",
+        "label": "USES",
+        "evidence": "and BaseChatOpenAI._agenerate",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Anandesh-Sharma",
+        "target": "Claude Code",
+        "label": "USES",
+        "evidence": "This contribution was developed with assistance from an AI agent (Claude).",
+        "evidence_start": 1603,
+        "evidence_end": 1677
+      }
+    ],
+    "summary": "A bug occurs in BaseChatOpenAI where _create_chat_result crashes when streaming=True and disable_streaming=\"tool_calling\" are active, because _default_params incorrectly sets stream=True for the OpenAI API, causing it to return a Stream object in a non-streaming code path; the fix involves explicitly setting payload[\"stream\"] = False in _generate and _agenerate."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

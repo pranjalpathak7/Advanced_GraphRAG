@@ -1,0 +1,116 @@
+{
+  "id": 35451,
+  "title": "langchain docs mcp 500 error",
+  "status": "closed",
+  "created_at": "2026-02-26T02:27:49Z",
+  "author_name": "korant96",
+  "url": "https://github.com/langchain-ai/langchain/issues/35451",
+  "body_text": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [x] langchain\n- [ ] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n#33636\n\n### Reproduction Steps / Example Code (Python)\n\n```python\ncurl -I -L --max-time 10 https://docs.langchain.com/mcp\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\n\n```\n\n### Description\n\n- codex：\n```bash\n⚠ MCP client for `langchain-docs` failed to start: MCP startup failed: handshaking with MCP server failed: Send message error Transport\n\n/mcp\n\n🔌  MCP Tools\n\n  • langchain-docs\n    • Status: enabled\n    • Auth: Unsupported\n    • URL: https://docs.langchain.com/mcp\n    • Tools: (none)\n    • Resources: (none)\n    • Resource templates: (none)\n```\n- claude code：\n\n<img width=\"765\" height=\"285\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c05f6ef7-126a-4413-b52d-f71b29e85970\" />\n\n- curl test:\n\n```bash\ncurl -I -L --max-time 10 https://docs.langchain.com/mcp\nHTTP/2 500 \ncache-control: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0\ncf-cache-status: EXPIRED\ncf-ray: 9d3bf37f08a4f8c6-SIN\ncontent-security-policy: worker-src * blob: data: 'unsafe-eval' 'unsafe-inline'; object-src data: ; base-uri 'self'; upgrade-insecure-requests; frame-ancestors 'self' https://dashboard.mintlify.com; form-action 'self' https://codesandbox.io;\ndate: Thu, 26 Feb 2026 02:18:19 GMT\nexpires: 0\npragma: no-cache\nserver: Vercel\nstrict-transport-security: max-age=63072000\nvary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding\nx-cache-key: langchain-5e9cc07a/547/dpl_7Eu9c4KYPBmvyRPAVrgAbKS4oeja/mcp#html=html\nx-frame-options: DENY\nx-matched-path: /_mintlify/mcp/[subdomain]/[transport]\nx-mint-proxy-version: 1.0.0-prod\nx-vercel-cache: MISS\nx-vercel-id: sin1:sin1:iad1::iad1::gnxt2-1772072299343-defaddc82bd4\ncontent-length: 0\n```\n\n\n### System Info\n\n```bash\n$ python -m langchain_core.sys_info\n\nSystem Information\n------------------\n> OS:  Linux\n> OS Version:  #1 SMP Fri Sep 26 15:08:55 CST 2025\n> Python Version:  3.12.11 (main, Sep  2 2025, 11:18:24) [GCC 8.5.0 20210514 (Tencent 8.5.0-26)]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.5\n> langchain: 1.1.3\n> langchain_community: 0.4.1\n> langsmith: 0.7.1\n> langchain_classic: 1.0.1\n> langchain_mcp_adapters: 0.2.1\n> langchain_openai: 1.1.6\n> langchain_text_splitters: 1.1.0\n> langgraph_api: 0.7.29\n> langgraph_cli: 0.4.12\n> langgraph_runtime_inmem: 0.24.1\n> langgraph_sdk: 0.3.1\n\nOptional packages not installed\n-------------------------------\n> langserve\n\nOther Dependencies\n------------------\n> aiohttp: 3.13.2\n> blockbuster: 1.5.26\n> click: 8.3.1\n> cloudpickle: 3.1.2\n> croniter: 6.0.0\n> cryptography: 46.0.3\n> dataclasses-json: 0.6.7\n> grpcio: 1.78.0\n> grpcio-health-checking: 1.78.0\n> grpcio-tools: 1.78.0\n> httpx: 0.28.1\n> httpx-sse: 0.4.3\n> jsonpatch: 1.33\n> jsonschema-rs: 0.29.1\n> langgraph: 1.0.5\n> langgraph-checkpoint: 3.0.1\n> mcp: 1.25.0\n> numpy: 2.4.0\n> openai: 2.14.0\n> opentelemetry-api: 1.39.1\n> opentelemetry-exporter-otlp-proto-http: 1.39.1\n> opentelemetry-sdk: 1.39.1\n> orjson: 3.11.5\n> packaging: 25.0\n> protobuf: 6.33.5\n> pydantic: 2.12.5\n> pydantic-settings: 2.12.0\n> pyjwt: 2.10.1\n> python-dotenv: 1.2.1\n> PyYAML: 6.0.3\n> pyyaml: 6.0.3\n> requests: 2.32.5\n> requests-toolbelt: 1.0.0\n> rich: 14.2.0\n> SQLAlchemy: 2.0.45\n> sqlalchemy: 2.0.45\n> sse-starlette: 2.1.3\n> starlette: 0.50.0\n> structlog: 25.5.0\n> tenacity: 9.1.2\n> tiktoken: 0.12.0\n> truststore: 0.10.4\n> typing-extensions: 4.15.0\n> uuid-utils: 0.12.0\n> uvicorn: 0.40.0\n> watchfiles: 1.1.1\n> xxhash: 3.6.0\n> zstandard: 0.25.0\n```",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "LangChain Docs",
+        "type": "Technology",
+        "description": "The official documentation platform for the LangChain library."
+      },
+      {
+        "name": "MCP",
+        "type": "Technology",
+        "description": "A client-server system or protocol mentioned in the context of LangChain documentation."
+      },
+      {
+        "name": "500 Error",
+        "type": "Problem",
+        "description": "A general server-side error indicating an unexpected condition preventing request fulfillment."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "The open-source framework for developing applications powered by language models."
+      },
+      {
+        "name": "MCP Client",
+        "type": "Technology",
+        "description": "The client component responsible for interacting with the MCP server, specifically for `langchain-docs`."
+      },
+      {
+        "name": "MCP Server",
+        "type": "Technology",
+        "description": "The server component that the MCP client attempts to handshake with."
+      },
+      {
+        "name": "Transport Error",
+        "type": "Problem",
+        "description": "An error occurring during message transmission, specifically during the handshaking process between MCP client and server."
+      },
+      {
+        "name": "cURL",
+        "type": "Technology",
+        "description": "A command-line tool used for transferring data with URLs."
+      },
+      {
+        "name": "LangChain Docs MCP URL",
+        "type": "Feature",
+        "description": "The specific endpoint `https://docs.langchain.com/mcp` on the LangChain documentation site."
+      },
+      {
+        "name": "Vercel",
+        "type": "Organization",
+        "description": "The cloud platform used for deploying and hosting the LangChain documentation."
+      }
+    ],
+    "relations": [
+      {
+        "source": "500 Error",
+        "target": "LangChain Docs MCP URL",
+        "label": "AFFECTS",
+        "evidence": "langchain docs mcp 500 error",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "MCP Client",
+        "target": "LangChain Docs",
+        "label": "AFFECTS",
+        "evidence": "MCP client for `langchain-docs` failed to start",
+        "evidence_start": 1402,
+        "evidence_end": 1449
+      },
+      {
+        "source": "Transport Error",
+        "target": "MCP Client",
+        "label": "CAUSES",
+        "evidence": "handshaking with MCP server failed: Send message error Transport",
+        "evidence_start": 1471,
+        "evidence_end": 1535
+      },
+      {
+        "source": "MCP Client",
+        "target": "MCP Server",
+        "label": "USES",
+        "evidence": "handshaking with MCP server failed",
+        "evidence_start": 1471,
+        "evidence_end": 1505
+      },
+      {
+        "source": "cURL",
+        "target": "LangChain Docs MCP URL",
+        "label": "USES",
+        "evidence": "curl -I -L --max-time 10 https://docs.langchain.com/mcp",
+        "evidence_start": 1239,
+        "evidence_end": 1294
+      },
+      {
+        "source": "Vercel",
+        "target": "LangChain Docs",
+        "label": "RELATED_TO",
+        "evidence": "server: Vercel",
+        "evidence_start": 2423,
+        "evidence_end": 2437
+      }
+    ],
+    "summary": "The LangChain documentation's `/mcp` endpoint is returning a 500 error, which appears to be caused by the MCP client failing to start due to a transport error during handshaking with the MCP server, as confirmed by cURL and internal logs."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

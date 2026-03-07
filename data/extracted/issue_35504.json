@@ -1,0 +1,171 @@
+{
+  "id": 35504,
+  "title": "fix(anthropic): handle empty message content gracefully",
+  "status": "open",
+  "created_at": "2026-03-02T00:55:11Z",
+  "author_name": "JasonCZMeng",
+  "url": "https://github.com/langchain-ai/langchain/pull/35504",
+  "body_text": "## Summary\n\nReplace empty string content in human and system messages with a single space (` `) before sending to the Anthropic API. This prevents a `BadRequestError` (400) when `HumanMessage` or `SystemMessage` has `content=\"\"`.\n\nFixes #35081\n\n## Motivation\n\nAnthropic's API rejects messages with empty content: *\"all messages must have non-empty content except for the optional final assistant message\"*. This is a problem in multi-agent pipelines where one agent's empty output becomes the next agent's user input. The same approach was adopted by [AutoGen](https://github.com/microsoft/autogen/pull/6063).\n\n## Changes\n\n**`libs/partners/anthropic/langchain_anthropic/chat_models.py`**\n- In `_format_messages()`, empty string content (`\"\"`) in human and system messages is replaced with `\" \"` before calling the API\n- Handles string content, list content blocks, and dict text blocks\n- Also fixes a minor inefficiency in tool_result content formatting for plain string content\n\n**`libs/partners/anthropic/tests/unit_tests/test_chat_models.py`**\n- Added `test__format_messages_with_empty_system_and_human_content()` covering the fix",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Anthropic API",
+        "type": "Technology",
+        "description": "The API provided by Anthropic that rejects messages with empty content."
+      },
+      {
+        "name": "Empty String Content",
+        "type": "Problem",
+        "description": "Message content that is an empty string, causing errors with the Anthropic API."
+      },
+      {
+        "name": "Human Message",
+        "type": "Technology",
+        "description": "A type of message in the context of LLM APIs, specifically a user's input."
+      },
+      {
+        "name": "System Message",
+        "type": "Technology",
+        "description": "A type of message in the context of LLM APIs, providing instructions or context."
+      },
+      {
+        "name": "BadRequestError (400)",
+        "type": "Problem",
+        "description": "A specific HTTP error code indicating that the server cannot process the request due to a client error, in this case, empty message content."
+      },
+      {
+        "name": "AutoGen",
+        "type": "Technology",
+        "description": "A multi-agent framework that adopted a similar approach to handle empty message content."
+      },
+      {
+        "name": "_format_messages()",
+        "type": "Feature",
+        "description": "A function responsible for formatting messages before sending them to the Anthropic API."
+      },
+      {
+        "name": "langchain_anthropic/chat_models.py",
+        "type": "Technology",
+        "description": "The Python file containing the `_format_messages()` function."
+      },
+      {
+        "name": "test__format_messages_with_empty_system_and_human_content()",
+        "type": "Feature",
+        "description": "A unit test covering the fix for empty system and human message content."
+      },
+      {
+        "name": "test_chat_models.py",
+        "type": "Technology",
+        "description": "The Python file containing unit tests for chat models, including the new test case."
+      },
+      {
+        "name": "Multi-Agent Pipelines",
+        "type": "Technology",
+        "description": "A system architecture where multiple agents interact, potentially leading to empty outputs as inputs for subsequent agents."
+      },
+      {
+        "name": "Tool Result Content Formatting",
+        "type": "Feature",
+        "description": "The process of formatting content from tool results."
+      },
+      {
+        "name": "Inefficiency",
+        "type": "Problem",
+        "description": "A minor performance issue related to tool_result content formatting."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Empty String Content",
+        "target": "BadRequestError (400)",
+        "label": "CAUSES",
+        "evidence": "This prevents a `BadRequestError` (400) when `HumanMessage` or `SystemMessage` has `content=\"\"`.",
+        "evidence_start": 133,
+        "evidence_end": 229
+      },
+      {
+        "source": "BadRequestError (400)",
+        "target": "Anthropic API",
+        "label": "AFFECTS",
+        "evidence": "This prevents a `BadRequestError` (400) when `HumanMessage` or `SystemMessage` has `content=\"\"`.",
+        "evidence_start": 133,
+        "evidence_end": 229
+      },
+      {
+        "source": "Anthropic API",
+        "target": "Empty String Content",
+        "label": "AFFECTS",
+        "evidence": "Anthropic's API rejects messages with empty content",
+        "evidence_start": 260,
+        "evidence_end": 311
+      },
+      {
+        "source": "_format_messages()",
+        "target": "Empty String Content",
+        "label": "USES",
+        "evidence": "In `_format_messages()`, empty string content (`\"\"`) in human and system messages is replaced with `\" \"` before calling the API",
+        "evidence_start": 690,
+        "evidence_end": 817
+      },
+      {
+        "source": "langchain_anthropic/chat_models.py",
+        "target": "_format_messages()",
+        "label": "RELATED_TO",
+        "evidence": "`libs/partners/anthropic/langchain_anthropic/chat_models.py` - In `_format_messages()`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "test__format_messages_with_empty_system_and_human_content()",
+        "target": "_format_messages()",
+        "label": "RELATED_TO",
+        "evidence": "Added `test__format_messages_with_empty_system_and_human_content()` covering the fix",
+        "evidence_start": 1049,
+        "evidence_end": 1133
+      },
+      {
+        "source": "test_chat_models.py",
+        "target": "test__format_messages_with_empty_system_and_human_content()",
+        "label": "RELATED_TO",
+        "evidence": "`libs/partners/anthropic/tests/unit_tests/test_chat_models.py` - Added `test__format_messages_with_empty_system_and_human_content()`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Empty String Content",
+        "target": "Multi-Agent Pipelines",
+        "label": "RELATED_TO",
+        "evidence": "This is a problem in multi-agent pipelines where one agent's empty output becomes the next agent's user input.",
+        "evidence_start": 407,
+        "evidence_end": 517
+      },
+      {
+        "source": "AutoGen",
+        "target": "Empty String Content",
+        "label": "RELATED_TO",
+        "evidence": "The same approach was adopted by [AutoGen](https://github.com/microsoft/autogen/pull/6063).",
+        "evidence_start": 518,
+        "evidence_end": 609
+      },
+      {
+        "source": "_format_messages()",
+        "target": "Inefficiency",
+        "label": "AFFECTS",
+        "evidence": "Also fixes a minor inefficiency in tool_result content formatting for plain string content",
+        "evidence_start": 888,
+        "evidence_end": 978
+      },
+      {
+        "source": "_format_messages()",
+        "target": "Tool Result Content Formatting",
+        "label": "RELATED_TO",
+        "evidence": "Also fixes a minor inefficiency in tool_result content formatting for plain string content",
+        "evidence_start": 888,
+        "evidence_end": 978
+      }
+    ],
+    "summary": "This issue fixes a `BadRequestError` (400) from the Anthropic API by replacing empty string content in `HumanMessage` and `SystemMessage` with a single space within the `_format_messages()` function, also addressing a minor inefficiency in tool result content formatting."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

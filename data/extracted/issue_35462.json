@@ -1,0 +1,179 @@
+{
+  "id": 35462,
+  "title": "fix(openai): gracefully handle null choices in OpenAI-compatible API …",
+  "status": "closed",
+  "created_at": "2026-02-27T08:25:47Z",
+  "author_name": "senguttuvan",
+  "url": "https://github.com/langchain-ai/langchain/pull/35462",
+  "body_text": "…responses\r\n\r\n## Summary\r\n\r\nFixes #32252\r\n\r\nWhen using `ChatOpenAI` with OpenAI-compatible endpoints (e.g., vLLM on RunPod, LM Studio, LocalAI, or other self-hosted inference servers), the client sometimes receives a valid response JSON — verified to have a `choices` field via `requests` directly — but the Pydantic model deserialization inside the OpenAI SDK occasionally produces `choices=None`.\r\n\r\nThis PR improves the null `choices` handling in two ways:\r\n1. **Recovery attempt**: Before raising, try to extract `choices` from the raw  `model_dump()` / dict form of the response — this handles the case where Pydantic strict validation sets the field to `None` even though the underlying JSON had it.\r\n\r\n2. **Better error message**: If recovery fails, raise a `ValueError` with the endpoint URL (if available) and a hint that this is likely an OpenAI-compatible API compatibility issue.\r\n\r\n### Testing\r\n\r\nAdded a unit test in `libs/partners/openai/tests/unit_tests/test_chat_models.py` that mocks a vLLM-style response with choices present but Pydantic-deserialized to `None`, verifying the recovery path works correctly.\r\n\r\n### Impact\r\n\r\nAffects all users running `ChatOpenAI` against:\r\n- vLLM (RunPod, self-hosted)\r\n- LM Studio\r\n- LocalAI\r\n- Any OpenAI-compatible endpoint that returns valid JSON choices but whose Pydantic model deserialization strips the field\r\n\r\n---\r\n\r\nChecklist:\r\n- [x] Tests added\r\n- [x] Passes existing test suite (`make test`)\r\n- [x] No breaking changes to public API\r\n- [x] Docstring updated where relevant\r\n\r\n\r\n## Social handles\r\nLinkedIn: https://linkedin.com/in/navin-senguttuvan\r\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatOpenAI",
+        "type": "Technology",
+        "description": "A client used for interacting with OpenAI-compatible endpoints."
+      },
+      {
+        "name": "OpenAI-compatible API",
+        "type": "Technology",
+        "description": "Endpoints that mimic the OpenAI API, such as vLLM, LM Studio, or LocalAI."
+      },
+      {
+        "name": "vLLM",
+        "type": "Technology",
+        "description": "A specific OpenAI-compatible inference server."
+      },
+      {
+        "name": "RunPod",
+        "type": "Technology",
+        "description": "A platform where vLLM can be hosted."
+      },
+      {
+        "name": "LM Studio",
+        "type": "Technology",
+        "description": "A tool for running local language models, compatible with OpenAI API."
+      },
+      {
+        "name": "LocalAI",
+        "type": "Technology",
+        "description": "A self-hosted, OpenAI-compatible API server."
+      },
+      {
+        "name": "Pydantic Model Deserialization Issue",
+        "type": "Problem",
+        "description": "An issue where the Pydantic model in the OpenAI SDK incorrectly deserializes the 'choices' field to 'None'."
+      },
+      {
+        "name": "Null Choices Handling",
+        "type": "Feature",
+        "description": "An improvement to gracefully handle 'choices=None' in OpenAI-compatible API responses."
+      },
+      {
+        "name": "ValueError",
+        "type": "Problem",
+        "description": "An error raised when 'choices' recovery fails during deserialization."
+      },
+      {
+        "name": "OpenAI SDK",
+        "type": "Technology",
+        "description": "The software development kit that includes ChatOpenAI."
+      },
+      {
+        "name": "Issue 32252",
+        "type": "Problem",
+        "description": "A specific GitHub issue that this fix addresses."
+      },
+      {
+        "name": "Unit Test",
+        "type": "Feature",
+        "description": "A test designed to verify the Null Choices Handling fix."
+      },
+      {
+        "name": "test_chat_models.py",
+        "type": "Technology",
+        "description": "The file where the unit test for ChatOpenAI is located."
+      }
+    ],
+    "relations": [
+      {
+        "source": "ChatOpenAI",
+        "target": "OpenAI-compatible API",
+        "label": "USES",
+        "evidence": "When using ChatOpenAI with OpenAI-compatible endpoints",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Pydantic Model Deserialization Issue",
+        "target": "Null Choices Handling",
+        "label": "RELATED_TO",
+        "evidence": "Before raising, try to extract choices from the raw model_dump() / dict form of the response — this handles the case where Pydantic strict validation sets the field to None even though the underlying JSON had it.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Null Choices Handling",
+        "target": "ChatOpenAI",
+        "label": "AFFECTS",
+        "evidence": "This PR improves the null choices handling in two ways",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Null Choices Handling",
+        "target": "ValueError",
+        "label": "CAUSES",
+        "evidence": "If recovery fails, raise a ValueError",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "vLLM",
+        "target": "OpenAI-compatible API",
+        "label": "RELATED_TO",
+        "evidence": "OpenAI-compatible endpoints (e.g., vLLM on RunPod, LM Studio, LocalAI, or other self-hosted inference servers)",
+        "evidence_start": 73,
+        "evidence_end": 183
+      },
+      {
+        "source": "LM Studio",
+        "target": "OpenAI-compatible API",
+        "label": "RELATED_TO",
+        "evidence": "OpenAI-compatible endpoints (e.g., vLLM on RunPod, LM Studio, LocalAI, or other self-hosted inference servers)",
+        "evidence_start": 73,
+        "evidence_end": 183
+      },
+      {
+        "source": "LocalAI",
+        "target": "OpenAI-compatible API",
+        "label": "RELATED_TO",
+        "evidence": "OpenAI-compatible endpoints (e.g., vLLM on RunPod, LM Studio, LocalAI, or other self-hosted inference servers)",
+        "evidence_start": 73,
+        "evidence_end": 183
+      },
+      {
+        "source": "Issue 32252",
+        "target": "Null Choices Handling",
+        "label": "RELATED_TO",
+        "evidence": "Fixes #32252",
+        "evidence_start": 28,
+        "evidence_end": 40
+      },
+      {
+        "source": "Unit Test",
+        "target": "Null Choices Handling",
+        "label": "RELATED_TO",
+        "evidence": "Added a unit test in libs/partners/openai/tests/unit_tests/test_chat_models.py that mocks a vLLM-style response with choices present but Pydantic-deserialized to None, verifying the recovery path works correctly.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Pydantic Model Deserialization Issue",
+        "target": "OpenAI SDK",
+        "label": "AFFECTS",
+        "evidence": "Pydantic model deserialization inside the OpenAI SDK occasionally produces choices=None.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "RunPod",
+        "target": "vLLM",
+        "label": "RELATED_TO",
+        "evidence": "vLLM on RunPod",
+        "evidence_start": 108,
+        "evidence_end": 122
+      },
+      {
+        "source": "Pydantic Model Deserialization Issue",
+        "target": "choices=None",
+        "label": "CAUSES",
+        "evidence": "Pydantic model deserialization inside the OpenAI SDK occasionally produces choices=None.",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "This issue fixes ChatOpenAI to gracefully handle null choices in OpenAI-compatible API responses, which occur due to Pydantic model deserialization issues in the OpenAI SDK when interacting with services like vLLM, LM Studio, or LocalAI."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

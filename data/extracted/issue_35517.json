@@ -1,0 +1,166 @@
+{
+  "id": 35517,
+  "title": "fix(core): properly merge fragmented tool_call_chunks in AIMessageChunk",
+  "status": "open",
+  "created_at": "2026-03-02T12:58:56Z",
+  "author_name": "A404coder",
+  "url": "https://github.com/langchain-ai/langchain/pull/35517",
+  "body_text": "## 问题\n\n根据 issue #35514，某些提供商（如 OpenRouter 配合 deepseek/deepseek-v3.2）在流式传输工具调用时，会将参数分散在多个 SSE 分片中。这导致工具在参数不完整时就被执行。\n\n## 修复\n\n1. **`init_tool_calls()` 方法** - 按 `id` 分组 `tool_call_chunks`，合并参数后再解析 JSON\n\n2. **`add_ai_message_chunks()` 函数** - 合并多个 AIMessageChunk 时，也按 `id` 分组合并 `tool_call_chunks`\n\n3. **单元测试** - 添加了针对 SSE 分片场景的测试用例\n\n## 测试场景\n\n- 单个工具调用的参数分片\n- 多个工具调用的分片\n- 合并后的完整参数验证\n\nFixes #35514",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "AIMessageChunk",
+        "type": "Technology",
+        "description": "A data structure in which fragmented tool call chunks need to be properly merged."
+      },
+      {
+        "name": "Fragmented Tool Call Chunks",
+        "type": "Problem",
+        "description": "Tool call parameters that are split across multiple Server-Sent Events (SSE) chunks."
+      },
+      {
+        "name": "OpenRouter",
+        "type": "Technology",
+        "description": "A provider that, when combined with Deepseek-v3.2, can cause fragmented tool call chunks."
+      },
+      {
+        "name": "Deepseek-v3.2",
+        "type": "Technology",
+        "description": "A model from Deepseek mentioned as exhibiting the issue when used with OpenRouter."
+      },
+      {
+        "name": "Streaming Tool Calls",
+        "type": "Feature",
+        "description": "The process of transmitting tool calls in a continuous stream, where fragmentation can occur."
+      },
+      {
+        "name": "Premature Tool Execution",
+        "type": "Problem",
+        "description": "The issue of tools being executed with incomplete parameters due to fragmentation."
+      },
+      {
+        "name": "init_tool_calls() Method",
+        "type": "Feature",
+        "description": "A method modified to group and merge tool call chunks by ID before JSON parsing."
+      },
+      {
+        "name": "add_ai_message_chunks() Function",
+        "type": "Feature",
+        "description": "A function modified to merge tool call chunks by ID when combining multiple AIMessageChunks."
+      },
+      {
+        "name": "SSE Chunks",
+        "type": "Technology",
+        "description": "Server-Sent Events chunks, which are the medium through which tool call parameters are fragmented."
+      },
+      {
+        "name": "Issue #35514",
+        "type": "Problem",
+        "description": "An existing GitHub issue that describes the problem of fragmented tool call chunks."
+      },
+      {
+        "name": "Unit Tests",
+        "type": "Feature",
+        "description": "Tests added to cover scenarios involving fragmented tool call parameters."
+      },
+      {
+        "name": "Tool Call Chunks",
+        "type": "Technology",
+        "description": "Segments of tool call parameters that can become fragmented during streaming."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Fragmented Tool Call Chunks",
+        "target": "AIMessageChunk",
+        "label": "AFFECTS",
+        "evidence": "properly merge fragmented tool_call_chunks in AIMessageChunk",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "OpenRouter",
+        "target": "Fragmented Tool Call Chunks",
+        "label": "CAUSES",
+        "evidence": "某些提供商（如 OpenRouter 配合 deepseek/deepseek-v3.2）在流式传输工具调用时，会将参数分散在多个 SSE 分片中。",
+        "evidence_start": 23,
+        "evidence_end": 97
+      },
+      {
+        "source": "Deepseek-v3.2",
+        "target": "Fragmented Tool Call Chunks",
+        "label": "CAUSES",
+        "evidence": "某些提供商（如 OpenRouter 配合 deepseek/deepseek-v3.2）在流式传输工具调用时，会将参数分散在多个 SSE 分片中。",
+        "evidence_start": 23,
+        "evidence_end": 97
+      },
+      {
+        "source": "Streaming Tool Calls",
+        "target": "Fragmented Tool Call Chunks",
+        "label": "RELATED_TO",
+        "evidence": "在流式传输工具调用时，会将参数分散在多个 SSE 分片中。",
+        "evidence_start": 68,
+        "evidence_end": 97
+      },
+      {
+        "source": "Fragmented Tool Call Chunks",
+        "target": "Premature Tool Execution",
+        "label": "CAUSES",
+        "evidence": "这导致工具在参数不完整时就被执行。",
+        "evidence_start": 97,
+        "evidence_end": 114
+      },
+      {
+        "source": "init_tool_calls() Method",
+        "target": "Tool Call Chunks",
+        "label": "USES",
+        "evidence": "按 `id` 分组 `tool_call_chunks`，合并参数后再解析 JSON",
+        "evidence_start": 155,
+        "evidence_end": 197
+      },
+      {
+        "source": "init_tool_calls() Method",
+        "target": "Fragmented Tool Call Chunks",
+        "label": "RELATED_TO",
+        "evidence": "按 `id` 分组 `tool_call_chunks`，合并参数后再解析 JSON",
+        "evidence_start": 155,
+        "evidence_end": 197
+      },
+      {
+        "source": "add_ai_message_chunks() Function",
+        "target": "Tool Call Chunks",
+        "label": "USES",
+        "evidence": "也按 `id` 分组合并 `tool_call_chunks`",
+        "evidence_start": 259,
+        "evidence_end": 290
+      },
+      {
+        "source": "add_ai_message_chunks() Function",
+        "target": "Fragmented Tool Call Chunks",
+        "label": "RELATED_TO",
+        "evidence": "合并多个 AIMessageChunk 时，也按 `id` 分组合并 `tool_call_chunks`",
+        "evidence_start": 237,
+        "evidence_end": 290
+      },
+      {
+        "source": "Unit Tests",
+        "target": "SSE Chunks",
+        "label": "RELATED_TO",
+        "evidence": "添加了针对 SSE 分片场景的测试用例",
+        "evidence_start": 306,
+        "evidence_end": 325
+      },
+      {
+        "source": "Issue #35514",
+        "target": "Fragmented Tool Call Chunks",
+        "label": "RELATED_TO",
+        "evidence": "根据 issue #35514，某些提供商（如 OpenRouter 配合 deepseek/deepseek-v3.2）在流式传输工具调用时，会将参数分散在多个 SSE 分片中。",
+        "evidence_start": 7,
+        "evidence_end": 97
+      }
+    ],
+    "summary": "This issue fixes a bug where tool call parameters are fragmented across SSE chunks by providers like OpenRouter with Deepseek-v3.2 during streaming, leading to premature tool execution, by properly merging these chunks within AIMessageChunk using the `init_tool_calls()` method and `add_ai_message_chunks()` function, and includes new unit tests."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

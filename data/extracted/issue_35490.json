@@ -1,0 +1,166 @@
+{
+  "id": 35490,
+  "title": "fix(langchain): handle missing 'tools' key in LLMToolSelectorMiddleware response",
+  "status": "open",
+  "created_at": "2026-03-01T02:37:32Z",
+  "author_name": "gitbalaji",
+  "url": "https://github.com/langchain-ai/langchain/pull/35490",
+  "body_text": "## Summary\n\n- `LLMToolSelectorMiddleware._process_selection_response` raised `KeyError: 'tools'` when the selection LLM returned a malformed response without the `tools` key (intermittent with some models under edge-case prompts)\n- `_process_selection_response` now returns `None` when the key is absent, and both `wrap_model_call` / `awrap_model_call` fall back to the original unfiltered request — keeping the agent functional\n- A warning is logged so the malformed response remains visible\n\n## Root cause\n\n```python\n# Before — crashes when LLM omits \"tools\"\nfor tool_name in response[\"tools\"]:  # KeyError\n\n# After — returns None, callers fall back to original request\ntools_from_response = response.get(\"tools\")\nif tools_from_response is None:\n    logger.warning(\"...Falling back to all available tools.\")\n    return None\n```\n\n## Test plan\n\n- [x] `test_missing_tools_key_falls_back_to_all_tools` — sync path: verifies all tools preserved on missing key\n- [x] `test_missing_tools_key_async_falls_back_to_all_tools` — async path: verifies no exception raised\n- [x] All 12 existing tests continue to pass\n\nCloses #34358\n\n---\n\n> This PR was developed with the assistance of an AI agent (Claude).",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "A framework that includes the LLMToolSelectorMiddleware component."
+      },
+      {
+        "name": "LLMToolSelectorMiddleware",
+        "type": "Technology",
+        "description": "A middleware component in LangChain responsible for processing LLM responses for tool selection."
+      },
+      {
+        "name": "LLM",
+        "type": "Technology",
+        "description": "Large Language Model, which can return malformed responses to the LLMToolSelectorMiddleware."
+      },
+      {
+        "name": "Malformed Response",
+        "type": "Problem",
+        "description": "A response from an LLM that is missing the expected 'tools' key."
+      },
+      {
+        "name": "KeyError: 'tools'",
+        "type": "Problem",
+        "description": "A Python error raised when the 'tools' key is absent from an LLM's response, previously crashing the middleware."
+      },
+      {
+        "name": "tools key",
+        "type": "Feature",
+        "description": "A specific key expected in the LLM's response for tool selection."
+      },
+      {
+        "name": "_process_selection_response",
+        "type": "Feature",
+        "description": "A method within LLMToolSelectorMiddleware that processes LLM responses for tool selection."
+      },
+      {
+        "name": "wrap_model_call",
+        "type": "Feature",
+        "description": "A synchronous method that handles model calls and now implements fallback logic for malformed LLM responses."
+      },
+      {
+        "name": "awrap_model_call",
+        "type": "Feature",
+        "description": "An asynchronous method that handles model calls and now implements fallback logic for malformed LLM responses."
+      },
+      {
+        "name": "Original Unfiltered Request",
+        "type": "Feature",
+        "description": "The initial request made to the agent, used as a fallback when LLM responses are malformed."
+      },
+      {
+        "name": "Agent Functionality",
+        "type": "Feature",
+        "description": "The ability of the agent to continue operating despite malformed LLM responses."
+      },
+      {
+        "name": "Warning Log",
+        "type": "Feature",
+        "description": "A system behavior where a warning message is recorded when a malformed LLM response is encountered."
+      }
+    ],
+    "relations": [
+      {
+        "source": "LangChain",
+        "target": "LLMToolSelectorMiddleware",
+        "label": "RELATED_TO",
+        "evidence": "fix(langchain): handle missing 'tools' key in LLMToolSelectorMiddleware response",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "LLMToolSelectorMiddleware",
+        "target": "LLM",
+        "label": "USES",
+        "evidence": "when the selection LLM returned a malformed response",
+        "evidence_start": 97,
+        "evidence_end": 149
+      },
+      {
+        "source": "LLM",
+        "target": "Malformed Response",
+        "label": "CAUSES",
+        "evidence": "when the selection LLM returned a malformed response",
+        "evidence_start": 97,
+        "evidence_end": 149
+      },
+      {
+        "source": "Malformed Response",
+        "target": "KeyError: 'tools'",
+        "label": "CAUSES",
+        "evidence": "`LLMToolSelectorMiddleware._process_selection_response` raised `KeyError: 'tools'` when the selection LLM returned a malformed response without the `tools` key",
+        "evidence_start": 14,
+        "evidence_end": 173
+      },
+      {
+        "source": "KeyError: 'tools'",
+        "target": "LLMToolSelectorMiddleware",
+        "label": "AFFECTS",
+        "evidence": "`LLMToolSelectorMiddleware._process_selection_response` raised `KeyError: 'tools'`",
+        "evidence_start": 14,
+        "evidence_end": 96
+      },
+      {
+        "source": "_process_selection_response",
+        "target": "tools key",
+        "label": "RELATED_TO",
+        "evidence": "malformed response without the `tools` key",
+        "evidence_start": 131,
+        "evidence_end": 173
+      },
+      {
+        "source": "_process_selection_response",
+        "target": "Malformed Response",
+        "label": "RELATED_TO",
+        "evidence": "`_process_selection_response` now returns `None` when the key is absent",
+        "evidence_start": 232,
+        "evidence_end": 303
+      },
+      {
+        "source": "wrap_model_call",
+        "target": "Original Unfiltered Request",
+        "label": "USES",
+        "evidence": "`wrap_model_call` / `awrap_model_call` fall back to the original unfiltered request",
+        "evidence_start": 314,
+        "evidence_end": 397
+      },
+      {
+        "source": "awrap_model_call",
+        "target": "Original Unfiltered Request",
+        "label": "USES",
+        "evidence": "`wrap_model_call` / `awrap_model_call` fall back to the original unfiltered request",
+        "evidence_start": 314,
+        "evidence_end": 397
+      },
+      {
+        "source": "Agent Functionality",
+        "target": "Original Unfiltered Request",
+        "label": "USES",
+        "evidence": "fall back to the original unfiltered request — keeping the agent functional",
+        "evidence_start": 353,
+        "evidence_end": 428
+      },
+      {
+        "source": "Warning Log",
+        "target": "Malformed Response",
+        "label": "RELATED_TO",
+        "evidence": "A warning is logged so the malformed response remains visible",
+        "evidence_start": 431,
+        "evidence_end": 492
+      }
+    ],
+    "summary": "The `LLMToolSelectorMiddleware` in LangChain now handles `KeyError: 'tools'` caused by malformed LLM responses by falling back to the original unfiltered request and logging a warning, thus maintaining agent functionality."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

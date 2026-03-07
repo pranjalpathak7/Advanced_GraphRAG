@@ -1,0 +1,184 @@
+{
+  "id": 35495,
+  "title": "test(chatglm): add tests for invalid API and timeout scenarios",
+  "status": "closed",
+  "created_at": "2026-03-01T14:06:52Z",
+  "author_name": "XXXJCSAMA",
+  "url": "https://github.com/langchain-ai/langchain/pull/35495",
+  "body_text": "## Description\r\nAdd tests to verify ChatGLM chat model's error handling for invalid API addresses and timeouts, covering sync, async, and streaming request modes.\r\n\r\n## Verification\r\n- Ran `make format`, `make lint` and `make test` from the root of the `langchain` package, all checks passed (only minor type checker import warnings, no impact on test execution).\r\n- Manually executed the new test cases to confirm they correctly validate error behaviors of ChatGLM under invalid API/timeout scenarios.\r\n\r\n## Additional Notes\r\n- No breaking changes, no dependency modifications, and no updates to `uv.lock`/`pyproject.toml` files.\r\n- This PR only touches the `langchain` package (specifically test files under `chat_models`), adhering to single-package modification guidelines.\r\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatGLM Chat Model",
+        "type": "Technology",
+        "description": "A chat model whose error handling is being tested."
+      },
+      {
+        "name": "Invalid API Addresses",
+        "type": "Problem",
+        "description": "A scenario where the API address is incorrect, leading to errors."
+      },
+      {
+        "name": "Timeouts",
+        "type": "Problem",
+        "description": "A scenario where requests exceed the allowed time limit, leading to errors."
+      },
+      {
+        "name": "Error Handling",
+        "type": "Feature",
+        "description": "The capability of the ChatGLM chat model to manage and respond to errors."
+      },
+      {
+        "name": "Sync Request Mode",
+        "type": "Feature",
+        "description": "A synchronous mode for making requests to the ChatGLM chat model."
+      },
+      {
+        "name": "Async Request Mode",
+        "type": "Feature",
+        "description": "An asynchronous mode for making requests to the ChatGLM chat model."
+      },
+      {
+        "name": "Streaming Request Mode",
+        "type": "Feature",
+        "description": "A streaming mode for making requests to the ChatGLM chat model."
+      },
+      {
+        "name": "Tests",
+        "type": "Feature",
+        "description": "Code added to verify the error handling of the ChatGLM chat model."
+      },
+      {
+        "name": "Make Format",
+        "type": "Technology",
+        "description": "A command-line tool used for code formatting."
+      },
+      {
+        "name": "Make Lint",
+        "type": "Technology",
+        "description": "A command-line tool used for code linting."
+      },
+      {
+        "name": "Make Test",
+        "type": "Technology",
+        "description": "A command-line tool used for running tests."
+      },
+      {
+        "name": "Langchain Package",
+        "type": "Technology",
+        "description": "The software package where the changes and tests are located."
+      },
+      {
+        "name": "Chat Models",
+        "type": "Technology",
+        "description": "A specific directory or component within the Langchain package containing chat model related files."
+      },
+      {
+        "name": "Type Checker Import Warnings",
+        "type": "Problem",
+        "description": "Minor warnings reported by the type checker during test execution."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Tests",
+        "target": "Error Handling",
+        "label": "RELATED_TO",
+        "evidence": "Add tests to verify ChatGLM chat model's error handling",
+        "evidence_start": 16,
+        "evidence_end": 71
+      },
+      {
+        "source": "Error Handling",
+        "target": "ChatGLM Chat Model",
+        "label": "RELATED_TO",
+        "evidence": "ChatGLM chat model's error handling",
+        "evidence_start": 36,
+        "evidence_end": 71
+      },
+      {
+        "source": "Error Handling",
+        "target": "Invalid API Addresses",
+        "label": "USES",
+        "evidence": "error handling for invalid API addresses",
+        "evidence_start": 57,
+        "evidence_end": 97
+      },
+      {
+        "source": "Error Handling",
+        "target": "Timeouts",
+        "label": "USES",
+        "evidence": "error handling for invalid API addresses and timeouts",
+        "evidence_start": 57,
+        "evidence_end": 110
+      },
+      {
+        "source": "Error Handling",
+        "target": "Sync Request Mode",
+        "label": "RELATED_TO",
+        "evidence": "covering sync, async, and streaming request modes",
+        "evidence_start": 112,
+        "evidence_end": 161
+      },
+      {
+        "source": "Error Handling",
+        "target": "Async Request Mode",
+        "label": "RELATED_TO",
+        "evidence": "covering sync, async, and streaming request modes",
+        "evidence_start": 112,
+        "evidence_end": 161
+      },
+      {
+        "source": "Error Handling",
+        "target": "Streaming Request Mode",
+        "label": "RELATED_TO",
+        "evidence": "covering sync, async, and streaming request modes",
+        "evidence_start": 112,
+        "evidence_end": 161
+      },
+      {
+        "source": "Make Format",
+        "target": "Langchain Package",
+        "label": "RELATED_TO",
+        "evidence": "Ran `make format`, `make lint` and `make test` from the root of the `langchain` package",
+        "evidence_start": 185,
+        "evidence_end": 272
+      },
+      {
+        "source": "Make Lint",
+        "target": "Langchain Package",
+        "label": "RELATED_TO",
+        "evidence": "Ran `make format`, `make lint` and `make test` from the root of the `langchain` package",
+        "evidence_start": 185,
+        "evidence_end": 272
+      },
+      {
+        "source": "Make Test",
+        "target": "Langchain Package",
+        "label": "RELATED_TO",
+        "evidence": "Ran `make format`, `make lint` and `make test` from the root of the `langchain` package",
+        "evidence_start": 185,
+        "evidence_end": 272
+      },
+      {
+        "source": "Type Checker Import Warnings",
+        "target": "Make Test",
+        "label": "AFFECTS",
+        "evidence": "only minor type checker import warnings, no impact on test execution",
+        "evidence_start": 293,
+        "evidence_end": 361
+      },
+      {
+        "source": "Langchain Package",
+        "target": "Chat Models",
+        "label": "USES",
+        "evidence": "This PR only touches the `langchain` package (specifically test files under `chat_models`)",
+        "evidence_start": 634,
+        "evidence_end": 724
+      }
+    ],
+    "summary": "This issue describes adding tests to the ChatGLM chat model within the Langchain package to verify its error handling for invalid API addresses and timeouts across sync, async, and streaming request modes."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

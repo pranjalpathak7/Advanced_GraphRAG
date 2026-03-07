@@ -1,0 +1,153 @@
+{
+  "id": 35496,
+  "title": "feat(anthropic): add bedrock_compat mode for Bedrock proxy streaming",
+  "status": "open",
+  "created_at": "2026-03-01T14:28:07Z",
+  "author_name": "lonnie08",
+  "url": "https://github.com/langchain-ai/langchain/pull/35496",
+  "body_text": "## Summary\n\nAdd `bedrock_compat` parameter to `ChatAnthropic` to enable compatibility mode for Bedrock proxy and similar proxies that send SSE events without the `event:` field.\n\n## Problem\n\nWhen using `ChatAnthropic` with Bedrock-compatible proxies (or other proxies that do not follow the standard Anthropic SSE format), streaming fails because:\n\n1. Bedrock proxies send SSE events with only `data:` lines\n2. The Anthropic SDK expects both `event:` and `data:` fields\n3. Without the `event:` field, all events are silently skipped, resulting in \"No generation chunks were returned\" error\n\n## Solution\n\nAdd a `bedrock_compat` parameter that, when set to `True`, wraps the streaming response to infer event types from the data payload.\n\n## Usage\n\n```python\nfrom langchain_anthropic import ChatAnthropic\n\nmodel = ChatAnthropic(\n    model=\"anthropic.claude-4-5-opus-20250129\",\n    bedrock_compat=True,\n    base_url=\"https://my-bedrock-proxy.example.com\",\n)\n\nfor chunk in model.stream(\"Hello\"):\n    print(chunk.content, end=\"|\")\n```\n\nFixes #35442",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatAnthropic",
+        "type": "Technology",
+        "description": "A class in `langchain_anthropic` used for interacting with Anthropic models."
+      },
+      {
+        "name": "bedrock_compat",
+        "type": "Feature",
+        "description": "A parameter for `ChatAnthropic` to enable compatibility mode for Bedrock proxy streaming."
+      },
+      {
+        "name": "Bedrock Proxy",
+        "type": "Technology",
+        "description": "A proxy service that sends SSE events with only `data:` lines, differing from the standard Anthropic SSE format."
+      },
+      {
+        "name": "Streaming Failure",
+        "type": "Problem",
+        "description": "An issue where `ChatAnthropic` streaming fails when used with Bedrock-compatible proxies."
+      },
+      {
+        "name": "Anthropic SDK",
+        "type": "Technology",
+        "description": "The SDK that `ChatAnthropic` relies on, which expects both `event:` and `data:` fields in SSE events."
+      },
+      {
+        "name": "No Generation Chunks Were Returned Error",
+        "type": "Problem",
+        "description": "An error message encountered when streaming fails due to missing `event:` fields in SSE events."
+      },
+      {
+        "name": "SSE Events Without Event Field",
+        "type": "Problem",
+        "description": "Server-Sent Events sent by Bedrock proxies that lack the `event:` field, causing issues with the Anthropic SDK."
+      },
+      {
+        "name": "Anthropic SSE Format",
+        "type": "Technology",
+        "description": "The standard format for Server-Sent Events expected by the Anthropic SDK, including `event:` and `data:` fields."
+      },
+      {
+        "name": "langchain_anthropic",
+        "type": "Technology",
+        "description": "The library containing the `ChatAnthropic` class."
+      },
+      {
+        "name": "anthropic.claude-4-5-opus-20250129",
+        "type": "Technology",
+        "description": "A specific Anthropic model used in the example."
+      },
+      {
+        "name": "Streaming Response",
+        "type": "Technology",
+        "description": "The response object from a streaming API call that `bedrock_compat` wraps."
+      }
+    ],
+    "relations": [
+      {
+        "source": "ChatAnthropic",
+        "target": "bedrock_compat",
+        "label": "RELATED_TO",
+        "evidence": "Add `bedrock_compat` parameter to `ChatAnthropic`",
+        "evidence_start": 12,
+        "evidence_end": 61
+      },
+      {
+        "source": "bedrock_compat",
+        "target": "Bedrock Proxy",
+        "label": "RELATED_TO",
+        "evidence": "enable compatibility mode for Bedrock proxy",
+        "evidence_start": 65,
+        "evidence_end": 108
+      },
+      {
+        "source": "Bedrock Proxy",
+        "target": "Streaming Failure",
+        "label": "CAUSES",
+        "evidence": "When using `ChatAnthropic` with Bedrock-compatible proxies (or other proxies that do not follow the standard Anthropic SSE format), streaming fails",
+        "evidence_start": 191,
+        "evidence_end": 338
+      },
+      {
+        "source": "Streaming Failure",
+        "target": "ChatAnthropic",
+        "label": "AFFECTS",
+        "evidence": "When using `ChatAnthropic` with Bedrock-compatible proxies (or other proxies that do not follow the standard Anthropic SSE format), streaming fails",
+        "evidence_start": 191,
+        "evidence_end": 338
+      },
+      {
+        "source": "Bedrock Proxy",
+        "target": "SSE Events Without Event Field",
+        "label": "CAUSES",
+        "evidence": "Bedrock proxies send SSE events with only `data:` lines",
+        "evidence_start": 352,
+        "evidence_end": 407
+      },
+      {
+        "source": "Anthropic SDK",
+        "target": "Anthropic SSE Format",
+        "label": "RELATED_TO",
+        "evidence": "The Anthropic SDK expects both `event:` and `data:` fields",
+        "evidence_start": 411,
+        "evidence_end": 469
+      },
+      {
+        "source": "SSE Events Without Event Field",
+        "target": "No Generation Chunks Were Returned Error",
+        "label": "CAUSES",
+        "evidence": "Without the `event:` field, all events are silently skipped, resulting in \"No generation chunks were returned\" error",
+        "evidence_start": 473,
+        "evidence_end": 589
+      },
+      {
+        "source": "bedrock_compat",
+        "target": "Streaming Response",
+        "label": "USES",
+        "evidence": "wraps the streaming response to infer event types from the data payload.",
+        "evidence_start": 663,
+        "evidence_end": 735
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "anthropic.claude-4-5-opus-20250129",
+        "label": "USES",
+        "evidence": "model=\"anthropic.claude-4-5-opus-20250129\"",
+        "evidence_start": 831,
+        "evidence_end": 873
+      },
+      {
+        "source": "langchain_anthropic",
+        "target": "ChatAnthropic",
+        "label": "USES",
+        "evidence": "from langchain_anthropic import ChatAnthropic",
+        "evidence_start": 757,
+        "evidence_end": 802
+      }
+    ],
+    "summary": "The `ChatAnthropic` class fails to stream responses from Bedrock-compatible proxies due to missing `event:` fields in SSE events, leading to a \"No generation chunks were returned\" error, which is resolved by adding a `bedrock_compat` parameter."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

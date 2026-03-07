@@ -1,0 +1,330 @@
+{
+  "id": 35458,
+  "title": "partners: add langchain-arcadedb integration",
+  "status": "closed",
+  "created_at": "2026-02-26T22:02:12Z",
+  "author_name": "lvca",
+  "url": "https://github.com/langchain-ai/langchain/pull/35458",
+  "body_text": "## Summary\n\nNew partner package for **[ArcadeDB](https://arcadedb.com)**, the multi-model database with native Bolt protocol support and 97.8% OpenCypher TCK compatibility.\n\n- `ArcadeDBGraph` — drop-in replacement for `Neo4jGraph` that connects via the standard Neo4j Python Bolt driver\n- **APOC-free**: schema introspection and graph document import use pure Cypher (no APOC procedures required)\n- Satisfies the `GraphStore` protocol — works with `GraphCypherQAChain` out of the box\n- Dependencies: only `langchain-core` and `neo4j` (Bolt driver)\n\n### Why ArcadeDB?\n\nArcadeDB is an open-source multi-model database (108k+ Docker pulls/month) that natively supports graph (OpenCypher/Gremlin), document (SQL), key-value, time-series, and vector models in a single engine. Its Bolt protocol endpoint lets existing Neo4j tooling connect without modification.\n\n### Key adaptations from langchain-neo4j\n\n| APOC procedure | ArcadeDB replacement |\n|---|---|\n| `apoc.meta.data()` for node props | Sample nodes per label, infer property types from values |\n| `apoc.meta.data()` for rel props | Sample rels per type, same inference |\n| `apoc.meta.data()` for patterns | `MATCH (a)-[r]->(b) RETURN DISTINCT labels(a)[0], type(r), labels(b)[0]` |\n| `apoc.merge.node()` | `UNWIND $rows AS row MERGE (n:Type {id: row.id}) SET n += row.properties` |\n| `apoc.merge.relationship()` | `MATCH ... MERGE (a)-[r:TYPE]->(b) SET r += row.properties` |\n\n### Files\n\n```\nlibs/partners/arcadedb/\n├── langchain_arcadedb/\n│   ├── __init__.py\n│   ├── arcadedb_graph.py     # Main ArcadeDBGraph class\n│   ├── graph_document.py     # Node/Relationship/GraphDocument dataclasses\n│   ├── schema.py             # APOC-free schema introspection\n│   └── py.typed\n├── tests/\n│   ├── unit_tests/\n│   │   ├── test_imports.py\n│   │   └── test_graph_document.py\n│   └── integration_tests/\n│       ├── test_arcadedb_graph.py\n│       └── test_compile.py\n├── scripts/\n│   ├── check_imports.py\n│   └── lint_imports.sh\n├── pyproject.toml\n├── Makefile\n├── README.md\n└── LICENSE\n```\n\n## Test plan\n\n- [x] Unit tests pass (imports, data structures)\n- [x] Integration tests pass against ArcadeDB 26.2.2 with Bolt plugin (`com.arcadedb.bolt.BoltProtocolPlugin`)\n- [x] Schema introspection detects node/rel properties and relationship patterns\n- [x] `add_graph_documents()` merges nodes and relationships correctly\n- [x] Idempotent merge verified (no duplicate nodes on re-import)\n- [x] `ArcadeDBGraph` satisfies `GraphStore` protocol (runtime check)\n- [x] Follows partner package conventions (hatchling build, ruff config, Makefile, test structure)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ArcadeDB",
+        "type": "Technology",
+        "description": "A multi-model database that natively supports graph, document, key-value, time-series, and vector models."
+      },
+      {
+        "name": "langchain-arcadedb",
+        "type": "Technology",
+        "description": "A new partner package for integrating ArcadeDB with LangChain."
+      },
+      {
+        "name": "ArcadeDBGraph",
+        "type": "Technology",
+        "description": "A class within langchain-arcadedb that serves as a drop-in replacement for Neo4jGraph."
+      },
+      {
+        "name": "Neo4jGraph",
+        "type": "Technology",
+        "description": "An existing graph integration class in LangChain that ArcadeDBGraph replaces."
+      },
+      {
+        "name": "Bolt Protocol",
+        "type": "Technology",
+        "description": "A standard protocol used for connecting to graph databases like Neo4j and ArcadeDB."
+      },
+      {
+        "name": "OpenCypher",
+        "type": "Technology",
+        "description": "A graph query language natively supported by ArcadeDB."
+      },
+      {
+        "name": "Gremlin",
+        "type": "Technology",
+        "description": "A graph traversal language natively supported by ArcadeDB."
+      },
+      {
+        "name": "SQL",
+        "type": "Technology",
+        "description": "A query language for document models, supported by ArcadeDB."
+      },
+      {
+        "name": "GraphStore Protocol",
+        "type": "Technology",
+        "description": "An interface that ArcadeDBGraph satisfies, allowing it to work with GraphCypherQAChain."
+      },
+      {
+        "name": "GraphCypherQAChain",
+        "type": "Technology",
+        "description": "A LangChain component for question-answering over Cypher graphs."
+      },
+      {
+        "name": "Neo4j Python Bolt Driver",
+        "type": "Technology",
+        "description": "The standard Python driver used by ArcadeDBGraph to connect to ArcadeDB."
+      },
+      {
+        "name": "APOC Procedures",
+        "type": "Technology",
+        "description": "Neo4j procedures that are replaced by pure Cypher in the ArcadeDB integration."
+      },
+      {
+        "name": "Cypher",
+        "type": "Technology",
+        "description": "A graph query language used for schema introspection and graph document import in ArcadeDBGraph."
+      },
+      {
+        "name": "langchain-core",
+        "type": "Technology",
+        "description": "A core dependency for the langchain-arcadedb package."
+      },
+      {
+        "name": "neo4j",
+        "type": "Technology",
+        "description": "The Python library providing the Bolt driver, a dependency for langchain-arcadedb."
+      },
+      {
+        "name": "Schema Introspection",
+        "type": "Feature",
+        "description": "The capability of ArcadeDBGraph to detect node/relationship properties and patterns without APOC procedures."
+      },
+      {
+        "name": "Graph Document Import",
+        "type": "Feature",
+        "description": "The process of importing graph data into ArcadeDB using pure Cypher."
+      },
+      {
+        "name": "add_graph_documents()",
+        "type": "Feature",
+        "description": "A method for correctly merging nodes and relationships into the graph."
+      },
+      {
+        "name": "Idempotent Merge",
+        "type": "Feature",
+        "description": "A verified property of the add_graph_documents() method, ensuring no duplicate nodes on re-import."
+      },
+      {
+        "name": "Node Properties Detection",
+        "type": "Feature",
+        "description": "A specific aspect of schema introspection, detecting properties of nodes."
+      },
+      {
+        "name": "Relationship Properties Detection",
+        "type": "Feature",
+        "description": "A specific aspect of schema introspection, detecting properties of relationships."
+      },
+      {
+        "name": "Relationship Patterns Detection",
+        "type": "Feature",
+        "description": "A specific aspect of schema introspection, detecting patterns of relationships."
+      },
+      {
+        "name": "ArcadeDB 26.2.2",
+        "type": "Technology",
+        "description": "A specific version of ArcadeDB against which integration tests were run."
+      },
+      {
+        "name": "BoltProtocolPlugin",
+        "type": "Technology",
+        "description": "A plugin for ArcadeDB that enables Bolt protocol support."
+      }
+    ],
+    "relations": [
+      {
+        "source": "langchain-arcadedb",
+        "target": "ArcadeDB",
+        "label": "RELATED_TO",
+        "evidence": "New partner package for **[ArcadeDB](https://arcadedb.com)**",
+        "evidence_start": 12,
+        "evidence_end": 72
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "langchain-arcadedb",
+        "label": "RELATED_TO",
+        "evidence": "langchain_arcadedb/arcadedb_graph.py     # Main ArcadeDBGraph class",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "Neo4jGraph",
+        "label": "RELATED_TO",
+        "evidence": "`ArcadeDBGraph` — drop-in replacement for `Neo4jGraph`",
+        "evidence_start": 176,
+        "evidence_end": 230
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "Bolt Protocol",
+        "label": "USES",
+        "evidence": "`ArcadeDBGraph` — drop-in replacement for `Neo4jGraph` that connects via the standard Neo4j Python Bolt driver",
+        "evidence_start": 176,
+        "evidence_end": 286
+      },
+      {
+        "source": "ArcadeDB",
+        "target": "Bolt Protocol",
+        "label": "USES",
+        "evidence": "the multi-model database with native Bolt protocol support",
+        "evidence_start": 74,
+        "evidence_end": 132
+      },
+      {
+        "source": "ArcadeDB",
+        "target": "OpenCypher",
+        "label": "USES",
+        "evidence": "natively supports graph (OpenCypher/Gremlin)",
+        "evidence_start": 648,
+        "evidence_end": 692
+      },
+      {
+        "source": "ArcadeDB",
+        "target": "Gremlin",
+        "label": "USES",
+        "evidence": "natively supports graph (OpenCypher/Gremlin)",
+        "evidence_start": 648,
+        "evidence_end": 692
+      },
+      {
+        "source": "ArcadeDB",
+        "target": "SQL",
+        "label": "USES",
+        "evidence": "document (SQL)",
+        "evidence_start": 694,
+        "evidence_end": 708
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "APOC Procedures",
+        "label": "RELATED_TO",
+        "evidence": "**APOC-free**: schema introspection and graph document import use pure Cypher (no APOC procedures required)",
+        "evidence_start": 289,
+        "evidence_end": 396
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "Cypher",
+        "label": "USES",
+        "evidence": "schema introspection and graph document import use pure Cypher",
+        "evidence_start": 304,
+        "evidence_end": 366
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "GraphStore Protocol",
+        "label": "RELATED_TO",
+        "evidence": "Satisfies the `GraphStore` protocol",
+        "evidence_start": 399,
+        "evidence_end": 434
+      },
+      {
+        "source": "GraphCypherQAChain",
+        "target": "GraphStore Protocol",
+        "label": "USES",
+        "evidence": "works with `GraphCypherQAChain` out of the box",
+        "evidence_start": 437,
+        "evidence_end": 483
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "langchain-core",
+        "label": "USES",
+        "evidence": "Dependencies: only `langchain-core` and `neo4j` (Bolt driver)",
+        "evidence_start": 486,
+        "evidence_end": 547
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "neo4j",
+        "label": "USES",
+        "evidence": "Dependencies: only `langchain-core` and `neo4j` (Bolt driver)",
+        "evidence_start": 486,
+        "evidence_end": 547
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "Neo4j Python Bolt Driver",
+        "label": "USES",
+        "evidence": "connects via the standard Neo4j Python Bolt driver",
+        "evidence_start": 236,
+        "evidence_end": 286
+      },
+      {
+        "source": "Schema Introspection",
+        "target": "ArcadeDBGraph",
+        "label": "RELATED_TO",
+        "evidence": "Schema introspection detects node/rel properties and relationship patterns",
+        "evidence_start": 2216,
+        "evidence_end": 2290
+      },
+      {
+        "source": "Graph Document Import",
+        "target": "ArcadeDBGraph",
+        "label": "RELATED_TO",
+        "evidence": "graph document import use pure Cypher",
+        "evidence_start": 329,
+        "evidence_end": 366
+      },
+      {
+        "source": "add_graph_documents()",
+        "target": "ArcadeDBGraph",
+        "label": "RELATED_TO",
+        "evidence": "`add_graph_documents()` merges nodes and relationships correctly",
+        "evidence_start": 2297,
+        "evidence_end": 2361
+      },
+      {
+        "source": "Idempotent Merge",
+        "target": "add_graph_documents()",
+        "label": "RELATED_TO",
+        "evidence": "Idempotent merge verified (no duplicate nodes on re-import)",
+        "evidence_start": 2368,
+        "evidence_end": 2427
+      },
+      {
+        "source": "Node Properties Detection",
+        "target": "Schema Introspection",
+        "label": "RELATED_TO",
+        "evidence": "Schema introspection detects node/rel properties",
+        "evidence_start": 2216,
+        "evidence_end": 2264
+      },
+      {
+        "source": "Relationship Properties Detection",
+        "target": "Schema Introspection",
+        "label": "RELATED_TO",
+        "evidence": "Schema introspection detects node/rel properties",
+        "evidence_start": 2216,
+        "evidence_end": 2264
+      },
+      {
+        "source": "Relationship Patterns Detection",
+        "target": "Schema Introspection",
+        "label": "RELATED_TO",
+        "evidence": "Schema introspection detects node/rel properties and relationship patterns",
+        "evidence_start": 2216,
+        "evidence_end": 2290
+      },
+      {
+        "source": "ArcadeDBGraph",
+        "target": "ArcadeDB 26.2.2",
+        "label": "USES",
+        "evidence": "Integration tests pass against ArcadeDB 26.2.2 with Bolt plugin (`com.arcadedb.bolt.BoltProtocolPlugin`)",
+        "evidence_start": 2105,
+        "evidence_end": 2209
+      },
+      {
+        "source": "ArcadeDB 26.2.2",
+        "target": "BoltProtocolPlugin",
+        "label": "USES",
+        "evidence": "ArcadeDB 26.2.2 with Bolt plugin (`com.arcadedb.bolt.BoltProtocolPlugin`)",
+        "evidence_start": 2136,
+        "evidence_end": 2209
+      }
+    ],
+    "summary": "This issue proposes adding a new `langchain-arcadedb` partner package, featuring `ArcadeDBGraph` as an APOC-free, `Neo4jGraph` replacement that integrates ArcadeDB with LangChain via the Bolt protocol and satisfies the `GraphStore` protocol."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

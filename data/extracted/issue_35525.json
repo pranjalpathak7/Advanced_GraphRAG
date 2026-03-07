@@ -1,0 +1,127 @@
+{
+  "id": 35525,
+  "title": "fix(huggingface): switch integration test provider to together",
+  "status": "closed",
+  "created_at": "2026-03-02T18:39:07Z",
+  "author_name": "mdrxy",
+  "url": "https://github.com/langchain-ai/langchain/pull/35525",
+  "body_text": "Switch the `TestHuggingFaceEndpoint` serverless inference provider from `sambanova` to `together` for `Llama-3.3-70B-Instruct`. Sambanova doesn't support `tool_choice: \"any\"` (needed by `test_structured_few_shot_examples` and `test_unicode_tool_call_integration`) and doesn't return `usage_metadata` in streaming responses.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "TestHuggingFaceEndpoint",
+        "type": "Feature",
+        "description": "A serverless inference provider for integration tests."
+      },
+      {
+        "name": "Sambanova",
+        "type": "Technology",
+        "description": "A serverless inference provider currently used by TestHuggingFaceEndpoint."
+      },
+      {
+        "name": "Together",
+        "type": "Technology",
+        "description": "A serverless inference provider that TestHuggingFaceEndpoint will switch to."
+      },
+      {
+        "name": "Llama-3.3-70B-Instruct",
+        "type": "Technology",
+        "description": "A specific model for which the inference provider is being switched."
+      },
+      {
+        "name": "tool_choice: \"any\"",
+        "type": "Feature",
+        "description": "A parameter required by certain integration tests."
+      },
+      {
+        "name": "test_structured_few_shot_examples",
+        "type": "Feature",
+        "description": "An integration test that requires 'tool_choice: \"any\"'."
+      },
+      {
+        "name": "test_unicode_tool_call_integration",
+        "type": "Feature",
+        "description": "An integration test that requires 'tool_choice: \"any\"'."
+      },
+      {
+        "name": "usage_metadata",
+        "type": "Feature",
+        "description": "Metadata expected in streaming responses."
+      },
+      {
+        "name": "Streaming Responses",
+        "type": "Feature",
+        "description": "A type of response from which usage_metadata is expected."
+      }
+    ],
+    "relations": [
+      {
+        "source": "TestHuggingFaceEndpoint",
+        "target": "Sambanova",
+        "label": "USES",
+        "evidence": "Switch the `TestHuggingFaceEndpoint` serverless inference provider from `sambanova`",
+        "evidence_start": 0,
+        "evidence_end": 83
+      },
+      {
+        "source": "TestHuggingFaceEndpoint",
+        "target": "Together",
+        "label": "USES",
+        "evidence": "switch integration test provider to together",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Sambanova",
+        "target": "tool_choice: \"any\"",
+        "label": "AFFECTS",
+        "evidence": "Sambanova doesn't support `tool_choice: \"any\"`",
+        "evidence_start": 128,
+        "evidence_end": 174
+      },
+      {
+        "source": "test_structured_few_shot_examples",
+        "target": "tool_choice: \"any\"",
+        "label": "USES",
+        "evidence": "`tool_choice: \"any\"` (needed by `test_structured_few_shot_examples`",
+        "evidence_start": 154,
+        "evidence_end": 221
+      },
+      {
+        "source": "test_unicode_tool_call_integration",
+        "target": "tool_choice: \"any\"",
+        "label": "USES",
+        "evidence": "`tool_choice: \"any\"` (needed by `test_structured_few_shot_examples` and `test_unicode_tool_call_integration`)",
+        "evidence_start": 154,
+        "evidence_end": 263
+      },
+      {
+        "source": "Sambanova",
+        "target": "usage_metadata",
+        "label": "AFFECTS",
+        "evidence": "doesn't return `usage_metadata` in streaming responses.",
+        "evidence_start": 268,
+        "evidence_end": 323
+      },
+      {
+        "source": "usage_metadata",
+        "target": "Streaming Responses",
+        "label": "RELATED_TO",
+        "evidence": "doesn't return `usage_metadata` in streaming responses.",
+        "evidence_start": 268,
+        "evidence_end": 323
+      },
+      {
+        "source": "TestHuggingFaceEndpoint",
+        "target": "Llama-3.3-70B-Instruct",
+        "label": "RELATED_TO",
+        "evidence": "for `Llama-3.3-70B-Instruct`.",
+        "evidence_start": 98,
+        "evidence_end": 127
+      }
+    ],
+    "summary": "The `TestHuggingFaceEndpoint` serverless inference provider is being switched from `sambanova` to `together` for `Llama-3.3-70B-Instruct` due to `sambanova`'s lack of support for `tool_choice: \"any\"` and its failure to return `usage_metadata` in streaming responses."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

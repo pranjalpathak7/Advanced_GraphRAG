@@ -1,0 +1,187 @@
+{
+  "id": 35500,
+  "title": "fix(core): render nested subgraph boxes for 3+ levels in draw_mermaid",
+  "status": "open",
+  "created_at": "2026-03-01T22:16:52Z",
+  "author_name": "AlonNaor22",
+  "url": "https://github.com/langchain-ai/langchain/pull/35500",
+  "body_text": "## Summary\n\n- Fixes `draw_mermaid()` with `xray=True` failing to render nested subgraph boxes for 3+ levels of nesting\n- The \"empty subgraphs\" code path skipped multi-level prefixes (`if \":\" not in prefix`), causing deeply nested nodes to appear as flat elements with escaped colons instead of properly nested subgraph containers\n- Additionally, `add_subgraph()` only discovered nested subgraphs via `edge_groups`, missing empty subgraphs entirely\n\n## Changes\n\n- **Precompute `all_subgraph_prefixes`** — expands `subgraph_nodes` keys into all ancestor prefixes so the recursive functions can discover intermediate nesting levels\n- **Add `add_empty_subgraph()`** — recursive function that opens a subgraph block, renders its nodes, recurses into child subgraphs (both edge-based and empty), and closes\n- **Extend `add_subgraph()`** — after the existing edge-groups recursion, also discover nested empty subgraphs from `all_subgraph_prefixes`\n- **Replace flat empty-subgraph loop** — the old `if \":\" not in prefix` loop is replaced with a root-level scan that calls `add_empty_subgraph()` recursively\n\n## Test plan\n\n- [x] Added `test_empty_nested_subgraph_mermaid` — reproduces the exact bug (3-level nesting with no internal edges)\n- [x] All 15 existing mermaid tests pass unchanged (snapshots verified)\n- [x] New snapshot shows correct nested `subgraph parent` → `subgraph child` → `grandchild` output\n\nCloses #35492\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "draw_mermaid()",
+        "type": "Technology",
+        "description": "A function responsible for rendering Mermaid diagrams."
+      },
+      {
+        "name": "xray=True",
+        "type": "Feature",
+        "description": "A parameter for `draw_mermaid()` that enables a specific rendering mode."
+      },
+      {
+        "name": "Nested Subgraph Boxes",
+        "type": "Feature",
+        "description": "Visual elements representing nested subgraphs in Mermaid diagrams."
+      },
+      {
+        "name": "Rendering Bug",
+        "type": "Problem",
+        "description": "The failure to render nested subgraph boxes for 3+ levels when `draw_mermaid()` is used with `xray=True`."
+      },
+      {
+        "name": "Multi-level Prefixes",
+        "type": "Technology",
+        "description": "A concept related to identifying nesting levels in subgraph definitions, which were previously skipped."
+      },
+      {
+        "name": "Empty Subgraphs",
+        "type": "Feature",
+        "description": "Subgraphs that do not contain internal edges, which were previously missed by `add_subgraph()`."
+      },
+      {
+        "name": "add_subgraph()",
+        "type": "Technology",
+        "description": "A function involved in adding subgraphs to the Mermaid rendering output."
+      },
+      {
+        "name": "edge_groups",
+        "type": "Technology",
+        "description": "A data structure used by `add_subgraph()` to discover nested subgraphs."
+      },
+      {
+        "name": "all_subgraph_prefixes",
+        "type": "Technology",
+        "description": "A precomputed set of all ancestor prefixes for subgraphs, used to discover intermediate nesting levels."
+      },
+      {
+        "name": "add_empty_subgraph()",
+        "type": "Technology",
+        "description": "A new recursive function introduced to correctly render empty subgraphs and their nested children."
+      },
+      {
+        "name": "test_empty_nested_subgraph_mermaid",
+        "type": "Technology",
+        "description": "A new test case specifically designed to reproduce and verify the fix for the 3-level nested empty subgraph bug."
+      },
+      {
+        "name": "Issue #35492",
+        "type": "Problem",
+        "description": "The GitHub issue that this fix addresses."
+      },
+      {
+        "name": "Claude Code",
+        "type": "Technology",
+        "description": "An AI tool used to generate the code for this fix."
+      }
+    ],
+    "relations": [
+      {
+        "source": "draw_mermaid()",
+        "target": "Rendering Bug",
+        "label": "AFFECTS",
+        "evidence": "Fixes `draw_mermaid()` with `xray=True` failing to render nested subgraph boxes for 3+ levels of nesting",
+        "evidence_start": 14,
+        "evidence_end": 118
+      },
+      {
+        "source": "xray=True",
+        "target": "Rendering Bug",
+        "label": "RELATED_TO",
+        "evidence": "Fixes `draw_mermaid()` with `xray=True` failing to render nested subgraph boxes for 3+ levels of nesting",
+        "evidence_start": 14,
+        "evidence_end": 118
+      },
+      {
+        "source": "Rendering Bug",
+        "target": "Nested Subgraph Boxes",
+        "label": "AFFECTS",
+        "evidence": "failing to render nested subgraph boxes for 3+ levels of nesting",
+        "evidence_start": 54,
+        "evidence_end": 118
+      },
+      {
+        "source": "Empty Subgraphs",
+        "target": "Rendering Bug",
+        "label": "CAUSES",
+        "evidence": "The \"empty subgraphs\" code path skipped multi-level prefixes (`if \":\" not in prefix`), causing deeply nested nodes to appear as flat elements with escaped colons instead of properly nested subgraph containers",
+        "evidence_start": 121,
+        "evidence_end": 329
+      },
+      {
+        "source": "Multi-level Prefixes",
+        "target": "Rendering Bug",
+        "label": "RELATED_TO",
+        "evidence": "The \"empty subgraphs\" code path skipped multi-level prefixes (`if \":\" not in prefix`), causing deeply nested nodes to appear as flat elements with escaped colons instead of properly nested subgraph containers",
+        "evidence_start": 121,
+        "evidence_end": 329
+      },
+      {
+        "source": "add_subgraph()",
+        "target": "Empty Subgraphs",
+        "label": "AFFECTS",
+        "evidence": "`add_subgraph()` only discovered nested subgraphs via `edge_groups`, missing empty subgraphs entirely",
+        "evidence_start": 346,
+        "evidence_end": 447
+      },
+      {
+        "source": "add_subgraph()",
+        "target": "edge_groups",
+        "label": "USES",
+        "evidence": "`add_subgraph()` only discovered nested subgraphs via `edge_groups`",
+        "evidence_start": 346,
+        "evidence_end": 413
+      },
+      {
+        "source": "all_subgraph_prefixes",
+        "target": "draw_mermaid()",
+        "label": "RELATED_TO",
+        "evidence": "Precompute `all_subgraph_prefixes` — expands `subgraph_nodes` keys into all ancestor prefixes so the recursive functions can discover intermediate nesting levels",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "add_empty_subgraph()",
+        "target": "draw_mermaid()",
+        "label": "RELATED_TO",
+        "evidence": "Add `add_empty_subgraph()` — recursive function that opens a subgraph block, renders its nodes, recurses into child subgraphs (both edge-based and empty), and closes",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "add_subgraph()",
+        "target": "all_subgraph_prefixes",
+        "label": "USES",
+        "evidence": "Extend `add_subgraph()` — after the existing edge-groups recursion, also discover nested empty subgraphs from `all_subgraph_prefixes`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "test_empty_nested_subgraph_mermaid",
+        "target": "Rendering Bug",
+        "label": "RELATED_TO",
+        "evidence": "Added `test_empty_nested_subgraph_mermaid` — reproduces the exact bug (3-level nesting with no internal edges)",
+        "evidence_start": 1120,
+        "evidence_end": 1230
+      },
+      {
+        "source": "draw_mermaid()",
+        "target": "Issue #35492",
+        "label": "RELATED_TO",
+        "evidence": "Closes #35492",
+        "evidence_start": 1403,
+        "evidence_end": 1416
+      },
+      {
+        "source": "Claude Code",
+        "target": "draw_mermaid()",
+        "label": "RELATED_TO",
+        "evidence": "Generated with [Claude Code]",
+        "evidence_start": 1420,
+        "evidence_end": 1448
+      }
+    ],
+    "summary": "The `draw_mermaid()` function, when used with `xray=True`, failed to render nested subgraph boxes for 3+ levels due to issues with handling empty subgraphs and multi-level prefixes, which has been fixed by precomputing all subgraph prefixes and introducing a new recursive function `add_empty_subgraph()`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

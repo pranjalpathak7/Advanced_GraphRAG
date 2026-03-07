@@ -1,0 +1,259 @@
+{
+  "id": 35459,
+  "title": "feat(langchain): add create_agent_tool and AgentSession for nested loops and time-travel",
+  "status": "open",
+  "created_at": "2026-02-26T22:17:37Z",
+  "author_name": "saadsaleem01",
+  "url": "https://github.com/langchain-ai/langchain/pull/35459",
+  "body_text": "## Summary\r\n\r\nImplements loop-in-loop agent patterns and session management requested in #35452.\r\n\r\n- **`create_agent_tool`**: wraps a compiled agent graph as a `BaseTool` so an outer agent can delegate subtasks to an inner agent that runs its own complete tool-calling loop — the \"loop in loop\" pattern.\r\n- **`AgentSession`**: convenience wrapper for interrupt/resume workflows and checkpoint-based time-travel (branching from any historical state into a new session).\r\n\r\nBoth APIs are marked as experimental and exported from `langchain.agents`.\r\n\r\n### Areas requiring careful review\r\n\r\n- `_AgentTool._run` / `_arun` — runtime import of `CallbackManagerForToolRun` outside `TYPE_CHECKING` is intentional (pydantic resolves the `_run` signature at runtime).\r\n- `AgentSession.resume()` — uses `None` for node-level interrupts vs `Command(resume=value)` for `interrupt()` calls; this distinction matters.\r\n- `AgentSession.branch()` — copies state via `update_state` to a new thread; does not deep-copy message objects.\r\n\r\n## Test plan\r\n\r\n- [x] 6 unit tests for `create_agent_tool` (basic, nested loop-in-loop, async, thread prefix, exports)\r\n- [x] 19 unit tests for `AgentSession` (run with all input types, interrupt/resume, state inspection, history, branching, preserving original state, async variants, exports)\r\n- [x] All 194 existing agent tests pass (zero regressions)\r\n\r\n> This contribution was developed with AI agent assistance.\r\n\r\nCloses #35452\r\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Create Agent Tool",
+        "type": "Feature",
+        "description": "A function that wraps a compiled agent graph as a BaseTool to enable loop-in-loop agent patterns."
+      },
+      {
+        "name": "Agent Session",
+        "type": "Feature",
+        "description": "A convenience wrapper for managing agent state, supporting interrupt/resume workflows and checkpoint-based time-travel."
+      },
+      {
+        "name": "Loop-in-Loop Agent Patterns",
+        "type": "Feature",
+        "description": "An architectural pattern where an outer agent delegates tasks to an inner agent, which then runs its own complete tool-calling loop."
+      },
+      {
+        "name": "Session Management",
+        "type": "Feature",
+        "description": "The capability to control and maintain the state of an agent's execution, including pausing, resuming, and branching."
+      },
+      {
+        "name": "BaseTool",
+        "type": "Technology",
+        "description": "An interface or base class for tools that agents can utilize."
+      },
+      {
+        "name": "Compiled Agent Graph",
+        "type": "Technology",
+        "description": "A pre-processed or optimized representation of an agent's execution flow."
+      },
+      {
+        "name": "Outer Agent",
+        "type": "Technology",
+        "description": "An agent designed to delegate subtasks to other agents."
+      },
+      {
+        "name": "Inner Agent",
+        "type": "Technology",
+        "description": "An agent that executes a specific subtask, often within its own tool-calling loop, as delegated by an outer agent."
+      },
+      {
+        "name": "Tool-Calling Loop",
+        "type": "Feature",
+        "description": "A process where an agent repeatedly calls tools to achieve a goal."
+      },
+      {
+        "name": "Interrupt/Resume Workflows",
+        "type": "Feature",
+        "description": "The ability to pause an agent's execution and later restart it from the point of interruption."
+      },
+      {
+        "name": "Checkpoint-Based Time-Travel",
+        "type": "Feature",
+        "description": "The ability to revert an agent's state to a previous checkpoint and branch into a new execution path."
+      },
+      {
+        "name": "Langchain.agents",
+        "type": "Technology",
+        "description": "The module within Langchain where the new agent APIs are exposed."
+      },
+      {
+        "name": "_AgentTool._run",
+        "type": "Technology",
+        "description": "A method within the internal `_AgentTool` class, whose signature resolution is handled by Pydantic."
+      },
+      {
+        "name": "_arun",
+        "type": "Technology",
+        "description": "An asynchronous method within the internal `_AgentTool` class, whose signature resolution is handled by Pydantic."
+      },
+      {
+        "name": "CallbackManagerForToolRun",
+        "type": "Technology",
+        "description": "A class related to managing callbacks during tool execution, intentionally imported at runtime."
+      },
+      {
+        "name": "Pydantic",
+        "type": "Technology",
+        "description": "A data validation and settings management library used for resolving method signatures at runtime."
+      },
+      {
+        "name": "AgentSession.resume()",
+        "type": "Feature",
+        "description": "A method of `AgentSession` used to resume agent execution."
+      },
+      {
+        "name": "Command(resume=value)",
+        "type": "Technology",
+        "description": "A specific command object used for `interrupt()` calls within `AgentSession`."
+      },
+      {
+        "name": "AgentSession.branch()",
+        "type": "Feature",
+        "description": "A method of `AgentSession` for creating a new session by copying state from an existing one."
+      },
+      {
+        "name": "Update State",
+        "type": "Feature",
+        "description": "An operation used to copy the state of an agent session."
+      },
+      {
+        "name": "Message Objects",
+        "type": "Technology",
+        "description": "Data structures representing messages within an agent's state."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Create Agent Tool",
+        "target": "Loop-in-Loop Agent Patterns",
+        "label": "RELATED_TO",
+        "evidence": "Implements loop-in-loop agent patterns",
+        "evidence_start": 14,
+        "evidence_end": 52
+      },
+      {
+        "source": "Agent Session",
+        "target": "Session Management",
+        "label": "RELATED_TO",
+        "evidence": "Implements loop-in-loop agent patterns and session management",
+        "evidence_start": 14,
+        "evidence_end": 75
+      },
+      {
+        "source": "Create Agent Tool",
+        "target": "Compiled Agent Graph",
+        "label": "USES",
+        "evidence": "wraps a compiled agent graph as a `BaseTool`",
+        "evidence_start": 127,
+        "evidence_end": 171
+      },
+      {
+        "source": "Create Agent Tool",
+        "target": "BaseTool",
+        "label": "RELATED_TO",
+        "evidence": "wraps a compiled agent graph as a `BaseTool`",
+        "evidence_start": 127,
+        "evidence_end": 171
+      },
+      {
+        "source": "Outer Agent",
+        "target": "Inner Agent",
+        "label": "USES",
+        "evidence": "an outer agent can delegate subtasks to an inner agent",
+        "evidence_start": 175,
+        "evidence_end": 229
+      },
+      {
+        "source": "Inner Agent",
+        "target": "Tool-Calling Loop",
+        "label": "USES",
+        "evidence": "an inner agent that runs its own complete tool-calling loop",
+        "evidence_start": 215,
+        "evidence_end": 274
+      },
+      {
+        "source": "Agent Session",
+        "target": "Interrupt/Resume Workflows",
+        "label": "USES",
+        "evidence": "`AgentSession`: convenience wrapper for interrupt/resume workflows",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Agent Session",
+        "target": "Checkpoint-Based Time-Travel",
+        "label": "USES",
+        "evidence": "`AgentSession`: convenience wrapper for interrupt/resume workflows and checkpoint-based time-travel",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Create Agent Tool",
+        "target": "Langchain.agents",
+        "label": "RELATED_TO",
+        "evidence": "Both APIs are marked as experimental and exported from `langchain.agents`.",
+        "evidence_start": 473,
+        "evidence_end": 547
+      },
+      {
+        "source": "Agent Session",
+        "target": "Langchain.agents",
+        "label": "RELATED_TO",
+        "evidence": "Both APIs are marked as experimental and exported from `langchain.agents`.",
+        "evidence_start": 473,
+        "evidence_end": 547
+      },
+      {
+        "source": "_AgentTool._run",
+        "target": "CallbackManagerForToolRun",
+        "label": "USES",
+        "evidence": "`_AgentTool._run` / `_arun` — runtime import of `CallbackManagerForToolRun`",
+        "evidence_start": 591,
+        "evidence_end": 666
+      },
+      {
+        "source": "_arun",
+        "target": "CallbackManagerForToolRun",
+        "label": "USES",
+        "evidence": "`_AgentTool._run` / `_arun` — runtime import of `CallbackManagerForToolRun`",
+        "evidence_start": 591,
+        "evidence_end": 666
+      },
+      {
+        "source": "Pydantic",
+        "target": "_AgentTool._run",
+        "label": "CAUSES",
+        "evidence": "(pydantic resolves the `_run` signature at runtime).",
+        "evidence_start": 706,
+        "evidence_end": 758
+      },
+      {
+        "source": "Pydantic",
+        "target": "_arun",
+        "label": "CAUSES",
+        "evidence": "(pydantic resolves the `_run` signature at runtime).",
+        "evidence_start": 706,
+        "evidence_end": 758
+      },
+      {
+        "source": "AgentSession.resume()",
+        "target": "Command(resume=value)",
+        "label": "RELATED_TO",
+        "evidence": "`AgentSession.resume()` — uses `None` for node-level interrupts vs `Command(resume=value)` for `interrupt()` calls; this distinction matters.",
+        "evidence_start": 762,
+        "evidence_end": 903
+      },
+      {
+        "source": "AgentSession.branch()",
+        "target": "Update State",
+        "label": "USES",
+        "evidence": "`AgentSession.branch()` — copies state via `update_state`",
+        "evidence_start": 907,
+        "evidence_end": 964
+      },
+      {
+        "source": "AgentSession.branch()",
+        "target": "Message Objects",
+        "label": "AFFECTS",
+        "evidence": "does not deep-copy message objects.",
+        "evidence_start": 982,
+        "evidence_end": 1017
+      }
+    ],
+    "summary": "This issue introduces `create_agent_tool` and `AgentSession` to Langchain, enabling loop-in-loop agent patterns, session management, interrupt/resume workflows, and checkpoint-based time-travel."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

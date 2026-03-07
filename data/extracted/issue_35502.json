@@ -1,0 +1,127 @@
+{
+  "id": 35502,
+  "title": "ci: fix codspeed segfault",
+  "status": "closed",
+  "created_at": "2026-03-02T00:07:08Z",
+  "author_name": "mdrxy",
+  "url": "https://github.com/langchain-ai/langchain/pull/35502",
+  "body_text": "Pin Python to 3.13.11 in the CodSpeed benchmark job. CPython 3.13.12 introduced a segfault in CodSpeed's walltime callgraph post-processing ([CodSpeedHQ/pytest-codspeed#106](https://github.com/CodSpeedHQ/pytest-codspeed/issues/106)), causing all `libs/core` benchmark runs to fail with `exit status: 139` since Feb 26 despite all 13 benchmarks passing.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "CodSpeed",
+        "type": "Technology",
+        "description": "A benchmarking tool used in the CI pipeline."
+      },
+      {
+        "name": "CPython 3.13.12",
+        "type": "Technology",
+        "description": "A specific version of the CPython interpreter that introduced a bug."
+      },
+      {
+        "name": "Segfault",
+        "type": "Problem",
+        "description": "A segmentation fault error, specifically occurring in CodSpeed's post-processing."
+      },
+      {
+        "name": "Walltime Callgraph Post-processing",
+        "type": "Feature",
+        "description": "A component within CodSpeed responsible for processing callgraph data related to walltime."
+      },
+      {
+        "name": "libs/core",
+        "type": "Technology",
+        "description": "A library or core component of the project whose benchmark runs were failing."
+      },
+      {
+        "name": "Benchmark Runs",
+        "type": "Feature",
+        "description": "The execution of performance benchmarks for the project."
+      },
+      {
+        "name": "Exit Status 139",
+        "type": "Problem",
+        "description": "A specific exit status code indicating a segmentation fault."
+      },
+      {
+        "name": "pytest-codspeed#106",
+        "type": "Problem",
+        "description": "An external GitHub issue tracking the segfault in pytest-codspeed."
+      },
+      {
+        "name": "CPython 3.13.11",
+        "type": "Technology",
+        "description": "A specific version of the CPython interpreter used to fix the segfault."
+      }
+    ],
+    "relations": [
+      {
+        "source": "CPython 3.13.12",
+        "target": "Segfault",
+        "label": "CAUSES",
+        "evidence": "CPython 3.13.12 introduced a segfault",
+        "evidence_start": 53,
+        "evidence_end": 90
+      },
+      {
+        "source": "Segfault",
+        "target": "Walltime Callgraph Post-processing",
+        "label": "AFFECTS",
+        "evidence": "segfault in CodSpeed's walltime callgraph post-processing",
+        "evidence_start": 82,
+        "evidence_end": 139
+      },
+      {
+        "source": "Walltime Callgraph Post-processing",
+        "target": "CodSpeed",
+        "label": "RELATED_TO",
+        "evidence": "CodSpeed's walltime callgraph post-processing",
+        "evidence_start": 94,
+        "evidence_end": 139
+      },
+      {
+        "source": "Segfault",
+        "target": "Benchmark Runs",
+        "label": "CAUSES",
+        "evidence": "causing all `libs/core` benchmark runs to fail",
+        "evidence_start": 234,
+        "evidence_end": 280
+      },
+      {
+        "source": "Benchmark Runs",
+        "target": "libs/core",
+        "label": "AFFECTS",
+        "evidence": "`libs/core` benchmark runs",
+        "evidence_start": 246,
+        "evidence_end": 272
+      },
+      {
+        "source": "Benchmark Runs",
+        "target": "Exit Status 139",
+        "label": "RELATED_TO",
+        "evidence": "fail with `exit status: 139`",
+        "evidence_start": 276,
+        "evidence_end": 304
+      },
+      {
+        "source": "Segfault",
+        "target": "pytest-codspeed#106",
+        "label": "RELATED_TO",
+        "evidence": "[CodSpeedHQ/pytest-codspeed#106]",
+        "evidence_start": 141,
+        "evidence_end": 173
+      },
+      {
+        "source": "CodSpeed",
+        "target": "CPython 3.13.11",
+        "label": "USES",
+        "evidence": "Pin Python to 3.13.11 in the CodSpeed benchmark job.",
+        "evidence_start": 0,
+        "evidence_end": 52
+      }
+    ],
+    "summary": "A CPython 3.13.12 segfault in CodSpeed's walltime callgraph post-processing caused `libs/core` benchmark runs to fail with exit status 139, leading to a fix by pinning Python to 3.13.11."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

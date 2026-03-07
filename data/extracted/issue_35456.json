@@ -1,0 +1,187 @@
+{
+  "id": 35456,
+  "title": "Add AgentAudit security badge",
+  "status": "open",
+  "created_at": "2026-02-26T21:52:25Z",
+  "author_name": "starbuck100",
+  "url": "https://github.com/langchain-ai/langchain/pull/35456",
+  "body_text": "## Summary\n\nAdds an [AgentAudit](https://agentaudit.dev) security badge to the README, showing the current trust score for the `langchain` package.\n\n**Current Trust Score: 98/100** — No significant security findings detected across multiple independent AI-powered audits.\n\n[![AgentAudit Security](https://agentaudit.dev/api/badge/langchain)](https://agentaudit.dev/packages/langchain)\n\n## What is AgentAudit?\n\n[AgentAudit](https://agentaudit.dev) is an open security registry for AI agent packages (MCP servers, skills, npm/pip packages). It provides:\n\n- Multi-model security audits (Claude, GPT-4o, Gemini, etc.)\n- Consensus-based trust scoring\n- Standardized vulnerability IDs (ASF-IDs)\n\nThe badge auto-updates as new audits are submitted. Full audit details: https://agentaudit.dev/packages/langchain",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "AgentAudit",
+        "type": "Organization",
+        "description": "An open security registry for AI agent packages that provides security audits and trust scoring."
+      },
+      {
+        "name": "Security Badge",
+        "type": "Feature",
+        "description": "A visual indicator displaying the current trust score for a software package, provided by AgentAudit."
+      },
+      {
+        "name": "README",
+        "type": "Technology",
+        "description": "A documentation file typically found in software projects."
+      },
+      {
+        "name": "langchain package",
+        "type": "Technology",
+        "description": "A specific software package for which AgentAudit provides a security trust score."
+      },
+      {
+        "name": "Trust Score",
+        "type": "Feature",
+        "description": "A metric indicating the security level of a package, ranging from 0-100, provided by AgentAudit."
+      },
+      {
+        "name": "AI-powered Audits",
+        "type": "Feature",
+        "description": "Security audits performed using artificial intelligence."
+      },
+      {
+        "name": "Multi-model Security Audits",
+        "type": "Feature",
+        "description": "Security audits performed using multiple independent AI models."
+      },
+      {
+        "name": "Consensus-based Trust Scoring",
+        "type": "Feature",
+        "description": "A method of scoring trust based on agreement across multiple audits."
+      },
+      {
+        "name": "Standardized Vulnerability IDs (ASF-IDs)",
+        "type": "Feature",
+        "description": "Standardized identifiers for vulnerabilities provided by AgentAudit."
+      },
+      {
+        "name": "AI Agent Packages",
+        "type": "Technology",
+        "description": "A category of software packages, including MCP servers, skills, npm/pip packages, that AgentAudit audits."
+      },
+      {
+        "name": "Claude",
+        "type": "Technology",
+        "description": "An AI model used by AgentAudit for security audits."
+      },
+      {
+        "name": "GPT-4o",
+        "type": "Technology",
+        "description": "An AI model used by AgentAudit for security audits."
+      },
+      {
+        "name": "Gemini",
+        "type": "Technology",
+        "description": "An AI model used by AgentAudit for security audits."
+      }
+    ],
+    "relations": [
+      {
+        "source": "AgentAudit",
+        "target": "Security Badge",
+        "label": "RELATED_TO",
+        "evidence": "Adds an [AgentAudit](https://agentaudit.dev) security badge",
+        "evidence_start": 12,
+        "evidence_end": 71
+      },
+      {
+        "source": "Security Badge",
+        "target": "README",
+        "label": "RELATED_TO",
+        "evidence": "Adds an [AgentAudit](https://agentaudit.dev) security badge to the README",
+        "evidence_start": 12,
+        "evidence_end": 85
+      },
+      {
+        "source": "Security Badge",
+        "target": "Trust Score",
+        "label": "RELATED_TO",
+        "evidence": "showing the current trust score for the `langchain` package.",
+        "evidence_start": 87,
+        "evidence_end": 147
+      },
+      {
+        "source": "Trust Score",
+        "target": "langchain package",
+        "label": "RELATED_TO",
+        "evidence": "showing the current trust score for the `langchain` package.",
+        "evidence_start": 87,
+        "evidence_end": 147
+      },
+      {
+        "source": "AgentAudit",
+        "target": "AI Agent Packages",
+        "label": "RELATED_TO",
+        "evidence": "AgentAudit is an open security registry for AI agent packages",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "AgentAudit",
+        "target": "Multi-model Security Audits",
+        "label": "USES",
+        "evidence": "It provides: Multi-model security audits (Claude, GPT-4o, Gemini, etc.)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Multi-model Security Audits",
+        "target": "Claude",
+        "label": "USES",
+        "evidence": "Multi-model security audits (Claude, GPT-4o, Gemini, etc.)",
+        "evidence_start": 555,
+        "evidence_end": 613
+      },
+      {
+        "source": "Multi-model Security Audits",
+        "target": "GPT-4o",
+        "label": "USES",
+        "evidence": "Multi-model security audits (Claude, GPT-4o, Gemini, etc.)",
+        "evidence_start": 555,
+        "evidence_end": 613
+      },
+      {
+        "source": "Multi-model Security Audits",
+        "target": "Gemini",
+        "label": "USES",
+        "evidence": "Multi-model security audits (Claude, GPT-4o, Gemini, etc.)",
+        "evidence_start": 555,
+        "evidence_end": 613
+      },
+      {
+        "source": "AgentAudit",
+        "target": "Consensus-based Trust Scoring",
+        "label": "USES",
+        "evidence": "It provides: [...] Consensus-based trust scoring",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Consensus-based Trust Scoring",
+        "target": "Trust Score",
+        "label": "RELATED_TO",
+        "evidence": "Consensus-based trust scoring",
+        "evidence_start": 616,
+        "evidence_end": 645
+      },
+      {
+        "source": "AgentAudit",
+        "target": "Standardized Vulnerability IDs (ASF-IDs)",
+        "label": "USES",
+        "evidence": "It provides: [...] Standardized vulnerability IDs (ASF-IDs)",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "AI-powered Audits",
+        "target": "Trust Score",
+        "label": "CAUSES",
+        "evidence": "No significant security findings detected across multiple independent AI-powered audits.",
+        "evidence_start": 183,
+        "evidence_end": 271
+      }
+    ],
+    "summary": "This issue proposes adding an AgentAudit security badge to the README, which displays the current trust score for the `langchain` package based on multi-model AI-powered security audits."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

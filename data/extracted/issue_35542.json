@@ -1,0 +1,135 @@
+{
+  "id": 35542,
+  "title": "feat(fireworks,groq,openrouter): add standard model property",
+  "status": "closed",
+  "created_at": "2026-03-03T22:24:45Z",
+  "author_name": "mdrxy",
+  "url": "https://github.com/langchain-ai/langchain/pull/35542",
+  "body_text": "Add a `model` property to `ChatFireworks`, `ChatGroq`, and `ChatOpenRouter` that returns `model_name`. These partners use Pydantic's `Field(alias=\"model\")` on `model_name`, which means `instance.model` doesn't work as a read accessor after construction — it raises an `AttributeError` or returns the field descriptor. `ChatOpenAI` already has this property; this brings the remaining in-repo partners to parity.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "ChatFireworks",
+        "type": "Technology",
+        "description": "A chat model class."
+      },
+      {
+        "name": "ChatGroq",
+        "type": "Technology",
+        "description": "A chat model class."
+      },
+      {
+        "name": "ChatOpenRouter",
+        "type": "Technology",
+        "description": "A chat model class."
+      },
+      {
+        "name": "Model Property",
+        "type": "Feature",
+        "description": "A property named 'model' that returns the 'model_name'."
+      },
+      {
+        "name": "Model Name",
+        "type": "Feature",
+        "description": "The underlying field storing the model's name."
+      },
+      {
+        "name": "Pydantic",
+        "type": "Technology",
+        "description": "A data validation library used by the chat model classes."
+      },
+      {
+        "name": "Field Alias",
+        "type": "Feature",
+        "description": "Pydantic's `Field(alias=\"model\")` mechanism used for aliasing `model_name` to `model`."
+      },
+      {
+        "name": "AttributeError",
+        "type": "Problem",
+        "description": "An error raised when attempting to access `instance.model` as a read accessor."
+      },
+      {
+        "name": "ChatOpenAI",
+        "type": "Technology",
+        "description": "Another chat model class that already has the 'model' property."
+      }
+    ],
+    "relations": [
+      {
+        "source": "ChatFireworks",
+        "target": "Model Property",
+        "label": "RELATED_TO",
+        "evidence": "Add a `model` property to `ChatFireworks`",
+        "evidence_start": 0,
+        "evidence_end": 41
+      },
+      {
+        "source": "ChatGroq",
+        "target": "Model Property",
+        "label": "RELATED_TO",
+        "evidence": "Add a `model` property to `ChatGroq`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ChatOpenRouter",
+        "target": "Model Property",
+        "label": "RELATED_TO",
+        "evidence": "Add a `model` property to `ChatOpenRouter`",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Model Property",
+        "target": "Model Name",
+        "label": "USES",
+        "evidence": "returns `model_name`",
+        "evidence_start": 81,
+        "evidence_end": 101
+      },
+      {
+        "source": "ChatFireworks",
+        "target": "Field Alias",
+        "label": "USES",
+        "evidence": "These partners use Pydantic's `Field(alias=\"model\")` on `model_name`",
+        "evidence_start": 103,
+        "evidence_end": 171
+      },
+      {
+        "source": "ChatGroq",
+        "target": "Field Alias",
+        "label": "USES",
+        "evidence": "These partners use Pydantic's `Field(alias=\"model\")` on `model_name`",
+        "evidence_start": 103,
+        "evidence_end": 171
+      },
+      {
+        "source": "ChatOpenRouter",
+        "target": "Field Alias",
+        "label": "USES",
+        "evidence": "These partners use Pydantic's `Field(alias=\"model\")` on `model_name`",
+        "evidence_start": 103,
+        "evidence_end": 171
+      },
+      {
+        "source": "Field Alias",
+        "target": "AttributeError",
+        "label": "CAUSES",
+        "evidence": "means `instance.model` doesn't work as a read accessor after construction — it raises an `AttributeError`",
+        "evidence_start": 179,
+        "evidence_end": 284
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "Model Property",
+        "label": "RELATED_TO",
+        "evidence": "`ChatOpenAI` already has this property",
+        "evidence_start": 318,
+        "evidence_end": 356
+      }
+    ],
+    "summary": "The issue proposes adding a `model` property to `ChatFireworks`, `ChatGroq`, and `ChatOpenRouter` to return `model_name`, addressing an `AttributeError` caused by Pydantic's `Field(alias=\"model\")` and bringing them to parity with `ChatOpenAI`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

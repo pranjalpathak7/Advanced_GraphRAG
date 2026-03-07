@@ -1,0 +1,163 @@
+{
+  "id": 35545,
+  "title": "fix(core): fix inflated usage_metadata when aggregating streaming chunks",
+  "status": "open",
+  "created_at": "2026-03-04T02:48:18Z",
+  "author_name": "antonio-mello-ai",
+  "url": "https://github.com/langchain-ai/langchain/pull/35545",
+  "body_text": "## Description\n\nFixes incorrect (inflated) `usage_metadata` token counts when aggregating streaming chunks from providers that report cumulative usage in every chunk (e.g. vLLM, Ollama), rather than only in the final chunk (OpenAI).\n\n**Root cause**: `add_ai_message_chunks()` used `add_usage()` (which sums all fields) to aggregate usage across chunks. When a provider sends cumulative `input_tokens=35` in every chunk, summing produces `35 * chunk_count` instead of `35`.\n\n**Fix**: Introduce `merge_usage()` which takes the element-wise `max` instead of `sum`, and use it in `add_ai_message_chunks()`. This produces correct totals for both patterns:\n- **OpenAI**: sends usage only in final chunk → `max` of one non-None value = correct ✓\n- **vLLM/Ollama**: sends cumulative usage per chunk → `max` of monotonically increasing values = final (correct) value ✓\n\nThe existing `add_usage()` function is preserved unchanged for backward compatibility.\n\n## Issue\n\nCloses #30429\n\n## Changes\n\n- Add `merge_usage()` function to `langchain_core.messages.ai` — same structure as `add_usage`/`subtract_usage` but uses `max` operator\n- Change `add_ai_message_chunks()` to use `merge_usage()` instead of `add_usage()` for streaming chunk aggregation\n- Update existing test to reflect `max` behavior\n- Add tests for OpenAI pattern (usage in final chunk only) and vLLM pattern (cumulative usage per chunk)\n- Add unit tests for `merge_usage()` itself\n\n## Dependencies\n\nNone.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Usage Metadata",
+        "type": "Feature",
+        "description": "Metadata containing token counts and other usage information reported by language model providers."
+      },
+      {
+        "name": "Streaming Chunks",
+        "type": "Feature",
+        "description": "Individual parts of a streamed response from a language model provider."
+      },
+      {
+        "name": "vLLM",
+        "type": "Technology",
+        "description": "A language model serving system that reports cumulative usage in every streaming chunk."
+      },
+      {
+        "name": "Ollama",
+        "type": "Technology",
+        "description": "A language model serving system that reports cumulative usage in every streaming chunk."
+      },
+      {
+        "name": "OpenAI",
+        "type": "Organization",
+        "description": "A language model provider that reports usage only in the final streaming chunk."
+      },
+      {
+        "name": "add_ai_message_chunks()",
+        "type": "Feature",
+        "description": "A function responsible for aggregating usage across streaming chunks."
+      },
+      {
+        "name": "add_usage()",
+        "type": "Feature",
+        "description": "An existing function that sums usage fields, which caused inflated counts for cumulative reporting."
+      },
+      {
+        "name": "merge_usage()",
+        "type": "Feature",
+        "description": "A new function introduced to correctly aggregate usage by taking the element-wise maximum."
+      },
+      {
+        "name": "langchain_core.messages.ai",
+        "type": "Technology",
+        "description": "The module where `merge_usage()` and `add_usage()` are defined."
+      },
+      {
+        "name": "Inflated Usage Metadata Token Counts",
+        "type": "Problem",
+        "description": "Incorrectly high token counts in `usage_metadata` due to summing cumulative usage from streaming chunks."
+      },
+      {
+        "name": "Cumulative Usage Reporting",
+        "type": "Feature",
+        "description": "A pattern where providers report total usage in every streaming chunk."
+      },
+      {
+        "name": "Max Operator",
+        "type": "Technology",
+        "description": "The mathematical operation used by `merge_usage()` to correctly aggregate usage."
+      },
+      {
+        "name": "Sum Operator",
+        "type": "Technology",
+        "description": "The mathematical operation used by `add_usage()` that led to the problem."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Inflated Usage Metadata Token Counts",
+        "target": "Usage Metadata",
+        "label": "AFFECTS",
+        "evidence": "Fixes incorrect (inflated) `usage_metadata` token counts",
+        "evidence_start": 16,
+        "evidence_end": 72
+      },
+      {
+        "source": "add_usage()",
+        "target": "Inflated Usage Metadata Token Counts",
+        "label": "CAUSES",
+        "evidence": "`add_ai_message_chunks()` used `add_usage()` (which sums all fields) to aggregate usage across chunks. When a provider sends cumulative `input_tokens=35` in every chunk, summing produces `35 * chunk_count` instead of `35`.",
+        "evidence_start": 250,
+        "evidence_end": 472
+      },
+      {
+        "source": "add_ai_message_chunks()",
+        "target": "add_usage()",
+        "label": "USES",
+        "evidence": "`add_ai_message_chunks()` used `add_usage()` (which sums all fields) to aggregate usage across chunks.",
+        "evidence_start": 250,
+        "evidence_end": 352
+      },
+      {
+        "source": "add_ai_message_chunks()",
+        "target": "merge_usage()",
+        "label": "USES",
+        "evidence": "Change `add_ai_message_chunks()` to use `merge_usage()` instead of `add_usage()` for streaming chunk aggregation",
+        "evidence_start": 1124,
+        "evidence_end": 1236
+      },
+      {
+        "source": "merge_usage()",
+        "target": "Max Operator",
+        "label": "USES",
+        "evidence": "Introduce `merge_usage()` which takes the element-wise `max` instead of `sum`",
+        "evidence_start": 483,
+        "evidence_end": 560
+      },
+      {
+        "source": "add_usage()",
+        "target": "Sum Operator",
+        "label": "USES",
+        "evidence": "`add_usage()` (which sums all fields)",
+        "evidence_start": 281,
+        "evidence_end": 318
+      },
+      {
+        "source": "vLLM",
+        "target": "Cumulative Usage Reporting",
+        "label": "USES",
+        "evidence": "providers that report cumulative usage in every chunk (e.g. vLLM, Ollama)",
+        "evidence_start": 112,
+        "evidence_end": 185
+      },
+      {
+        "source": "Ollama",
+        "target": "Cumulative Usage Reporting",
+        "label": "USES",
+        "evidence": "providers that report cumulative usage in every chunk (e.g. vLLM, Ollama)",
+        "evidence_start": 112,
+        "evidence_end": 185
+      },
+      {
+        "source": "OpenAI",
+        "target": "Streaming Chunks",
+        "label": "RELATED_TO",
+        "evidence": "providers that report cumulative usage in every chunk (e.g. vLLM, Ollama), rather than only in the final chunk (OpenAI).",
+        "evidence_start": 112,
+        "evidence_end": 232
+      },
+      {
+        "source": "merge_usage()",
+        "target": "langchain_core.messages.ai",
+        "label": "RELATED_TO",
+        "evidence": "Add `merge_usage()` function to `langchain_core.messages.ai`",
+        "evidence_start": 988,
+        "evidence_end": 1048
+      }
+    ],
+    "summary": "An issue caused inflated `usage_metadata` token counts when aggregating `streaming chunks` from providers reporting `cumulative usage`, which is fixed by introducing `merge_usage()` with a `max operator` in `add_ai_message_chunks()`."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

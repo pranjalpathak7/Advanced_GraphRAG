@@ -1,0 +1,153 @@
+{
+  "id": 35516,
+  "title": "🐞 [langchain-openai] Bug: reasoning_content not extracted from DeepSeek streaming responses",
+  "status": "closed",
+  "created_at": "2026-03-02T11:09:57Z",
+  "author_name": "squallopen",
+  "url": "https://github.com/langchain-ai/langchain/issues/35516",
+  "body_text": "## Checkboxes\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain.\n- [x] This is related to langchain-openai package.\n- [x] I posted a self-contained, minimal, reproducible example.\n\n## Package\n- [x] langchain-openai\n\n## Related Issues\n- #35006\n- #34938\n\n## Reproduction Steps\n\n```typescript\nimport { ChatOpenAI } from \"@langchain/openai\";\n\nconst llm = new ChatOpenAI({\n  model: \"deepseek-reasoner\",\n  apiKey: process.env.DEEPSEEK_API_KEY,\n  baseURL: \"https://api.deepseek.com\"\n});\n\nconst stream = await llm.stream(\"What is 2+2?\");\n\nfor await (const chunk of stream) {\n  // chunk.additional_kwargs.reasoning_content is always undefined\n  console.log(\"reasoning:\", chunk.additional_kwargs?.reasoning_content);\n}\n```\n\nExpected: `reasoning_content` should contain the model's thinking process.\nActual: `reasoning_content` is always undefined.\n\n## Description\n\nLangChain's ChatOpenAI doesn't extract `reasoning_content` from DeepSeek's streaming responses. The `reasoning_content` field is used by DeepSeek models (like `deepseek-reasoner`) to stream their thinking process.\n\n## Suggested Fix\n\nIn `libs/langchain-openai/src/chat_models/completions.ts`, function `convertCompletionsDeltaToBaseMessageChunk`, add:\n\n```typescript\n// Extract reasoning_content (DeepSeek specific)\nif (delta.reasoning_content) {\n  additional_kwargs.reasoning_content = delta.reasoning_content;\n}\n```\n\n## System Info\n\n- langchain-openai: ^0.1.0\n- Node.js: 18+\n- DeepSeek API\n\n---\n\n## PR\n\nFix submitted: #35520",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "langchain-openai",
+        "type": "Technology",
+        "description": "A LangChain package related to OpenAI integrations, where the bug is located."
+      },
+      {
+        "name": "reasoning_content",
+        "type": "Feature",
+        "description": "A field in DeepSeek model responses that contains the model's thinking process."
+      },
+      {
+        "name": "DeepSeek",
+        "type": "Organization",
+        "description": "The provider of AI models, including 'deepseek-reasoner'."
+      },
+      {
+        "name": "Streaming Responses",
+        "type": "Feature",
+        "description": "Responses from AI models that are delivered in a continuous stream."
+      },
+      {
+        "name": "Extraction Failure",
+        "type": "Problem",
+        "description": "The core issue where 'reasoning_content' is not being extracted from DeepSeek's streaming responses."
+      },
+      {
+        "name": "ChatOpenAI",
+        "type": "Technology",
+        "description": "A class within the langchain-openai package used to interact with OpenAI-compatible APIs, including DeepSeek."
+      },
+      {
+        "name": "deepseek-reasoner",
+        "type": "Technology",
+        "description": "A specific AI model provided by DeepSeek."
+      },
+      {
+        "name": "DeepSeek API",
+        "type": "Technology",
+        "description": "The API endpoint for DeepSeek models."
+      },
+      {
+        "name": "Node.js",
+        "type": "Technology",
+        "description": "The JavaScript runtime environment where the issue was observed."
+      },
+      {
+        "name": "convertCompletionsDeltaToBaseMessageChunk",
+        "type": "Technology",
+        "description": "A function in 'libs/langchain-openai/src/chat_models/completions.ts' that needs modification to fix the bug."
+      },
+      {
+        "name": "PR #35520",
+        "type": "Feature",
+        "description": "A submitted Pull Request intended to fix the 'reasoning_content' extraction issue."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Extraction Failure",
+        "target": "reasoning_content",
+        "label": "AFFECTS",
+        "evidence": "reasoning_content not extracted from DeepSeek streaming responses",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "Extraction Failure",
+        "label": "CAUSES",
+        "evidence": "LangChain's ChatOpenAI doesn't extract reasoning_content from DeepSeek's streaming responses.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "DeepSeek",
+        "target": "reasoning_content",
+        "label": "USES",
+        "evidence": "The reasoning_content field is used by DeepSeek models",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "deepseek-reasoner",
+        "target": "reasoning_content",
+        "label": "USES",
+        "evidence": "DeepSeek models (like deepseek-reasoner) to stream their thinking process.",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "deepseek-reasoner",
+        "label": "USES",
+        "evidence": "const llm = new ChatOpenAI({ model: \"deepseek-reasoner\"",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "DeepSeek API",
+        "label": "USES",
+        "evidence": "baseURL: \"https://api.deepseek.com\"",
+        "evidence_start": 737,
+        "evidence_end": 772
+      },
+      {
+        "source": "langchain-openai",
+        "target": "ChatOpenAI",
+        "label": "RELATED_TO",
+        "evidence": "This is related to langchain-openai package.",
+        "evidence_start": 368,
+        "evidence_end": 412
+      },
+      {
+        "source": "Extraction Failure",
+        "target": "Streaming Responses",
+        "label": "RELATED_TO",
+        "evidence": "reasoning_content not extracted from DeepSeek streaming responses",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "PR #35520",
+        "target": "Extraction Failure",
+        "label": "RELATED_TO",
+        "evidence": "Fix submitted: #35520",
+        "evidence_start": 1756,
+        "evidence_end": 1777
+      },
+      {
+        "source": "convertCompletionsDeltaToBaseMessageChunk",
+        "target": "reasoning_content",
+        "label": "RELATED_TO",
+        "evidence": "In libs/langchain-openai/src/chat_models/completions.ts, function convertCompletionsDeltaToBaseMessageChunk, add: // Extract reasoning_content (DeepSeek specific) if (delta.reasoning_content) { additional_kwargs.reasoning_content = delta.reasoning_content; }",
+        "evidence_start": null,
+        "evidence_end": null
+      }
+    ],
+    "summary": "LangChain's ChatOpenAI class fails to extract the `reasoning_content` field from DeepSeek's streaming responses, which is used by models like `deepseek-reasoner` to provide their thinking process, resulting in `reasoning_content` always being undefined."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,145 @@
+{
+  "id": 35515,
+  "title": "Fix Mermaid rendering for nested empty subgraphs",
+  "status": "open",
+  "created_at": "2026-03-02T10:50:54Z",
+  "author_name": "ShunyuWu-Shaun",
+  "url": "https://github.com/langchain-ai/langchain/pull/35515",
+  "body_text": "## Summary\n- fix Mermaid subgraph traversal to include nested prefixes even when they have no internal edges\n- preserve deterministic prefix ordering while expanding missing ancestor prefixes\n- add regression coverage for `parent:child:grandchild` nested-empty-subgraph rendering\n\n## Testing\n- Not run in this environment: local Python is 3.9, while this repo requires 3.10+ for test imports.\n\nCloses #35492\n",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "Mermaid",
+        "type": "Technology",
+        "description": "A diagramming tool whose rendering functionality is being fixed."
+      },
+      {
+        "name": "Nested Empty Subgraphs",
+        "type": "Feature",
+        "description": "A specific type of subgraph structure in Mermaid diagrams that is experiencing rendering issues."
+      },
+      {
+        "name": "Subgraph Traversal",
+        "type": "Feature",
+        "description": "The process of navigating through subgraphs in Mermaid, which is being fixed to include nested prefixes."
+      },
+      {
+        "name": "Nested Prefixes",
+        "type": "Feature",
+        "description": "A naming convention or structural element within Mermaid subgraphs that needs to be included during traversal."
+      },
+      {
+        "name": "Internal Edges",
+        "type": "Feature",
+        "description": "Connections within a subgraph in Mermaid, relevant to the condition for including nested prefixes."
+      },
+      {
+        "name": "Deterministic Prefix Ordering",
+        "type": "Feature",
+        "description": "A desired property for the consistent ordering of prefixes in Mermaid, which the fix aims to preserve."
+      },
+      {
+        "name": "Missing Ancestor Prefixes",
+        "type": "Problem",
+        "description": "A condition where parent prefixes are not correctly expanded, affecting deterministic prefix ordering."
+      },
+      {
+        "name": "Python 3.9",
+        "type": "Technology",
+        "description": "A specific version of the Python programming language used locally, which is incompatible with the repository's testing requirements."
+      },
+      {
+        "name": "Python 3.10+",
+        "type": "Technology",
+        "description": "The required version range of the Python programming language for running tests in the repository."
+      },
+      {
+        "name": "Regression Coverage",
+        "type": "Feature",
+        "description": "A type of testing added to ensure that previously fixed bugs related to nested-empty-subgraph rendering do not re-emerge."
+      },
+      {
+        "name": "Testing",
+        "type": "Feature",
+        "description": "The process of verifying software functionality, which was not performed due to environment constraints."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Mermaid",
+        "target": "Nested Empty Subgraphs",
+        "label": "RELATED_TO",
+        "evidence": "fix Mermaid rendering for nested empty subgraphs",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Mermaid",
+        "target": "Subgraph Traversal",
+        "label": "RELATED_TO",
+        "evidence": "fix Mermaid subgraph traversal",
+        "evidence_start": 13,
+        "evidence_end": 43
+      },
+      {
+        "source": "Subgraph Traversal",
+        "target": "Nested Prefixes",
+        "label": "USES",
+        "evidence": "subgraph traversal to include nested prefixes",
+        "evidence_start": 25,
+        "evidence_end": 70
+      },
+      {
+        "source": "Nested Prefixes",
+        "target": "Internal Edges",
+        "label": "RELATED_TO",
+        "evidence": "even when they have no internal edges",
+        "evidence_start": 71,
+        "evidence_end": 108
+      },
+      {
+        "source": "Mermaid",
+        "target": "Deterministic Prefix Ordering",
+        "label": "RELATED_TO",
+        "evidence": "preserve deterministic prefix ordering",
+        "evidence_start": 111,
+        "evidence_end": 149
+      },
+      {
+        "source": "Missing Ancestor Prefixes",
+        "target": "Deterministic Prefix Ordering",
+        "label": "AFFECTS",
+        "evidence": "expanding missing ancestor prefixes",
+        "evidence_start": 156,
+        "evidence_end": 191
+      },
+      {
+        "source": "Regression Coverage",
+        "target": "Nested Empty Subgraphs",
+        "label": "USES",
+        "evidence": "add regression coverage for `parent:child:grandchild` nested-empty-subgraph rendering",
+        "evidence_start": 194,
+        "evidence_end": 279
+      },
+      {
+        "source": "Python 3.9",
+        "target": "Testing",
+        "label": "AFFECTS",
+        "evidence": "local Python is 3.9, while this repo requires 3.10+ for test imports.",
+        "evidence_start": 323,
+        "evidence_end": 392
+      },
+      {
+        "source": "Python 3.10+",
+        "target": "Testing",
+        "label": "RELATED_TO",
+        "evidence": "this repo requires 3.10+ for test imports.",
+        "evidence_start": 350,
+        "evidence_end": 392
+      }
+    ],
+    "summary": "This issue fixes Mermaid rendering for nested empty subgraphs by improving subgraph traversal to include nested prefixes and preserving deterministic prefix ordering, with regression coverage added, though testing was skipped due to Python version incompatibility."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

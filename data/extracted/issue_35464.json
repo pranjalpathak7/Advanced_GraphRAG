@@ -1,0 +1,148 @@
+{
+  "id": 35464,
+  "title": "Unsupported context management with openai and azure endpoint",
+  "status": "open",
+  "created_at": "2026-02-27T09:33:17Z",
+  "author_name": "Djkmarco",
+  "url": "https://github.com/langchain-ai/langchain/issues/35464",
+  "body_text": "### Checked other resources\n\n- [x] This is a bug, not a usage question.\n- [x] I added a clear and descriptive title that summarizes this issue.\n- [x] I used the GitHub search to find a similar question and didn't find it.\n- [x] I am sure that this is a bug in LangChain rather than my code.\n- [x] The bug is not resolved by updating to the latest stable version of LangChain (or the specific integration package).\n- [x] This is not related to the langchain-community package.\n- [x] I posted a self-contained, minimal, reproducible example. A maintainer can copy it and run it AS IS.\n\n### Package (Required)\n\n- [x] langchain\n- [x] langchain-openai\n- [ ] langchain-anthropic\n- [ ] langchain-classic\n- [ ] langchain-core\n- [ ] langchain-model-profiles\n- [ ] langchain-tests\n- [ ] langchain-text-splitters\n- [ ] langchain-chroma\n- [ ] langchain-deepseek\n- [ ] langchain-exa\n- [ ] langchain-fireworks\n- [ ] langchain-groq\n- [ ] langchain-huggingface\n- [ ] langchain-mistralai\n- [ ] langchain-nomic\n- [ ] langchain-ollama\n- [ ] langchain-openrouter\n- [ ] langchain-perplexity\n- [ ] langchain-qdrant\n- [ ] langchain-xai\n- [ ] Other / not sure / general\n\n### Related Issues / PRs\n\n_No response_\n\n### Reproduction Steps / Example Code (Python)\n\n```python\nfrom langchain_openai import ChatOpenAI\n\ntry:\n    _llm = ChatOpenAI(\n        model=config[\"model_name\"],\n        base_url=f\"{config['azure_endpoint']}/openai/v1/\",\n        api_key=config[\"azure_api_key\"],\n        reasoning={\n        \"effort\": \"high\",  # 'low', 'medium', or 'high'\n        \"summary\": \"auto\",  # 'detailed', 'auto', or None\n        },\n        use_previous_response_id=True,\n        use_responses_api=True,\n        context_management=[{\"type\": \"compaction\", \"compact_threshold\": 100_000}],\n    )\n\n    response = _llm.invoke([{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}, {\"role\": \"user\", \"content\": \"tell me the best way to optimize a function in python?\"}])\n\nexcept Exception as e:\n    print(f\"Error: {e}\")\n\n\n```\n\n### Error Message and Stack Trace (if applicable)\n\n```shell\nError: Error code: 400 - {'error': {'message': 'compact_threshold is not enabled.', 'type': 'invalid_request_error', 'param': 'compact_threshold', 'code': 'unsupported_parameter'}}\n```\n\n### Description\n\nTrying to use azure endpoint with context_management=[{\"type\": \"compaction\", \"compact_threshold\": 100_000}] returns a compact_threshold is not enabled error\n\n### System Info\n\nSystem Information\n------------------\n> OS:  Windows\n> OS Version:  10.0.26200\n> Python Version:  3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]\n\nPackage Information\n-------------------\n> langchain_core: 1.2.16\n> langchain: 1.2.10\n> langsmith: 0.7.7\n> langchain_openai: 1.1.10\n> langgraph_sdk: 0.3.9\n\nOptional packages not installed\n-------------------------------\n> deepagents\n> deepagents-cli\n\nOther Dependencies\n------------------\n> httpx: 0.28.1\n> jsonpatch: 1.33\n> langgraph: 1.0.9\n> openai: 2.24.0\n> orjson: 3.11.7\n> packaging: 26.0\n> pydantic: 2.12.5\n> pytest: 8.4.2\n> pyyaml: 6.0.3\n> requests: 2.32.5\n> requests-toolbelt: 1.0.0\n> rich: 14.3.3\n> tenacity: 9.1.4\n> tiktoken: 0.12.0\n> typing-extensions: 4.15.0\n> uuid-utils: 0.14.1\n> xxhash: 3.6.0",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "OpenAI",
+        "type": "Technology",
+        "description": "A platform or API for AI models, mentioned in the context of context management."
+      },
+      {
+        "name": "Azure Endpoint",
+        "type": "Technology",
+        "description": "Microsoft Azure's service endpoint used for accessing OpenAI models."
+      },
+      {
+        "name": "Context Management",
+        "type": "Feature",
+        "description": "A feature for managing conversational context in AI models, specifically 'compaction' with 'compact_threshold'."
+      },
+      {
+        "name": "ChatOpenAI",
+        "type": "Technology",
+        "description": "A class from the `langchain_openai` package for interacting with OpenAI chat models."
+      },
+      {
+        "name": "LangChain",
+        "type": "Technology",
+        "description": "A framework for developing applications powered by language models, where the bug is reported."
+      },
+      {
+        "name": "LangChain OpenAI",
+        "type": "Technology",
+        "description": "A specific integration package within LangChain for OpenAI models."
+      },
+      {
+        "name": "Compact Threshold Not Enabled",
+        "type": "Problem",
+        "description": "An error indicating that the 'compact_threshold' parameter for context management is not supported or enabled by the Azure endpoint."
+      },
+      {
+        "name": "HTTP 400 Error",
+        "type": "Problem",
+        "description": "A client-side error (Bad Request) received from the API."
+      },
+      {
+        "name": "Compaction",
+        "type": "Feature",
+        "description": "A specific type of context management strategy being attempted."
+      },
+      {
+        "name": "Python",
+        "type": "Technology",
+        "description": "The programming language used for the reproduction steps."
+      }
+    ],
+    "relations": [
+      {
+        "source": "Context Management",
+        "target": "OpenAI",
+        "label": "RELATED_TO",
+        "evidence": "Unsupported context management with openai and azure endpoint",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "Context Management",
+        "target": "Azure Endpoint",
+        "label": "RELATED_TO",
+        "evidence": "Unsupported context management with openai and azure endpoint",
+        "evidence_start": null,
+        "evidence_end": null
+      },
+      {
+        "source": "LangChain",
+        "target": "LangChain OpenAI",
+        "label": "USES",
+        "evidence": "langchain-openai",
+        "evidence_start": 630,
+        "evidence_end": 646
+      },
+      {
+        "source": "LangChain OpenAI",
+        "target": "ChatOpenAI",
+        "label": "USES",
+        "evidence": "from langchain_openai import ChatOpenAI",
+        "evidence_start": 1246,
+        "evidence_end": 1285
+      },
+      {
+        "source": "ChatOpenAI",
+        "target": "Context Management",
+        "label": "USES",
+        "evidence": "context_management=[{\"type\": \"compaction\", \"compact_threshold\": 100_000}]",
+        "evidence_start": 1675,
+        "evidence_end": 1748
+      },
+      {
+        "source": "Context Management",
+        "target": "Compaction",
+        "label": "RELATED_TO",
+        "evidence": "context_management=[{\"type\": \"compaction\"",
+        "evidence_start": 1675,
+        "evidence_end": 1716
+      },
+      {
+        "source": "Azure Endpoint",
+        "target": "Compact Threshold Not Enabled",
+        "label": "CAUSES",
+        "evidence": "Trying to use azure endpoint with context_management=[{\"type\": \"compaction\", \"compact_threshold\": 100_000}] returns a compact_threshold is not enabled error",
+        "evidence_start": 2255,
+        "evidence_end": 2411
+      },
+      {
+        "source": "Compact Threshold Not Enabled",
+        "target": "HTTP 400 Error",
+        "label": "CAUSES",
+        "evidence": "Error code: 400 - {'error': {'message': 'compact_threshold is not enabled.'",
+        "evidence_start": 2059,
+        "evidence_end": 2134
+      },
+      {
+        "source": "LangChain",
+        "target": "Compact Threshold Not Enabled",
+        "label": "AFFECTS",
+        "evidence": "I am sure that this is a bug in LangChain rather than my code.",
+        "evidence_start": 228,
+        "evidence_end": 290
+      },
+      {
+        "source": "Djkmarco",
+        "target": "Python",
+        "label": "USES",
+        "evidence": "Python Version:  3.14.3",
+        "evidence_start": 2511,
+        "evidence_end": 2534
+      }
+    ],
+    "summary": "The `ChatOpenAI` class in LangChain's `langchain-openai` package fails with an HTTP 400 error when attempting to use 'compaction' context management with a 'compact_threshold' against an Azure OpenAI endpoint, indicating the feature is unsupported by Azure."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}

@@ -1,0 +1,140 @@
+{
+  "id": 35519,
+  "title": "fix(core): pass bound tools to token counter in trim_messages",
+  "status": "open",
+  "created_at": "2026-03-02T13:59:50Z",
+  "author_name": "giulio-leone",
+  "url": "https://github.com/langchain-ai/langchain/pull/35519",
+  "body_text": "## Description\n\nFixes #29637\n\nWhen a model with bound tools (e.g. from `bind_tools()`) is passed as `token_counter` to `trim_messages()`, the tools parameter was not forwarded to `get_num_tokens_from_messages()`. This caused errors with token counters like `ChatAnthropic`'s that use Anthropic's token counting API, which requires tool schemas when messages contain `tool_use`/`tool_result` blocks.\n\n## Problem\n\n```python\nllm = ChatAnthropic(model=\"claude-3-5-sonnet-latest\").bind_tools(tools)\n\n# This raises BadRequestError because tools aren't passed to the token counter\ntrim_messages(messages, max_tokens=200, token_counter=llm)\n```\n\nThe root cause is in `trim_messages()` at the point where it extracts the token counter from a model:\n\n```python\n# Before (broken): tools not forwarded\nlist_token_counter = actual_token_counter.get_num_tokens_from_messages\n```\n\n## Fix\n\nWhen the token counter has bound `kwargs` containing `tools` (as set by `bind_tools()` → `bind(tools=...)`), extract them and wrap the token counter to pass tools through:\n\n```python\nif hasattr(actual_token_counter, \"kwargs\"):\n    _bound_tools = actual_token_counter.kwargs.get(\"tools\")\nif _bound_tools is not None:\n    list_token_counter = lambda msgs: counter(msgs, tools=_bound_tools)\n```\n\n## Tests\n\nAdded 3 new unit tests:\n- `test_trim_messages_bound_model_tools_passed_to_token_counter` — verifies tools are forwarded with `strategy=\"first\"`\n- `test_trim_messages_bound_model_tools_with_strategy_last` — verifies tools are forwarded with `strategy=\"last\"`\n- `test_trim_messages_bound_model_without_tools_still_works` — verifies no regression for bound models without tools\n\nAll 157 tests in `test_utils.py` pass. Lint clean.",
+  "extracted_data": {
+    "entities": [
+      {
+        "name": "trim_messages",
+        "type": "Feature",
+        "description": "A function designed to reduce the length of message lists based on a maximum token limit."
+      },
+      {
+        "name": "Token Counter",
+        "type": "Feature",
+        "description": "A component or function used to calculate the number of tokens in messages."
+      },
+      {
+        "name": "Bound Tools",
+        "type": "Feature",
+        "description": "Tools that are associated with a language model, typically via a `bind_tools()` method."
+      },
+      {
+        "name": "bind_tools()",
+        "type": "Feature",
+        "description": "A method used to associate tools with a language model."
+      },
+      {
+        "name": "get_num_tokens_from_messages()",
+        "type": "Feature",
+        "description": "A function responsible for calculating the number of tokens from a list of messages."
+      },
+      {
+        "name": "ChatAnthropic",
+        "type": "Technology",
+        "description": "A class representing an Anthropic chat model, used here as a token counter."
+      },
+      {
+        "name": "Anthropic's Token Counting API",
+        "type": "Technology",
+        "description": "An API provided by Anthropic for accurate token counting, especially when messages include tool-related content."
+      },
+      {
+        "name": "Tool Schemas",
+        "type": "Feature",
+        "description": "Definitions or structures of tools required by certain token counting APIs."
+      },
+      {
+        "name": "Tool Use/Tool Result Blocks",
+        "type": "Feature",
+        "description": "Specific message components indicating the use or result of a tool within messages."
+      },
+      {
+        "name": "BadRequestError",
+        "type": "Problem",
+        "description": "An error indicating an invalid request, specifically due to missing tool schemas in the token counting API call."
+      }
+    ],
+    "relations": [
+      {
+        "source": "trim_messages",
+        "target": "Token Counter",
+        "label": "USES",
+        "evidence": "When a model with bound tools (e.g. from `bind_tools()`) is passed as `token_counter` to `trim_messages()`",
+        "evidence_start": 30,
+        "evidence_end": 136
+      },
+      {
+        "source": "Token Counter",
+        "target": "get_num_tokens_from_messages()",
+        "label": "USES",
+        "evidence": "the tools parameter was not forwarded to `get_num_tokens_from_messages()`.",
+        "evidence_start": 138,
+        "evidence_end": 212
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "Anthropic's Token Counting API",
+        "label": "USES",
+        "evidence": "token counters like `ChatAnthropic`'s that use Anthropic's token counting API",
+        "evidence_start": 237,
+        "evidence_end": 314
+      },
+      {
+        "source": "Anthropic's Token Counting API",
+        "target": "Tool Schemas",
+        "label": "USES",
+        "evidence": "Anthropic's token counting API, which requires tool schemas when messages contain `tool_use`/`tool_result` blocks.",
+        "evidence_start": 284,
+        "evidence_end": 398
+      },
+      {
+        "source": "Tool Use/Tool Result Blocks",
+        "target": "Tool Schemas",
+        "label": "RELATED_TO",
+        "evidence": "requires tool schemas when messages contain `tool_use`/`tool_result` blocks.",
+        "evidence_start": 322,
+        "evidence_end": 398
+      },
+      {
+        "source": "bind_tools()",
+        "target": "Bound Tools",
+        "label": "RELATED_TO",
+        "evidence": "model with bound tools (e.g. from `bind_tools()`)",
+        "evidence_start": 37,
+        "evidence_end": 86
+      },
+      {
+        "source": "trim_messages",
+        "target": "BadRequestError",
+        "label": "CAUSES",
+        "evidence": "This raises BadRequestError because tools aren't passed to the token counter",
+        "evidence_start": 497,
+        "evidence_end": 573
+      },
+      {
+        "source": "Bound Tools",
+        "target": "Token Counter",
+        "label": "RELATED_TO",
+        "evidence": "the tools parameter was not forwarded to `get_num_tokens_from_messages()`.",
+        "evidence_start": 138,
+        "evidence_end": 212
+      },
+      {
+        "source": "ChatAnthropic",
+        "target": "Token Counter",
+        "label": "RELATED_TO",
+        "evidence": "token counters like `ChatAnthropic`'s",
+        "evidence_start": 237,
+        "evidence_end": 274
+      }
+    ],
+    "summary": "The `trim_messages` function failed to forward bound tools to the token counter, specifically `ChatAnthropic` models using Anthropic's API, leading to `BadRequestError` because tool schemas were not provided for messages containing tool use/result blocks."
+  },
+  "extraction_version": "v1.0-gemini-2.5-flash",
+  "duplicate_of": null
+}
