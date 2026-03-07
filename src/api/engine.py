@@ -1,8 +1,7 @@
 import os
 import chromadb
 from neo4j import GraphDatabase
-from langchain_google_genai import ChatGoogleGenerativeAI 
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings 
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,28 +18,30 @@ class GraphRAG:
     def __init__(self):
         self.driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))
         
-        # THE FIX: Do not download the heavy AI model on startup!
-        self._embedding_fn = None 
-        
         self.chroma_client = chromadb.Client()
+        # WE CHANGED THE NAME TO 'entities_google' SO IT DOESN'T CLASH WITH OLD SAVED DATA
         self.collection = self.chroma_client.get_or_create_collection(
-            name="entities", 
+            name="entities_google", 
             metadata={"hnsw:space": "cosine"}
         )
         
-        # Setup Gemini 
+        # Setup Gemini LLM
         self.llm = ChatGoogleGenerativeAI(
             model="gemini-2.5-flash",
             google_api_key=GOOGLE_API_KEY,
             temperature=0
         )
+        
+        # INSTANT LIGHTWEIGHT EMBEDDINGS (No heavy downloads!)
+        self.embedding_model = GoogleGenerativeAIEmbeddings(
+            model="models/embedding-001",
+            google_api_key=GOOGLE_API_KEY
+        )
 
+    # We don't need the lazy load property anymore because Google's API has no download size!
     @property
     def embedding_fn(self):
-        if self._embedding_fn is None:
-            print("⏳ Downloading HuggingFace Embedding Model...")
-            self._embedding_fn = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        return self._embedding_fn
+        return self.embedding_model
 
     def index_entities(self):
         """Syncs Neo4j Entities to ChromaDB."""
