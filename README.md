@@ -1,8 +1,7 @@
 # Layer10 Memory Core - Execution Guide
 
-## Live Demo
-**[Click Here to Try the Live Application!](https://advancedgraphrag.streamlit.app/)**
-*(No installation required. You can explore the interactive knowledge graph topology and test the temporally-aware GraphRAG agent directly in your browser.)*
+## GitHub Repo
+**[Click Here to go the GitHub repo of this project!](https://github.com/pranjalpathak7/Advanced_GraphRAG)**
 
 ---
 
